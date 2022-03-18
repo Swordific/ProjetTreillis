@@ -9,7 +9,7 @@ package fr.insa.alla.infom2;
  * @author Ilyas ALLA
  */
 
-public class Noeud {
+public abstract class Noeud {
     private int id;
     private double px, py;
     private Vecteur2D f;
