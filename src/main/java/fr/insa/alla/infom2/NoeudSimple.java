@@ -9,5 +9,9 @@ package fr.insa.alla.infom2;
  * @author Farouk
  */
 public class NoeudSimple extends Noeud {
-    
+    @Override
+    public String toString() {
+        String output = new String();
+        return output;
+    }
 }
