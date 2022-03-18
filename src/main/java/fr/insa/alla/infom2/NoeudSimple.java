@@ -4,8 +4,6 @@
  */
 package fr.insa.alla.infom2;
 
-import fr.insa.nomEtud.nomProj.Noeud;
-
 /**
  *
  * @author Farouk
