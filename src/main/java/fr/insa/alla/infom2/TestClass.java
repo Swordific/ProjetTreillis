@@ -9,5 +9,8 @@ package fr.insa.alla.infom2;
  * @author hazem
  */
 public class TestClass {
-    public static void main(String[] args){}
+    public static void main(String[] args){
+        
+    //public void TestClass() test {}
+    }
 }
