@@ -9,5 +9,7 @@ package fr.insa.alla.infom2;
  * @author Asus
  */
 public class NewClass {
-
+    public static void main(String[] args) {
+        System.out.println("Hello World!");
+    }
 }
