@@ -86,7 +86,7 @@ public abstract class Noeud {
         double vy = Lire.i();
         
         Vecteur2D Force = new Vecteur2D(vx,vy);
-        String NoeudTest = new Noeud(px, py, Force);
+        NoeudSimple NoeudTest = new NoeudSimple(id, px, py, Force);
     }
 
 }
