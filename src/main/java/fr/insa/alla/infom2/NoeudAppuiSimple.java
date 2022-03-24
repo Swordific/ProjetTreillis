@@ -9,12 +9,20 @@ package fr.insa.alla.infom2;
  * @author antoine
  */
 public class NoeudAppuiSimple extends NoeudAppui {
+        
+    public NoeudAppuiSimple(int id, double px, double py, Vecteur2D f) {
+        super(id, px, py, f);
+    }
+
+    public NoeudAppuiSimple(double px, double py, Vecteur2D f) {
+        super(px, py, f);
+    }
+
+    public NoeudAppuiSimple(double px, double py) {
+        super(px, py);
+    }
     
-    private int id;
-    private double px, py;
-    private Vecteur2D f;
-    
-     @Override
+    @Override
     public String toString() {
         String output = new String();
         return output;

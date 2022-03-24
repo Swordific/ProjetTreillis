@@ -10,9 +10,9 @@ package fr.insa.alla.infom2;
  */
 
 public abstract class Noeud {
-    private int id;
-    private double px, py;
-    private Vecteur2D f;
+    protected int id;
+    protected double px, py;
+    protected Vecteur2D f;
 
     public int getId() {
         return id;
