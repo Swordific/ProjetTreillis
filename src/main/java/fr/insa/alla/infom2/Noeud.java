@@ -76,7 +76,17 @@ public abstract class Noeud {
 
     //TODO
     public void entreeNoeud() {
-
+        System.out.println("Quelle est la position horizontale de votre noeud (px)?");
+        double px = Lire.i();
+        System.out.println("Quelle est la position verticale de votre noeud (py)?");
+        double py = Lire.i();
+        System.out.println("Quelle est la force horizontale sur votre noeud (vx)?");
+        double vx = Lire.i();
+        System.out.println("Quelle est la force verticale de votre noeud (vy)?");
+        double vy = Lire.i();
+        
+        Vecteur2D Force = new Vecteur2D(vx,vy);
+        String NoeudTest = new Noeud(px, py, Force);
     }
 
 }
