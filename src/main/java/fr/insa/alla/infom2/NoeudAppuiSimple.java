@@ -6,7 +6,7 @@ package fr.insa.alla.infom2;
 
 /**
  *
- * @author antoi
+ * @author antoine
  */
 public class NoeudAppuiSimple extends NoeudAppui {
     
