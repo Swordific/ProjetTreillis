@@ -67,7 +67,7 @@ public abstract class Noeud {
         this.f = new Vecteur2D();
     }
     
-    public int nbrInconnues() {
+    public static int nbrInconnues() {
         
         int nbrInconnues = 0;
         
@@ -93,7 +93,7 @@ public abstract class Noeud {
     }
 
     //TODO
-    public void entreeNoeud() {
+    public static void entreeNoeud() {
         
         System.out.println("Quelle est la position horizontale de votre noeud (px)?");
         double x = Lire.i();
