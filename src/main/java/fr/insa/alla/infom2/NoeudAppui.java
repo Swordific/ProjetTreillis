@@ -9,7 +9,7 @@ package fr.insa.alla.infom2;
  *
  * @author hazem
  */
-public class NoeudAppui extends Noeud {
+public abstract class NoeudAppui extends Noeud {
     
     public NoeudAppui(int id, double px, double py, Vecteur2D f) {
         super(id, px, py, f);
