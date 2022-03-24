@@ -66,6 +66,24 @@ public abstract class Noeud {
         this.py = py;
         this.f = new Vecteur2D();
     }
+    
+    public int nbrInconnues() {
+        
+        int nbrInconnues = 0;
+        
+        System.out.println("Quel type de noeud voulez vous creer ? (noeud simple : 0, appui simple : 1, appui double : 2)");
+        int type = Lire.i();
+        if (type == 0) {
+            nbrInconnues = 0;
+        }
+        if (type == 1) {
+            nbrInconnues = 1;
+        }
+        if (type == 2) {
+            nbrInconnues = 2;
+        }
+        return nbrInconnues;
+    }
 
     //TODO
     @Override
@@ -76,17 +94,21 @@ public abstract class Noeud {
 
     //TODO
     public void entreeNoeud() {
+        
         System.out.println("Quelle est la position horizontale de votre noeud (px)?");
-        double px = Lire.i();
+        double x = Lire.i();
         System.out.println("Quelle est la position verticale de votre noeud (py)?");
-        double py = Lire.i();
+        double y = Lire.i();
         System.out.println("Quelle est la force horizontale sur votre noeud (vx)?");
         double vx = Lire.i();
         System.out.println("Quelle est la force verticale de votre noeud (vy)?");
         double vy = Lire.i();
         
+        int nbrInconnues = nbrInconnues();
         Vecteur2D Force = new Vecteur2D(vx,vy);
-        NoeudSimple NoeudTest = new NoeudSimple(id, px, py, Force);
+        NoeudSimple NoeudTest = new NoeudSimple(id, x, y, Force);
+        
+        System.out.println(NoeudTest + "Nombre d'inconnues = " + nbrInconnues);
     }
 
 }
