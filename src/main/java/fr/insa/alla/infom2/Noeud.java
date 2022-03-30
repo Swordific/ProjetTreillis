@@ -93,22 +93,19 @@ public abstract class Noeud {
     }
 
     //TODO
-    public static void entreeNoeud() {
-        
-        System.out.println("Quelle est la position horizontale de votre noeud (px)?");
+    public static Noeud entreeNoeud() {
+        System.out.println("Quel type de noeud voulez-vous créer ? (simple(s), appui simple(as), appui double(ad))");
+        String type = Lire.S();
+        System.out.println("Quelle est l'abscisse de votre noeud (px) ?");
         double x = Lire.i();
-        System.out.println("Quelle est la position verticale de votre noeud (py)?");
+        System.out.println("Quelle est l'ordonnée de votre noeud (py) ?");
         double y = Lire.i();
-        System.out.println("Quelle est la force horizontale sur votre noeud (vx)?");
-        double vx = Lire.i();
-        System.out.println("Quelle est la force verticale de votre noeud (vy)?");
-        double vy = Lire.i();
+        System.out.println("Quelle est la force horizontale sur votre noeud (fx) ?");
+        double fx = Lire.i();
+        System.out.println("Quelle est la force verticale de votre noeud (fy) ?");
+        double fy = Lire.i();
         
-        int nbrInconnues = nbrInconnues();
-        Vecteur2D Force = new Vecteur2D(vx,vy);
-        NoeudSimple NoeudTest = new NoeudSimple(id, x, y, Force);
-        
-        System.out.println(NoeudTest + "Nombre d'inconnues = " + nbrInconnues);
+        return
     }
 
 }
