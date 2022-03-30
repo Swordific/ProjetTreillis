@@ -13,6 +13,6 @@ public class Test {
     double x,y;
     
     public void Main() {
-        int nbrInconnues = 
+
     }
 }
