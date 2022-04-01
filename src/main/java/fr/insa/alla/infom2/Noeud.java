@@ -86,7 +86,7 @@ public abstract class Noeud {
         System.out.println("Y a-t-il une force appliquée à votre noeud ? (o/n)");
         String f = Lire.S();
         double fx = 0, fy = 0;
-        if (f == "o" || f == "O") {
+        if ("o".equals(f) || "O".equals(f)) {
             System.out.println("Quelle est la force horizontale sur votre noeud (fx) ?");
             fx = Lire.d();
             System.out.println("Quelle est la force verticale de votre noeud (fy) ?");

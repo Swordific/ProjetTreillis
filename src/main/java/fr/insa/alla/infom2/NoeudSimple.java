@@ -10,10 +10,6 @@ package fr.insa.alla.infom2;
  */
 public class NoeudSimple extends Noeud {
     
-    private int id;
-    private double px, py;
-    private Vecteur2D f;
-
     public NoeudSimple(int id, double px, double py, Vecteur2D f) {
         super(id, px, py, f);
     }
