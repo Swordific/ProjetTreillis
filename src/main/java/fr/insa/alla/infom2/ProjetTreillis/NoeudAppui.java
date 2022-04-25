@@ -1,4 +1,4 @@
-package fr.insa.alla.infom2;
+package fr.insa.alla.infom2.ProjetTreillis;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
