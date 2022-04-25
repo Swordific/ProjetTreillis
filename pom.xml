@@ -11,4 +11,28 @@
         <exec.mainClass>fr.insa.alla.infom2.Projet</exec.mainClass>
     </properties>
     <name>ProjetTreillis</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>15.0.1</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
+            </plugin>
+            <plugin>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-maven-plugin</artifactId>
+            <version>0.0.5</version>
+            <configuration>
+            <mainClass>fr.insa.alla.infom2.ProjetTreillis.Interface.MainFx</mainClass>
+            </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
