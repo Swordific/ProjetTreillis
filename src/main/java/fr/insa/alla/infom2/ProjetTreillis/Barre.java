@@ -4,6 +4,8 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis;
 
+import static java.lang.Math.atan;
+
 /**
  *
  * @author antoi
@@ -40,7 +42,7 @@ calcule l’angle entre le vecteur (n, noeudOppose(n)) et le vecteur Ox (axe hor
       }
         
     
-    //TODO
+    
     public Noeud noeudOppose(Noeud n) {
         if (n == noeudDepart) {
             return noeudArrivee ;
@@ -52,7 +54,16 @@ calcule l’angle entre le vecteur (n, noeudOppose(n)) et le vecteur Ox (axe hor
     }
     
     //TODO
-    //public static double angle(Noeud n) {}
+    public double angle() {
+    double pyNoeudArrivee = noeudArrivee.getPy();
+    double pxNoeudArrivee = noeudArrivee.getPx(); 
+    double pyNoeudDepart = noeudDepart.getPy(); 
+    double pxNoeudDepart = noeudDepart.getPx(); 
+    pyNoeudArrivee = pyNoeudArrivee - pyNoeudDepart ; 
+    pxNoeudArrivee = pxNoeudArrivee - pxNoeudDepart;
+    double angle = atan(pyNoeudArrivee/pxNoeudArrivee);
+    return angle ; 
+    }
     
     
     @Override
