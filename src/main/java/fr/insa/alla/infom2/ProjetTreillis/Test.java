@@ -9,10 +9,14 @@ package fr.insa.alla.infom2.ProjetTreillis;
  */
 
 public class Test {
-    int nbrInconnues;
-    double x,y;
     
-    public void Main() {
-
+    
+    public static void main(String[] args) {
+         System.out.println(Noeud.entreeNoeud().toString());
+         Vecteur2D Force = new Vecteur2D(5, 7) ; 
+         System.out.println(Force.toString());
+         
     }
+ 
+    
 }

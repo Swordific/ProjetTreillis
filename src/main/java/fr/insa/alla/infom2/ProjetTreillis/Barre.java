@@ -19,20 +19,47 @@ nœud de départ de la barre, soit son nœud d’arrivée, renvoie l’autre nœ
 Définir la méthode angle, qui connaissant un nœud n de la barre (nœud de départ ou nœud d’arrivée)
 calcule l’angle entre le vecteur (n, noeudOppose(n)) et le vecteur Ox (axe horizontal).
 */   
-    //TODO
-    public Barre() {
+    
+    public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, double maxTrac, double maxComp, double cout ) {
+        this.id = id;
+        this.noeudDepart = noeudDepart;
+        this.noeudArrivee = noeudArrivee ;
+        this.cout = cout ;
+        this.maxComp = maxComp ;
+        this.maxTrac = maxTrac ;
+                 
     }
     
+      public Barre(Noeud noeudDepart, Noeud noeudArrivee, double maxTrac, double maxComp, double cout ) {
+        this.id = -1;
+        this.noeudDepart = noeudDepart;
+        this.noeudArrivee = noeudArrivee ;
+        this.cout = cout ;
+        this.maxComp = maxComp ;
+        this.maxTrac = maxTrac ;
+      }
+        
+    
     //TODO
-    //public static Noeud noeudOppose(Barre b, Noeud n) {}
+    public Noeud noeudOppose(Noeud n) {
+        if (n == noeudDepart) {
+            return noeudArrivee ;
+        }
+        else if (n == noeudArrivee) {
+            return noeudDepart ; 
+    }
+        return null ;
+    }
     
     //TODO
     //public static double angle(Noeud n) {}
     
-    //TODO
+    
     @Override
     public String toString() {
-        String output = new String();
+          
+        String output = new String() ; 
+        output =  "Noeud de depart " + this.noeudDepart.toString() + " ; Noeud d'arrivée " + this.noeudArrivee.toString() + "; La traction maximale " + this.maxTrac + "; La compression maximale " + this.maxComp + "; Le coût de la barre " + this.cout ; 
         return output;
     }
 
