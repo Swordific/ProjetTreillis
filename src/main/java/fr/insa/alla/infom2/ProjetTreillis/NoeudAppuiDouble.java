@@ -21,10 +21,10 @@ public class NoeudAppuiDouble extends NoeudAppui {
     public NoeudAppuiDouble(double px, double py) {
         super(px, py);
     }
-    
-    @Override
+
     public String toString() {
-        String output = new String();
+        String output = super.toString();
+        output = "Noeud Appui Double" + output;
         return output;
     }
 }

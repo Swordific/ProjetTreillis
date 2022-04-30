@@ -25,9 +25,7 @@ public abstract class NoeudAppui extends Noeud {
     
     @Override
     public String toString() {
-        String output = new String();
-        
-        return output;
+        return super.toString();
     }
             
 }

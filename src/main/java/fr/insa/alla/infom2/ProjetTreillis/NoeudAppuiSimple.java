@@ -24,7 +24,8 @@ public class NoeudAppuiSimple extends NoeudAppui {
     
     @Override
     public String toString() {
-        String output = new String();
+        String output = super.toString();
+        output = "Noeud Appui Simple" + output;
         return output;
     }
 }

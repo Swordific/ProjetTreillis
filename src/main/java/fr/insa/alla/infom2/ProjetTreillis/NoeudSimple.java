@@ -20,7 +20,8 @@ public class NoeudSimple extends Noeud {
     
     @Override
     public String toString() {
-        String output = new String();
+        String output = super.toString();
+        output = "Noeud Simple" + output;
         return output;
     }
     
