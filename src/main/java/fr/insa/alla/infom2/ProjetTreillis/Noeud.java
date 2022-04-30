@@ -12,6 +12,7 @@ import java.util.Set;
  *
  * @author Ilyas ALLA
  */
+//TODO creer methodes pour ajouter et retirer des barres dans les listes
 public abstract class Noeud {
 
     protected int id;
@@ -168,5 +169,14 @@ public abstract class Noeud {
         ArrayList<Barre> list = new ArrayList(set);
         return list;
     }
+
+    public void ajouterBarreDepart(Barre b) {
+        this.barresDepart.add(b);
+    }
+
+    public void ajouterBarreArrivee(Barre b) {
+        this.barresDepart.add(b);
+    }
+
 
 }
