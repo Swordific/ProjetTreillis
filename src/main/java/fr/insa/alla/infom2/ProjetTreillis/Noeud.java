@@ -67,10 +67,9 @@ public abstract class Noeud {
         this.f = new Vecteur2D();
     }
 
-    //TODO
     @Override
     public String toString() {
-        String output = new String();
+        String output = "(" + this.px + " ; " + this.py + ") ; F = " + this.f;
         return output;
     }
 
@@ -84,9 +83,9 @@ public abstract class Noeud {
         System.out.println("Quelle est l'ordonnée de votre noeud (py) ?");
         double y = Lire.d();
         System.out.println("Y a-t-il une force appliquée à votre noeud ? (o/n)");
-        String f = Lire.S();
+        String f = Lire.S().toLowerCase();
         double fx = 0, fy = 0;
-        if (f.equals("o") || f.equals("O")) {
+        if (f.equals("o")) {
             System.out.println("Quelle est la force horizontale sur votre noeud (fx) ?");
             fx = Lire.d();
             System.out.println("Quelle est la force verticale de votre noeud (fy) ?");
@@ -104,13 +103,8 @@ public abstract class Noeud {
             case 2:
                 out = new NoeudAppuiDouble(id, x, y, F);
                 break;
-
         }
-        if (out != null) {
-            return out;
-        } else {
-            return null;
-        }
+        return out;
     }
 
 }
