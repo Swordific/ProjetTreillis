@@ -4,6 +4,8 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Ilyas ALLA
@@ -13,6 +15,8 @@ public abstract class Noeud {
     protected int id;
     protected double px, py;
     protected Vecteur2D f;
+    protected ArrayList<Barre> barresDepart;
+    protected ArrayList<Barre> barresArrivee;
 
     public int getId() {
         return id;
@@ -51,6 +55,8 @@ public abstract class Noeud {
         this.px = px;
         this.py = py;
         this.f = f;
+        this.barresArrivee = new ArrayList<Barre>();
+        this.barresDepart = new ArrayList<Barre>();
     }
 
     public Noeud(double px, double py, Vecteur2D f) {
@@ -58,6 +64,8 @@ public abstract class Noeud {
         this.px = px;
         this.py = py;
         this.f = f;
+        this.barresArrivee = new ArrayList<Barre>();
+        this.barresDepart = new ArrayList<Barre>();
     }
 
     public Noeud(double px, double py) {
@@ -65,6 +73,8 @@ public abstract class Noeud {
         this.px = px;
         this.py = py;
         this.f = new Vecteur2D();
+        this.barresArrivee = new ArrayList<Barre>();
+        this.barresDepart = new ArrayList<Barre>();
     }
 
     @Override
@@ -105,6 +115,48 @@ public abstract class Noeud {
                 break;
         }
         return out;
+    }
+
+    public int nbrInconnues() {
+        int nbr = 0;
+        String type = this.getClass().toString();
+        switch (type) {
+            case "NoeudSimple":
+                return 0;
+            case "NoeudAppuiSimple":
+                return 1;
+            case "NoeudAppuiDouble":
+                return 2;
+        }
+        return -1;
+    }
+
+    /**
+     * @return the barresDepart
+     */
+    public ArrayList<Barre> getBarresDepart() {
+        return barresDepart;
+    }
+
+    /**
+     * @param barresDepart the barresDepart to set
+     */
+    public void setBarresDepart(ArrayList<Barre> barresDepart) {
+        this.barresDepart = barresDepart;
+    }
+
+    /**
+     * @return the barresArrivee
+     */
+    public ArrayList<Barre> getBarresArrivee() {
+        return barresArrivee;
+    }
+
+    /**
+     * @param barresArrivee the barresArrivee to set
+     */
+    public void setBarresArrivee(ArrayList<Barre> barresArrivee) {
+        this.barresArrivee = barresArrivee;
     }
 
 }

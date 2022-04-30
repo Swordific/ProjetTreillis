@@ -9,13 +9,17 @@ package fr.insa.alla.infom2.ProjetTreillis;
  * @author Farouk
  */
 public class NoeudSimple extends Noeud {
-    
-    private int id;
-    private double px, py;
-    private Vecteur2D f;
 
     public NoeudSimple(int id, double px, double py, Vecteur2D f) {
         super(id, px, py, f);
+    }
+
+    public NoeudSimple(double px, double py, Vecteur2D f) {
+        super(px, py, f);
+    }
+
+    public NoeudSimple(double px, double py) {
+        super(px, py);
     }
     
     @Override

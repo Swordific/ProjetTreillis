@@ -22,6 +22,7 @@ public class NoeudAppuiDouble extends NoeudAppui {
         super(px, py);
     }
 
+    @Override
     public String toString() {
         String output = super.toString();
         output = "Noeud Appui Double" + output;
