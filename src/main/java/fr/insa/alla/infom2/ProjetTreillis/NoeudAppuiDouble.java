@@ -9,7 +9,7 @@ package fr.insa.alla.infom2.ProjetTreillis;
  * @author antoine
  */
 public class NoeudAppuiDouble extends NoeudAppui {
-        
+
     public NoeudAppuiDouble(int id, double px, double py, Vecteur2D f) {
         super(id, px, py, f);
     }

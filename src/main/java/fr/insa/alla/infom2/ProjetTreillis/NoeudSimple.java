@@ -21,14 +21,14 @@ public class NoeudSimple extends Noeud {
     public NoeudSimple(double px, double py) {
         super(px, py);
     }
-    
+
     @Override
     public String toString() {
         String output = super.toString();
         output = "Noeud Simple" + output;
         return output;
     }
-    
+
     /**
      * @return the id
      */

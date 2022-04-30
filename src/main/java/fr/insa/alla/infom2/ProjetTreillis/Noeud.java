@@ -5,6 +5,8 @@
 package fr.insa.alla.infom2.ProjetTreillis;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -48,6 +50,34 @@ public abstract class Noeud {
 
     public void setF(Vecteur2D f) {
         this.f = f;
+    }
+
+    /**
+     * @return the barresDepart
+     */
+    public ArrayList<Barre> getBarresDepart() {
+        return barresDepart;
+    }
+
+    /**
+     * @param barresDepart the barresDepart to set
+     */
+    public void setBarresDepart(ArrayList<Barre> barresDepart) {
+        this.barresDepart = barresDepart;
+    }
+
+    /**
+     * @return the barresArrivee
+     */
+    public ArrayList<Barre> getBarresArrivee() {
+        return barresArrivee;
+    }
+
+    /**
+     * @param barresArrivee the barresArrivee to set
+     */
+    public void setBarresArrivee(ArrayList<Barre> barresArrivee) {
+        this.barresArrivee = barresArrivee;
     }
 
     public Noeud(int id, double px, double py, Vecteur2D f) {
@@ -131,32 +161,12 @@ public abstract class Noeud {
         return -1;
     }
 
-    /**
-     * @return the barresDepart
-     */
-    public ArrayList<Barre> getBarresDepart() {
-        return barresDepart;
-    }
-
-    /**
-     * @param barresDepart the barresDepart to set
-     */
-    public void setBarresDepart(ArrayList<Barre> barresDepart) {
-        this.barresDepart = barresDepart;
-    }
-
-    /**
-     * @return the barresArrivee
-     */
-    public ArrayList<Barre> getBarresArrivee() {
-        return barresArrivee;
-    }
-
-    /**
-     * @param barresArrivee the barresArrivee to set
-     */
-    public void setBarresArrivee(ArrayList<Barre> barresArrivee) {
-        this.barresArrivee = barresArrivee;
+    public ArrayList<Barre> barresIncidentes() {
+        Set<Barre> set = new HashSet<Barre>();
+        set.addAll(this.barresDepart);
+        set.addAll(this.barresArrivee);
+        ArrayList<Barre> list = new ArrayList(set);
+        return list;
     }
 
 }

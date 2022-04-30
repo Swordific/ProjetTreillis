@@ -9,7 +9,7 @@ package fr.insa.alla.infom2.ProjetTreillis;
  * @author antoine
  */
 public class NoeudAppuiSimple extends NoeudAppui {
-        
+
     public NoeudAppuiSimple(int id, double px, double py, Vecteur2D f) {
         super(id, px, py, f);
     }
@@ -21,7 +21,7 @@ public class NoeudAppuiSimple extends NoeudAppui {
     public NoeudAppuiSimple(double px, double py) {
         super(px, py);
     }
-    
+
     @Override
     public String toString() {
         String output = super.toString();

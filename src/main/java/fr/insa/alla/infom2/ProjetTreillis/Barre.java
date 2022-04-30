@@ -5,72 +5,104 @@
 package fr.insa.alla.infom2.ProjetTreillis;
 
 import static java.lang.Math.atan;
+import java.util.ArrayList;
 
 /**
  *
  * @author antoi
  */
 public class Barre {
-    
+
     private int id;
     private Noeud noeudDepart, noeudArrivee;
     private double maxTrac, maxComp, cout;
-/*
-Définir la méthode noeudOppose, qui pour une barre b donnée, et un nœud n donné qui est soit le
-nœud de départ de la barre, soit son nœud d’arrivée, renvoie l’autre nœud de la barre.
-Définir la méthode angle, qui connaissant un nœud n de la barre (nœud de départ ou nœud d’arrivée)
-calcule l’angle entre le vecteur (n, noeudOppose(n)) et le vecteur Ox (axe horizontal).
-*/   
-    
-    public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, double maxTrac, double maxComp, double cout ) {
+
+    public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, double maxTrac, double maxComp, double cout) {
         this.id = id;
         this.noeudDepart = noeudDepart;
-        this.noeudArrivee = noeudArrivee ;
-        this.cout = cout ;
-        this.maxComp = maxComp ;
-        this.maxTrac = maxTrac ;
-                 
+        this.noeudArrivee = noeudArrivee;
+        this.cout = cout;
+        this.maxComp = maxComp;
+        this.maxTrac = maxTrac;
+
+        ArrayList<Barre> listeDepart = noeudDepart.getBarresDepart();
+        listeDepart.add(this);
+        ArrayList<Barre> listeArrivee = noeudArrivee.getBarresArrivee();
+        listeArrivee.add(this);
+
+        noeudDepart.setBarresDepart(listeDepart);
+        noeudArrivee.setBarresArrivee(listeArrivee);
     }
-    
-      public Barre(Noeud noeudDepart, Noeud noeudArrivee, double maxTrac, double maxComp, double cout ) {
+
+    public Barre(Noeud noeudDepart, Noeud noeudArrivee, double maxTrac, double maxComp, double cout) {
         this.id = -1;
         this.noeudDepart = noeudDepart;
-        this.noeudArrivee = noeudArrivee ;
-        this.cout = cout ;
-        this.maxComp = maxComp ;
-        this.maxTrac = maxTrac ;
-      }
-        
-    
-    
+        this.noeudArrivee = noeudArrivee;
+        this.cout = cout;
+        this.maxComp = maxComp;
+        this.maxTrac = maxTrac;
+
+        ArrayList<Barre> listeDepart = noeudDepart.getBarresDepart();
+        listeDepart.add(this);
+        ArrayList<Barre> listeArrivee = noeudArrivee.getBarresArrivee();
+        listeArrivee.add(this);
+
+        noeudDepart.setBarresDepart(listeDepart);
+        noeudArrivee.setBarresArrivee(listeArrivee);
+    }
+
+    public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee) {
+        this.id = id;
+        this.noeudDepart = noeudDepart;
+        this.noeudArrivee = noeudArrivee;
+
+        ArrayList<Barre> listeDepart = noeudDepart.getBarresDepart();
+        listeDepart.add(this);
+        ArrayList<Barre> listeArrivee = noeudArrivee.getBarresArrivee();
+        listeArrivee.add(this);
+
+        noeudDepart.setBarresDepart(listeDepart);
+        noeudArrivee.setBarresArrivee(listeArrivee);
+    }
+
+    public Barre(Noeud noeudDepart, Noeud noeudArrivee) {
+        this.id = -1;
+        this.noeudDepart = noeudDepart;
+        this.noeudArrivee = noeudArrivee;
+
+        ArrayList<Barre> listeDepart = noeudDepart.getBarresDepart();
+        listeDepart.add(this);
+        ArrayList<Barre> listeArrivee = noeudArrivee.getBarresArrivee();
+        listeArrivee.add(this);
+
+        noeudDepart.setBarresDepart(listeDepart);
+        noeudArrivee.setBarresArrivee(listeArrivee);
+    }
+
     public Noeud noeudOppose(Noeud n) {
         if (n == noeudDepart) {
-            return noeudArrivee ;
+            return noeudArrivee;
+        } else if (n == noeudArrivee) {
+            return noeudDepart;
         }
-        else if (n == noeudArrivee) {
-            return noeudDepart ; 
+        return null;
     }
-        return null ;
-    }
-    
-    //TODO
+
     public double angle() {
-    double pyNoeudArrivee = noeudArrivee.getPy();
-    double pxNoeudArrivee = noeudArrivee.getPx(); 
-    double pyNoeudDepart = noeudDepart.getPy(); 
-    double pxNoeudDepart = noeudDepart.getPx(); 
-    pyNoeudArrivee = pyNoeudArrivee - pyNoeudDepart ; 
-    pxNoeudArrivee = pxNoeudArrivee - pxNoeudDepart;
-    double angle = atan(pyNoeudArrivee/pxNoeudArrivee);
-    return angle ; 
+        double pyNoeudArrivee = noeudArrivee.getPy();
+        double pxNoeudArrivee = noeudArrivee.getPx();
+        double pyNoeudDepart = noeudDepart.getPy();
+        double pxNoeudDepart = noeudDepart.getPx();
+        pyNoeudArrivee = pyNoeudArrivee - pyNoeudDepart;
+        pxNoeudArrivee = pxNoeudArrivee - pxNoeudDepart;
+        double angle = atan(pyNoeudArrivee / pxNoeudArrivee);
+        return angle;
     }
-    
-    
+
     @Override
     public String toString() {
-          
-        String output = new String() ; 
-        output =  "Noeud de depart " + this.noeudDepart.toString() + " ; Noeud d'arrivée " + this.noeudArrivee.toString() + "; La traction maximale " + this.maxTrac + "; La compression maximale " + this.maxComp + "; Le coût de la barre " + this.cout ; 
+        String output = new String();
+        output = "Départ : " + this.noeudDepart + " ; Arrivée : " + this.noeudArrivee + " ; Traction maximale : " + this.maxTrac + " ; Compression maximale : " + this.maxComp + " ; Coût au mètre : " + this.cout;
         return output;
     }
 
@@ -157,6 +189,5 @@ calcule l’angle entre le vecteur (n, noeudOppose(n)) et le vecteur Ox (axe hor
     public void setCout(double cout) {
         this.cout = cout;
     }
-    
-    
+
 }

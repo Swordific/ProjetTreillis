@@ -11,6 +11,7 @@ import java.util.ArrayList;
  * @author Asus
  */
 public class Treillis {
+
     private ArrayList<Noeud> noeuds;
     private ArrayList<Barre> barres;
 
@@ -42,7 +43,6 @@ public class Treillis {
         noeuds.add(n);
         return null;
     }
-
 
     public String ajouteBarre(Barre b) {
         if (barres.contains(b)) {

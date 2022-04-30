@@ -43,5 +43,5 @@ public class Vecteur2D {
         String output = "(" + this.vx + " ; " + this.vy + ")";
         return output;
     }
-    
+
 }
