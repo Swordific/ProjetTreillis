@@ -4,8 +4,10 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis.Interface;
 
+
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 /**
@@ -20,11 +22,12 @@ public class MainFx extends Application {
         primaryStage.setWidth(1280);
         primaryStage.setHeight(720);
         primaryStage.setResizable(true);
-
+        Button close = new Button() ;
         primaryStage.show();
     }
 
     public static void main(String[] args) {
         launch(args);
     }
+    
 }
