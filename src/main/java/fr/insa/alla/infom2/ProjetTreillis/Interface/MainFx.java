@@ -6,6 +6,8 @@ package fr.insa.alla.infom2.ProjetTreillis.Interface;
 
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -20,6 +22,10 @@ public class MainFx extends Application {
         primaryStage.setWidth(1280);
         primaryStage.setHeight(720);
         primaryStage.setResizable(true);
+        //TODO
+        primaryStage.getIcons().add(new Image("file:appicon.png"));
+
+        Button ouvrir = new Button();
 
         primaryStage.show();
     }
