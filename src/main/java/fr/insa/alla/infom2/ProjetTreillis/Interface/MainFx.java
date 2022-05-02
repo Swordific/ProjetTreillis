@@ -21,40 +21,30 @@ public class MainFx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Treillis");
-        primaryStage.setWidth(1280);
-        primaryStage.setHeight(720);
-        primaryStage.setResizable(true);
+        //primaryStage.setWidth(1280);
+        //primaryStage.setHeight(720);
+        //primaryStage.setResizable(true);
 
         //FileInputStream inputstream = new FileInputStream("src/main/java/fr/insa/alla/infom2/ProjetTreillis/Interface/appicon.png");
         //Image appicon = new Image(inputstream);
-
         //primaryStage.getIcons().add(appicon);
-        Scene sceneMenu, sceneAction;
+        Scene sceneMain;
 
         Button importTreillis = new Button("Importer un treillis existant");
         Button creerTreillis = new Button("Créer un nouveau treillis");
-
-        HBox boutonsMenu = new HBox(50);
-        boutonsMenu.getChildren().addAll(importTreillis, creerTreillis);
-        boutonsMenu.setAlignment(Pos.CENTER);
-        sceneMenu = new Scene(boutonsMenu);
-        primaryStage.setScene(sceneMenu);
-
-        primaryStage.show();
-
         Button creerNoeud = new Button("Créer un noeud");
         Button supprNoeud = new Button("Supprimer un noeud");
         Button creerBarre = new Button("Créer une barre");
         Button supprBarre = new Button("Supprimer une barre");
-        Button retourButton = new Button("Retour");
-        retourButton.setOnAction(e -> primaryStage.setScene(sceneMenu));
 
-        HBox hboxMenuTreillis = new HBox(50);
-        hboxMenuTreillis.getChildren().addAll(creerNoeud, supprNoeud, creerBarre, supprBarre);
-        hboxMenuTreillis.setAlignment(Pos.CENTER);
+        HBox hboxOptions = new HBox(50);
+        hboxOptions.getChildren().addAll(importTreillis, creerTreillis, creerNoeud, supprNoeud, creerBarre, supprBarre);
+        hboxOptions.setAlignment(Pos.TOP_CENTER);
 
-        sceneAction = new Scene(hboxMenuTreillis);
-        creerTreillis.setOnAction(e -> primaryStage.setScene(sceneAction));
+        sceneMain = new Scene(hboxOptions, 1280, 720);
+        primaryStage.setScene(sceneMain);
+
+        primaryStage.show();
 
     }
 
