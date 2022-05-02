@@ -9,7 +9,10 @@ import static javafx.application.Application.launch;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 /**
@@ -39,9 +42,11 @@ public class MainFx extends Application {
 
         HBox hboxOptions = new HBox(50);
         hboxOptions.getChildren().addAll(importTreillis, creerTreillis, creerNoeud, supprNoeud, creerBarre, supprBarre);
-        hboxOptions.setAlignment(Pos.TOP_CENTER);
-
-        sceneMain = new Scene(hboxOptions, 1280, 720);
+        hboxOptions.setAlignment(Pos.CENTER);
+        Rectangle rectBarreBoutons = new Rectangle(1920, 100, Color.GREY);
+        //rectBarreBoutons.set();
+        AnchorPane barreBoutons = new AnchorPane(rectBarreBoutons, hboxOptions);
+        sceneMain = new Scene(barreBoutons, 1280, 720);
         primaryStage.setScene(sceneMain);
 
         primaryStage.show();
