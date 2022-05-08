@@ -25,6 +25,14 @@ public class Treillis {
         this.barres = new ArrayList<Barre>();
     }
 
+    public ArrayList<Noeud> getNoeuds() {
+        return noeuds;
+    }
+
+    public ArrayList<Barre> getBarres() {
+        return barres;
+    }
+
     public int maxIdNoeud() {
         int maxid = 0;
         for (Noeud n : noeuds) {

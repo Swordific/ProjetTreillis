@@ -16,6 +16,7 @@ public class Barre {
     private int id;
     private Noeud noeudDepart, noeudArrivee;
     private double maxTrac, maxComp, cout;
+    private Vecteur2D f;
 
     public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, double maxTrac, double maxComp, double cout) {
         this.id = id;
@@ -188,6 +189,14 @@ public class Barre {
      */
     public void setCout(double cout) {
         this.cout = cout;
+    }
+
+    public Vecteur2D getF() {
+        return f;
+    }
+
+    public void setF(Vecteur2D f) {
+        this.f = f;
     }
 
 }
