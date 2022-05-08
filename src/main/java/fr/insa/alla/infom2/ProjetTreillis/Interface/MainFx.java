@@ -12,18 +12,21 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
 /**
  *
  * @author Asus
@@ -37,13 +40,14 @@ public class MainFx extends Application {
         //primaryStage.setHeight(720);
         //primaryStage.setResizable(true);
 
-        //FileInputStream inputstream = new FileInputStream(MainFx.class.getClassLoader().getResourceAsStream("src/main/java/fr/insa/alla/infom2/ProjetTreillis/Interface/appicon.png"));
-        //Image appicon = new Image(getClass().getResourceAsStream("/bruh/appicon.png"));
-        //primaryStage.getIcons().add(appicon);
-        Scene sceneMain;
+        Image appicon = new Image(getClass().getResourceAsStream("/appicon.png"));
+        primaryStage.getIcons().add(appicon);
+        Scene mainScene;
 
         Button importTreillisBouton = new Button("Importer un treillis existant");
         Button creerTreillisBouton = new Button("Créer un nouveau treillis");
+        importTreillisBouton.setEffect(new DropShadow());
+        creerTreillisBouton.setEffect(new DropShadow());
         MenuItem importTreillisMenu = new MenuItem("Importer un treillis existant");
         MenuItem exportTreillisMenu = new MenuItem("Exporter le treillis actif");
         MenuItem creerTreillisMenu = new MenuItem("Créer un nouveau treillis");
@@ -55,7 +59,7 @@ public class MainFx extends Application {
         EventHandler importTreillisEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                String filePath = fileChooser.showOpenDialog(primaryStage).getPath();
+                String filePathImport = fileChooser.showOpenDialog(primaryStage).getPath();
                 //Fichier.importTreillis();
             }
         };
@@ -68,7 +72,7 @@ public class MainFx extends Application {
         EventHandler exportTreillisEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                String filePath = fileChooser.showOpenDialog(primaryStage).getPath();
+                String filePathExport = fileChooser.showOpenDialog(primaryStage).getPath();
             }
         };
         exportTreillisMenu.setOnAction(exportTreillisEvent);
@@ -76,6 +80,11 @@ public class MainFx extends Application {
         HBox hboxWelcome = new HBox(50);
         hboxWelcome.getChildren().addAll(creerTreillisBouton, importTreillisBouton);
         hboxWelcome.setAlignment(Pos.CENTER);
+        Image shrab = new Image(getClass().getResourceAsStream("/companylogo.png"));
+        ImageView imageView = new ImageView(shrab);
+        imageView.setOpacity(0.35);
+        StackPane rootWelcome = new StackPane();
+        rootWelcome.getChildren().addAll(imageView, hboxWelcome);
 
         Menu menuFichier = new Menu("Fichier");
         Menu menuEditer = new Menu("Editer");
@@ -85,32 +94,31 @@ public class MainFx extends Application {
         menuBar.getMenus().addAll(menuFichier, menuEditer);
         VBox menuVBox = new VBox(menuBar);
         menuVBox.setMaxSize(3000, 50);
-        sceneMain = new Scene(hboxWelcome);
-        primaryStage.setScene(sceneMain);
+        mainScene = new Scene(rootWelcome);
+        primaryStage.setScene(mainScene);
 
-        NumberAxis x = new NumberAxis();
-        NumberAxis y = new NumberAxis();
-        LineChart xy = new LineChart(x, y);
+        Pane graphPane = new Pane();
         StackPane rootGraph = new StackPane();
-        rootGraph.getChildren().addAll(xy, menuVBox);
+        rootGraph.getChildren().addAll(graphPane, menuVBox);
         rootGraph.setAlignment(menuVBox, Pos.TOP_LEFT);
-        rootGraph.setAlignment(xy, Pos.BOTTOM_LEFT);
-        rootGraph.setMargin(xy, new Insets(20, 5, 5, 5));
+        rootGraph.setAlignment(graphPane, Pos.BOTTOM_LEFT);
+        rootGraph.setMargin(graphPane, new Insets(20, 5, 5, 5));
 
         creerTreillisBouton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 primaryStage.getScene().setRoot(rootGraph);
+
                 Treillis treillis = new Treillis();
                 Noeud dep = new NoeudSimple(1, 1);
                 Noeud arr = new NoeudSimple(2, 2);
                 Barre b = new Barre(dep, arr);
-                Segment.tracerSegment(b);
+                //Segment.tracerSegment(b);
             }
         });
+
         primaryStage.setMaximized(true);
         primaryStage.show();
-
 
     }
 
