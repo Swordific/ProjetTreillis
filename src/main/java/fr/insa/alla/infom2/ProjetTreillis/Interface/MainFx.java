@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
@@ -19,12 +20,18 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -38,11 +45,22 @@ public class MainFx extends Application {
         primaryStage.setTitle("Treillis");
         //primaryStage.setWidth(1280);
         //primaryStage.setHeight(720);
-        //primaryStage.setResizable(true);
+        primaryStage.setResizable(false);
 
         Image appicon = new Image(getClass().getResourceAsStream("/appicon.png"));
+        primaryStage.setMaximized(true);
         primaryStage.getIcons().add(appicon);
         Scene mainScene;
+        Rectangle2D tailleEcran = Screen.getPrimary().getVisualBounds();
+        Rectangle graph = new Rectangle();
+
+        double graphW = tailleEcran.getWidth() - 40;
+        double graphH = tailleEcran.getHeight() - 40;
+
+        graph.setX(0);
+        graph.setY(0);
+        graph.setFill(Color.TRANSPARENT);
+        graph.setStroke(Color.BLACK);
 
         Button importTreillisBouton = new Button("Importer un treillis existant");
         Button creerTreillisBouton = new Button("Créer un nouveau treillis");
@@ -98,11 +116,17 @@ public class MainFx extends Application {
         primaryStage.setScene(mainScene);
 
         Pane graphPane = new Pane();
+        graphPane.setMinSize(graphW, graphH);
+
+        graph.setWidth(graphPane.getMinWidth());
+        graph.setHeight(graphPane.getMinHeight());
+        graphPane.getChildren().add(graph);
+        System.out.println(graph.getWidth());
         StackPane rootGraph = new StackPane();
-        rootGraph.getChildren().addAll(graphPane, menuVBox);
+        rootGraph.getChildren().addAll(graph, menuVBox);
         rootGraph.setAlignment(menuVBox, Pos.TOP_LEFT);
-        rootGraph.setAlignment(graphPane, Pos.BOTTOM_LEFT);
-        rootGraph.setMargin(graphPane, new Insets(20, 5, 5, 5));
+        //rootGraph.setAlignment(graphPane, Pos.BOTTOM_LEFT);
+        rootGraph.setMargin(graphPane, new Insets(20, 20, 20, 20));
 
         creerTreillisBouton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -116,6 +140,17 @@ public class MainFx extends Application {
                 //Segment.tracerSegment(b);
             }
         });
+        //TODO 
+        Text t;
+        Line l;
+        for (int i = 0; i <= 10; i++) {
+            l = new Line( graph.getX()+(graphPane.getWidth()/10) * i, 0, graph.getX()+(graphPane.getWidth()/10) * i, graph.getY() + graphPane.getHeight());
+            l.setStrokeWidth(10);
+            l.setStroke(Color.BLACK);
+            rootGraph.getChildren().add(l);
+            System.out.println(l.getStartY() + ", " + l.getEndY());
+
+        }
 
         primaryStage.setMaximized(true);
         primaryStage.show();
