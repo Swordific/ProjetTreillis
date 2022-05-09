@@ -4,7 +4,17 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerException;
 
 /**
  *
@@ -91,7 +101,7 @@ public class Treillis {
         return barres.get(Lire.i() - 1);
     }
 
-    public static void menuTexte() {
+    public static void menuTexte() throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException, TransformerException, IOException {
         Treillis treillis = new Treillis();
 
         while (true) {
@@ -137,6 +147,28 @@ public class Treillis {
                     break;
                 case 5:
                     treillis.barres.remove(treillis.choixBarre());
+                    break;
+                case 6:
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    // write XML to ByteArrayOutputStream
+                    Fichier.exportTreillis(treillis, out);
+
+                    // Java 10
+                    //String xml = out.toString(StandardCharsets.UTF_8);
+
+                    // standard way to convert byte array to String
+                    String xml = new String(out.toByteArray(), StandardCharsets.UTF_8);
+
+                    // System.out.println(formatXML(xml));
+
+                    String prettyPrintXML = Fichier.formatXML(xml);
+
+                    // print to console
+                    // System.out.println(prettyPrintXML);
+
+                    // Java 11 - write to file
+                    Files.write(Paths.get("C:/Users/ialla01/Desktop/zbeub.xml"), prettyPrintXML.getBytes(StandardCharsets.UTF_8));
+                    //Fichier.exportTreillis(treillis, new FileOutputStream("C:/Users/ialla01/Desktop/zbeub.xml"));
                     break;
             }
         }

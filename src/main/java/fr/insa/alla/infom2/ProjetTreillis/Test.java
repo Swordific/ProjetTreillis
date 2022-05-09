@@ -4,6 +4,10 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import javax.xml.stream.XMLStreamException;
+
 /**
  *
  * @author Farouk
