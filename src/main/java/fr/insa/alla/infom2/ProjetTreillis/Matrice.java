@@ -4,6 +4,9 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis;
 
+import java.io.IOException;
+import java.util.Arrays;
+
 /**
  *
  * @author Farouk
