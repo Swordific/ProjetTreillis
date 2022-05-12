@@ -68,7 +68,14 @@ public class Terrain {
         this.Ymax = Ymax;
     }
     
+@Override
+    public String toString() {
+        String output = new String();
+        output = "Début abscisse : " + this.Ymin + ", début ordonnée : " + this.Xmin + ", fin abscisse : " + this.Ymax + ", fin ordonnée : " + this.Xmax ;
+        return output;
+        }
     
+
     
     
 
