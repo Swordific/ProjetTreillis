@@ -9,74 +9,40 @@ package fr.insa.alla.infom2.ProjetTreillis;
  * @author Asus
  */
 public class Terrain {
-    
-    private double Xmin, Xmax, Ymin, Ymax;
 
-    /**
-     * @return the Xmin
-     */
-    public double getXmin() {
-        return Xmin;
-    }
+    private Vecteur2D depart, arrivee;
 
-    /**
-     * @param Xmin the Xmin to set
-     */
-    public void setXmin(double Xmin) {
-        this.Xmin = Xmin;
-    }
-
-    /**
-     * @return the Xmax
-     */
-    public double getXmax() {
-        return Xmax;
-    }
-
-    /**
-     * @param Xmax the Xmax to set
-     */
-    public void setXmax(double Xmax) {
-        this.Xmax = Xmax;
-    }
-
-    /**
-     * @return the Ymin
-     */
-    public double getYmin() {
-        return Ymin;
-    }
-
-    /**
-     * @param Ymin the Ymin to set
-     */
-    public void setYmin(double Ymin) {
-        this.Ymin = Ymin;
-    }
-
-    /**
-     * @return the Ymax
-     */
-    public double getYmax() {
-        return Ymax;
-    }
-
-    /**
-     * @param Ymax the Ymax to set
-     */
-    public void setYmax(double Ymax) {
-        this.Ymax = Ymax;
-    }
-    
-@Override
+    @Override
     public String toString() {
         String output = new String();
-        output = "Début abscisse : " + this.Ymin + ", début ordonnée : " + this.Xmin + ", fin abscisse : " + this.Ymax + ", fin ordonnée : " + this.Xmax ;
+        output = "Départ : " + this.getDepart() + " ; Arrivée : " + this.getArrivee();
         return output;
-        }
-    
+    }
 
-    
-    
+    public Terrain(double xD, double yD, double xA, double yA) {
+        depart = new Vecteur2D(xD, yD);
+        arrivee = new Vecteur2D(xA, yA);
+    }
+
+    public Terrain() {
+        depart = new Vecteur2D(0, 0);
+        arrivee = new Vecteur2D(100, 0);
+    }
+
+    public Vecteur2D getDepart() {
+        return depart;
+    }
+
+    public void setDepart(Vecteur2D depart) {
+        this.depart = depart;
+    }
+
+    public Vecteur2D getArrivee() {
+        return arrivee;
+    }
+
+    public void setArrivee(Vecteur2D arrivee) {
+        this.arrivee = arrivee;
+    }
 
 }
