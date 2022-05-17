@@ -4,10 +4,6 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis;
 
-import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
-import javax.xml.stream.XMLStreamException;
-
 /**
  *
  * @author Farouk
@@ -15,7 +11,10 @@ import javax.xml.stream.XMLStreamException;
 public class Test {
 
     public static void main(String[] args) {
-        Treillis.menuTexte();
+        //Treillis.menuTexte();
+        Numeroteur num = new Numeroteur();
+        num.addAll(667, "dfnoifdn", 994.01);
+        System.out.println(num.getIndex(667));
     }
 
 }

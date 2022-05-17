@@ -4,18 +4,19 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 /**
  *
  * @author Farouk
  */
 public class Matrice {
-    
-    private int  nbrLig;
+
+    private int nbrLig;
     private int nbrCol;
-    private double coeffs;
+    private double[][] coeffs;
+
+    public Matrice() {
+
+    }
 
     /**
      * @return the nbrLig
@@ -48,21 +49,19 @@ public class Matrice {
     /**
      * @return the coeffs
      */
-    public double getCoeffs() {
+    public double[][] getCoeffs() {
         return coeffs;
     }
 
-    /**
-     * @param coeffs the coeffs to set
-     */
-    public void setCoeffs(double coeffs) {
+    public void setCoeffs(double[][] coeffs) {
         this.coeffs = coeffs;
     }
+
     @Override
     public String toString() {
         String output = new String();
         String[][] Matrice = new String[nbrLig][nbrCol];
-        String.format("%+4.2E", coeffs);
+        String.format("%+4.2E", getCoeffs());
         return output;
     }
 }
