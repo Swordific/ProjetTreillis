@@ -230,7 +230,7 @@ public class MainFx extends Application {
         Point2D pt;
         double xf, yf;
         x -= zero.getX();
-        xf = ((x) / (trp.getX() - zero.getX() / 160)) * 160;
+        xf = ((x) / (trp.getX() - zero.getX())) * 160;
         yf = (y / (trp.getY() - zero.getY() / 70)) - zero.getY();
         pt = new Point2D(xf, yf);
         return pt;
