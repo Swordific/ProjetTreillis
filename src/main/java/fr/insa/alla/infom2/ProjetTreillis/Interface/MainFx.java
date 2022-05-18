@@ -5,11 +5,14 @@
 package fr.insa.alla.infom2.ProjetTreillis.Interface;
 
 import fr.insa.alla.infom2.ProjetTreillis.*;
+import java.util.ArrayList;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -21,14 +24,14 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -40,8 +43,10 @@ import javafx.stage.Stage;
  * @author Asus
  */
 public class MainFx extends Application {
+
     Group graph = new Group();
-    
+    Rectangle2D tailleEcran = Screen.getPrimary().getVisualBounds();
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Treillis");
@@ -54,7 +59,7 @@ public class MainFx extends Application {
         primaryStage.getIcons().add(appicon);
         Scene mainScene;
         Rectangle2D tailleEcran = Screen.getPrimary().getVisualBounds();
-       // Rectangle graph = new Rectangle();
+        // Rectangle graph = new Rectangle();
 
         //double graphW = tailleEcran.getWidth() - 40;
         //double graphH = tailleEcran.getHeight() - 40;
@@ -63,7 +68,6 @@ public class MainFx extends Application {
         graph.setY(0);
         graph.setFill(Color.TRANSPARENT);
         graph.setStroke(Color.BLACK);*/
-
         Button importTreillisBouton = new Button("Importer un treillis existant");
         Button creerTreillisBouton = new Button("Créer un nouveau treillis");
         importTreillisBouton.setEffect(new DropShadow());
@@ -117,8 +121,6 @@ public class MainFx extends Application {
         mainScene = new Scene(rootWelcome);
         primaryStage.setScene(mainScene);
 
-        
-       
         /*groupGraph.setMinSize(graphW, graphH);
 
         graph.setWidth(groupGraph.getMinWidth());
@@ -126,14 +128,12 @@ public class MainFx extends Application {
         groupGraph.getChildren().add(graph);
         System.out.println(graph.getWidth());*/
         Pane rootGraph = new Pane();
-        menuVBox.setPadding( new Insets(0, 0, 0, 0));
+        menuVBox.setPadding(new Insets(0, 0, 0, 0));
         menuVBox.setMinWidth(tailleEcran.getWidth());
         rootGraph.getChildren().addAll(graph, menuVBox);
-        rootGraph.setTopAnchor(menuVBox, 0.0);
-        
-       rootGraph.setAlignment(graph, Pos.BOTTOM_LEFT);
-        
+        //rootGraph.setTopAnchor(menuVBox, 0.0);
 
+        //rootGraph.setAlignment(graph, Pos.BOTTOM_LEFT);
         creerTreillisBouton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -146,32 +146,95 @@ public class MainFx extends Application {
                 //Segment.tracerSegment(b);
             }
         });
-        //TODO 
-        
-        
 
         primaryStage.setMaximized(true);
         primaryStage.show();
-        dessinerGraph();
+        //primaryStage.setWidth(tailleEcran.getWidth());
+        //primaryStage.setHeight(tailleEcran.getHeight());
+        Point2D[] pts = dessinerGraphe();
+        Point2D zero = pts[0];
+        Point2D topRightPt = pts[1];
+
+        EventHandler testMEvent = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                Point2D pt = calcCoord(zero, topRightPt, e.getSceneX(), e.getSceneY());
+                //System.out.println("(" + zero.getX() + " ; " + zero.getY() + ")");
+                //System.out.println("(" + topRightPt.getX() + " ; " + topRightPt.getY() + ")");
+                System.out.println("(" + pt.getX() + " ; " + pt.getY() + ")");
+
+            }
+        };
+
+        mainScene.addEventFilter(MouseEvent.MOUSE_CLICKED, testMEvent);
 
     }
-        public  void dessinerGraph() {
-            Rectangle2D tailleEcran = Screen.getPrimary().getVisualBounds();
-        Text t;
-        Line lHorizontal;
-        Line lVertical ;
-        for (int i = 0; i <= 9; i++) {
-            
-            lVertical = new Line((tailleEcran.getHeight()/10) +100,tailleEcran.getHeight()/10 * i + 50 , tailleEcran.getHeight()/10 * 9 +100 , tailleEcran.getHeight()/10 * i + 50);
-            lVertical.setStrokeWidth(5);
-            lVertical.setStroke(Color.BLACK);
-            lHorizontal = new Line((tailleEcran.getHeight()/10  +70) + i *(tailleEcran.getHeight()/10  +70), tailleEcran.getHeight()/10  + 50 , (tailleEcran.getHeight()/10  +70) + i *(tailleEcran.getHeight()/10  +70) , tailleEcran.getHeight()/10 * 9 + 50);
-            lHorizontal.setStrokeWidth(5);
-            lHorizontal.setStroke(Color.BLACK);
-            graph.getChildren().addAll(/*lHorizontal,*/ lVertical);
-            
+
+    public Point2D[] dessinerGraphe() {
+        double h = tailleEcran.getHeight();
+        double w = tailleEcran.getWidth();
+        ArrayList<Text> graduations = new ArrayList<>();
+        ArrayList<Line> hLines = new ArrayList<>();
+        ArrayList<Line> vLines = new ArrayList<>();
+
+        for (int i = 1; i <= 17; i++) {
+            if (i % 2 == 0) {
+                hLines.add(new Line());
+                hLines.get(i / 2 - 1).setStartX(50);
+                hLines.get(i / 2 - 1).setStartY(h / 10 * i / 2 + 50);
+                hLines.get(i / 2 - 1).setEndX(w - 50);
+                hLines.get(i / 2 - 1).setEndY(h / 10 * i / 2 + 50);
+
+                hLines.get(i / 2 - 1).setStrokeWidth(2);
+                hLines.get(i / 2 - 1).setStroke(Color.GREY);
+                hLines.get(i / 2 - 1).setOpacity(0.4);
+
+                Text t = new Text(25, h / 10 * (i / 2) + 54, Integer.toString((8 - i / 2) * 10));
+                t.setFill(Color.GREY);
+                t.setOpacity(0.8);
+                graduations.add(t);
+
+            }
+
+            vLines.add(new Line());
+            vLines.get(i - 1).setStartX(h / 10 * i + 30);
+            vLines.get(i - 1).setStartY(60);
+            vLines.get(i - 1).setEndX(h / 10 * i + 30);
+            vLines.get(i - 1).setEndY(h - 40);
+
+            vLines.get(i - 1).setStrokeWidth(2);
+            vLines.get(i - 1).setStroke(Color.GREY);
+            vLines.get(i - 1).setOpacity(0.4);
+
+            Text t = new Text(h / 10 * i + 30, h - 20, Integer.toString((i - 1) * 10));
+            double tw = t.prefWidth(-1);
+            t.setX(t.getX() - tw / 2);
+            t.setFill(Color.GREY);
+            t.setOpacity(0.8);
+            graduations.add(t);
+
         }
-        }
+        graph.getChildren().addAll(hLines);
+        graph.getChildren().addAll(vLines);
+        graph.getChildren().addAll(graduations);
+        Bounds zeroBounds = Shape.intersect(hLines.get(hLines.size() - 1), vLines.get(0)).getBoundsInParent();
+        Bounds topRightBounds = Shape.intersect(hLines.get(0), vLines.get(vLines.size() - 1)).getBoundsInParent();
+        Point2D zero = new Point2D(zeroBounds.getCenterX(), zeroBounds.getCenterY());
+        Point2D topRightPt = new Point2D(topRightBounds.getCenterX(), topRightBounds.getCenterY());
+        Point2D[] pts = {zero, topRightPt};
+
+        return pts;
+    }
+
+    public static Point2D calcCoord(Point2D zero, Point2D trp, double x, double y) {
+        Point2D pt;
+        double xf, yf;
+        x -= zero.getX();
+        xf = ((x) / (trp.getX() - zero.getX() / 160)) * 160;
+        yf = (y / (trp.getY() - zero.getY() / 70)) - zero.getY();
+        pt = new Point2D(xf, yf);
+        return pt;
+    }
 
     public static void main(String[] args) {
         launch(args);
