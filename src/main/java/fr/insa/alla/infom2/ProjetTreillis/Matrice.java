@@ -74,7 +74,6 @@ public class Matrice {
                 this.coeffs = Matrice;
             }
     }
-    //Méthode .set
     public void set(int i,int j ,double k){
         this.coeffs[i][j]=k;
        
