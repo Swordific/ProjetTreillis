@@ -17,7 +17,7 @@ public class Matrice {
     public double[][] coeffs;
 
     public Matrice() {
-        
+
     }
 
     /**
@@ -66,19 +66,19 @@ public class Matrice {
         String.format("%+4.2E", getCoeffs());
         return output;
     }
-    
-    public double get() {
-        for (int i = 0; i < nbrLig; i++) {
-            for (int j = 0; j < nbrCol; j++) {
-                double[][] Matrice = new double[nbrLig][nbrCol];
-                this.coeffs = Matrice;
-            }
-    }
-    public void set(int i,int j ,double k){
-        this.coeffs[i][j]=k;
-       
-   }
-    
+
+//    public double get() {
+//        for (int i = 0; i < nbrLig; i++) {
+//            for (int j = 0; j < nbrCol; j++) {
+//                double[][] Matrice = new double[nbrLig][nbrCol];
+//                this.coeffs = Matrice;
+//            }
+//        }
+//    }
+//    public void set(int i,int j ,double k){
+//        this.coeffs[i][j]=k;
+//       
+//    }
     /**
      *
      * @return
@@ -88,7 +88,7 @@ public class Matrice {
         double[][] Transposee = new double[nbrCol][nbrLig];
         for (var i = 0; i < nbrLig; i++) {
             for (var j = 0; nbrCol >= j; j++) {
-                this.coeffs
+                //this.coeffs
             }
         }
         return Arrays.toString(Transposee);

@@ -43,12 +43,12 @@ public class Segment {
         return "[" + this.debut + "," + this.fin + ']';
     }
 
-     public static Segment demandeSegment() {
-        System.out.println("point début : ");
-        Point deb = Point.demandePoint();
-        System.out.println("point fin : ");
-        Point fin = Point.demandePoint();
-        return new Segment(deb, fin);
-    }
+//     public static Segment demandeSegment() {
+//        System.out.println("point début : ");
+//        Point deb = Point.demandePoint();
+//        System.out.println("point fin : ");
+//        Point fin = Point.demandePoint();
+//        return new Segment(deb, fin);
+//    }
     
 }
