@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
@@ -39,7 +40,8 @@ import javafx.stage.Stage;
  * @author Asus
  */
 public class MainFx extends Application {
-
+    Group graph = new Group();
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Treillis");
@@ -52,15 +54,15 @@ public class MainFx extends Application {
         primaryStage.getIcons().add(appicon);
         Scene mainScene;
         Rectangle2D tailleEcran = Screen.getPrimary().getVisualBounds();
-        Rectangle graph = new Rectangle();
+       // Rectangle graph = new Rectangle();
 
-        double graphW = tailleEcran.getWidth() - 40;
-        double graphH = tailleEcran.getHeight() - 40;
+        //double graphW = tailleEcran.getWidth() - 40;
+        //double graphH = tailleEcran.getHeight() - 40;
 
-        graph.setX(0);
+        /*graph.setX(0);
         graph.setY(0);
         graph.setFill(Color.TRANSPARENT);
-        graph.setStroke(Color.BLACK);
+        graph.setStroke(Color.BLACK);*/
 
         Button importTreillisBouton = new Button("Importer un treillis existant");
         Button creerTreillisBouton = new Button("Créer un nouveau treillis");
@@ -115,18 +117,22 @@ public class MainFx extends Application {
         mainScene = new Scene(rootWelcome);
         primaryStage.setScene(mainScene);
 
-        Pane graphPane = new Pane();
-        graphPane.setMinSize(graphW, graphH);
+        
+       
+        /*groupGraph.setMinSize(graphW, graphH);
 
-        graph.setWidth(graphPane.getMinWidth());
-        graph.setHeight(graphPane.getMinHeight());
-        graphPane.getChildren().add(graph);
-        System.out.println(graph.getWidth());
-        StackPane rootGraph = new StackPane();
+        graph.setWidth(groupGraph.getMinWidth());
+        graph.setHeight(groupGraph.getMinHeight());
+        groupGraph.getChildren().add(graph);
+        System.out.println(graph.getWidth());*/
+        Pane rootGraph = new Pane();
+        menuVBox.setPadding( new Insets(0, 0, 0, 0));
+        menuVBox.setMinWidth(tailleEcran.getWidth());
         rootGraph.getChildren().addAll(graph, menuVBox);
-        rootGraph.setAlignment(menuVBox, Pos.TOP_LEFT);
-        //rootGraph.setAlignment(graphPane, Pos.BOTTOM_LEFT);
-        rootGraph.setMargin(graphPane, new Insets(20, 20, 20, 20));
+        rootGraph.setTopAnchor(menuVBox, 0.0);
+        
+       rootGraph.setAlignment(graph, Pos.BOTTOM_LEFT);
+        
 
         creerTreillisBouton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -141,21 +147,31 @@ public class MainFx extends Application {
             }
         });
         //TODO 
-        Text t;
-        Line l;
-        for (int i = 0; i <= 10; i++) {
-            l = new Line( graph.getX()+(graphPane.getWidth()/10) * i, 0, graph.getX()+(graphPane.getWidth()/10) * i, graph.getY() + graphPane.getHeight());
-            l.setStrokeWidth(10);
-            l.setStroke(Color.BLACK);
-            rootGraph.getChildren().add(l);
-            System.out.println(l.getStartY() + ", " + l.getEndY());
-
-        }
+        
+        
 
         primaryStage.setMaximized(true);
         primaryStage.show();
+        dessinerGraph();
 
     }
+        public  void dessinerGraph() {
+            Rectangle2D tailleEcran = Screen.getPrimary().getVisualBounds();
+        Text t;
+        Line lHorizontal;
+        Line lVertical ;
+        for (int i = 0; i <= 9; i++) {
+            
+            lVertical = new Line((tailleEcran.getHeight()/10) +100,tailleEcran.getHeight()/10 * i + 50 , tailleEcran.getHeight()/10 * 9 +100 , tailleEcran.getHeight()/10 * i + 50);
+            lVertical.setStrokeWidth(5);
+            lVertical.setStroke(Color.BLACK);
+            lHorizontal = new Line((tailleEcran.getHeight()/10  +70) + i *(tailleEcran.getHeight()/10  +70), tailleEcran.getHeight()/10  + 50 , (tailleEcran.getHeight()/10  +70) + i *(tailleEcran.getHeight()/10  +70) , tailleEcran.getHeight()/10 * 9 + 50);
+            lHorizontal.setStrokeWidth(5);
+            lHorizontal.setStroke(Color.BLACK);
+            graph.getChildren().addAll(/*lHorizontal,*/ lVertical);
+            
+        }
+        }
 
     public static void main(String[] args) {
         launch(args);
