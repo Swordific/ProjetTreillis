@@ -6,7 +6,6 @@ package fr.insa.alla.infom2.ProjetTreillis;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -67,7 +66,7 @@ public class Treillis {
         if (noeuds.contains(n)) {
             return "Noeud déjà dans la liste";
         }
-        n.setId(this.maxIdNoeud());
+        //n.setId(this.maxIdNoeud());
         noeuds.add(n);
         return null;
     }
@@ -78,7 +77,7 @@ public class Treillis {
         }
         this.ajouteNoeud(b.getNoeudDepart());
         this.ajouteNoeud(b.getNoeudArrivee());
-        b.setId(this.maxIdBarre());
+        //b.setId(this.maxIdBarre());
         barres.add(b);
         return null;
     }

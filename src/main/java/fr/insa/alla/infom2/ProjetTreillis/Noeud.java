@@ -5,8 +5,6 @@
 package fr.insa.alla.infom2.ProjetTreillis;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  *
@@ -110,7 +108,7 @@ public abstract class Noeud {
 
     @Override
     public String toString() {
-        String output = "(" + this.px + " ; " + this.py + ") ; F = " + this.f;
+        String output = "(id=" + id + ") (" + this.px + " ; " + this.py + ") ; F = " + this.f;
         return output;
     }
 
@@ -152,21 +150,20 @@ public abstract class Noeud {
         int nbr = 0;
         String type = this.getClass().toString();
         switch (type) {
-            case "NoeudSimple":
+            case "class fr.insa.alla.infom2.ProjetTreillis.NoeudSimple":
                 return 0;
-            case "NoeudAppuiSimple":
+            case "class fr.insa.alla.infom2.ProjetTreillis.NoeudAppuiSimple":
                 return 1;
-            case "NoeudAppuiDouble":
+            case "class fr.insa.alla.infom2.ProjetTreillis.NoeudAppuiDouble":
                 return 2;
         }
         return -1;
     }
 
     public ArrayList<Barre> barresIncidentes() {
-        Set<Barre> set = new HashSet<Barre>();
-        set.addAll(this.barresDepart);
-        set.addAll(this.barresArrivee);
-        ArrayList<Barre> list = new ArrayList(set);
+        ArrayList<Barre> list = new ArrayList();
+        list.addAll(barresDepart);
+        list.addAll(barresArrivee);
         return list;
     }
 
