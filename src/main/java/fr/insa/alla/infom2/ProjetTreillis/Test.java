@@ -13,6 +13,16 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.TransformerException;
 import java.lang.Math.*;
 
+import static fr.insa.alla.infom2.ProjetTreillis.Treillis.menuTexte;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerException;
+import java.lang.Math.* ;
+
+
 /**
  *
  * @author Farouk
@@ -20,10 +30,18 @@ import java.lang.Math.*;
 public class Test {
 
     public static void main(String[] args) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException, TransformerException, IOException {
+
 //        Treillis.menuTexte();
 //        Numeroteur num = new Numeroteur();
 //        num.addAll(667, "dfnoifdn", 994.01);
 //        System.out.println(num.getIndex(667));
+
+        //Treillis.menuTexte();
+        //Numeroteur num = new Numeroteur();
+        //num.addAll(667, "dfnoifdn", 994.01);
+        //System.out.println(num.getIndex(667));
+
+
 
         Vecteur2D f = new Vecteur2D(0, 1000);
         Noeud n1 = new NoeudAppuiSimple(1, 0, 0, f);
@@ -48,6 +66,8 @@ public class Test {
     
 
 
+        
+
       
                 
                 
@@ -55,3 +75,4 @@ public class Test {
         
     }
 }
+
