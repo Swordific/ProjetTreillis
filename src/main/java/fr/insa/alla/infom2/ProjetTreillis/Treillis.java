@@ -4,14 +4,18 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis;
 
+import Jama.Matrix;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import static java.lang.Math.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.TransformerException;
 
@@ -100,8 +104,67 @@ public class Treillis {
         return barres.get(Lire.i() - 1);
     }
 
-    public static void menuTexte() throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException, TransformerException, IOException {
-        Treillis treillis = new Treillis();
+    public Matrix calculeTraction() {
+
+        Matrix equa = new Matrix(2 * noeuds.size() + barres.size()-1, 2* noeuds.size());
+        Matrix secondMembre = new Matrix(2 * noeuds.size(), 1);
+
+        ArrayList<Barre> listBarres = new ArrayList();
+        int listR =0 ;
+        int i = 0;
+        int k = 0;
+
+        while (i <= 2 * noeuds.size() - 2) {
+            for (Noeud n : this.noeuds) {
+
+                for (Barre b : this.barres) {
+                    int j = 0;
+                    if (!listBarres.contains(b)) {
+
+                        equa.set(i, listBarres.size(), cos(Math.toRadians(b.angle(n))));
+                        equa.set(i + 1, listBarres.size() , sin(Math.toRadians(b.angle(n))));
+                        listBarres.add(b);
+
+                    } else if (listBarres.contains(b)) {
+                        equa.set(i, listBarres.indexOf(b), cos(Math.toRadians(b.angle(n))));
+                        equa.set(i + 1, listBarres.indexOf(b), sin(Math.toRadians(b.angle(n))));
+                    }
+
+                }
+                int type = n.nbrInconnues();
+                System.out.println(type);
+                switch (type) {
+                    case 1:
+                        equa.set(i, listBarres.size() + listR, 0.0);
+                        equa.set(i + 1, listBarres.size() + listR + 1, 1.0);
+                        listR= listR +2 ;
+                        break;
+                    case 2:
+                        equa.set(i, listBarres.size() + listR, 0);
+                        equa.set(i + 1, listBarres.size() + listR + 1, 1);
+                        listR= listR +2 ;
+                        break;
+                }
+
+                secondMembre.set(i, 0, n.getF().getVx());
+                secondMembre.set(i + 1, 0, n.getF().getVy());
+
+                i += 2;
+            }
+        }
+        System.out.println(Arrays.deepToString(equa.getArray()));
+        System.out.println(listBarres.size());
+        System.out.println(listR);
+        System.out.println(Arrays.deepToString(secondMembre.getArray()));
+        Matrix solution = equa.solve(secondMembre);
+        
+        //Matrix[] m = {equa, secondMembre};
+        return solution;
+
+    }
+
+    public static void menuTexte(Treillis treillis) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException, TransformerException, IOException {
+        
 
         while (true) {
             System.out.println("Que voulez-vous faire ?\r\n1) Afficher le treillis\r\n2) Créer un noeud\r\n3) Supprimer un noeud\r\n4) Créer une barre\r\n5) Supprimer une barre");
@@ -154,20 +217,20 @@ public class Treillis {
 
                     // Java 10
                     //String xml = out.toString(StandardCharsets.UTF_8);
-
                     // standard way to convert byte array to String
                     String xml = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
                     // System.out.println(formatXML(xml));
-
                     String prettyPrintXML = Fichier.formatXML(xml);
 
                     // print to console
                     // System.out.println(prettyPrintXML);
-
                     // Java 11 - write to file
                     Files.write(Paths.get("C:/Users/ialla01/Desktop/zbeub.xml"), prettyPrintXML.getBytes(StandardCharsets.UTF_8));
                     //Fichier.exportTreillis(treillis, new FileOutputStream("C:/Users/ialla01/Desktop/zbeub.xml"));
+                    break;
+                case 7:
+                    System.out.println(Arrays.deepToString(treillis.calculeTraction().getArray()));
                     break;
             }
         }

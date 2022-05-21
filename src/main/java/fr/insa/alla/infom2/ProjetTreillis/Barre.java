@@ -17,12 +17,32 @@ public class Barre {
     private Noeud noeudDepart, noeudArrivee;
     private double maxTrac, maxComp, cout;
     private Vecteur2D f;
+    private double trac ; 
 
-    public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, double maxTrac, double maxComp, double cout) {
+    public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, double trac, double maxTrac, double maxComp, double cout) {
         this.id = id;
         this.noeudDepart = noeudDepart;
         this.noeudArrivee = noeudArrivee;
         this.cout = cout;
+        this.trac = trac ;
+        this.maxComp = maxComp;
+        this.maxTrac = maxTrac;
+
+        ArrayList<Barre> listeDepart = noeudDepart.getBarresDepart();
+        listeDepart.add(this);
+        ArrayList<Barre> listeArrivee = noeudArrivee.getBarresArrivee();
+        listeArrivee.add(this);
+
+        noeudDepart.setBarresDepart(listeDepart);
+        noeudArrivee.setBarresArrivee(listeArrivee);
+    }
+    
+     public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, double maxTrac, double maxComp, double cout) {
+        this.id = id;
+        this.noeudDepart = noeudDepart;
+        this.noeudArrivee = noeudArrivee;
+        this.cout = cout;
+        this.trac = 0 ;
         this.maxComp = maxComp;
         this.maxTrac = maxTrac;
 
@@ -89,21 +109,24 @@ public class Barre {
         return null;
     }
 
-    public double angle() {
-        double pyNoeudArrivee = noeudArrivee.getPy();
-        double pxNoeudArrivee = noeudArrivee.getPx();
-        double pyNoeudDepart = noeudDepart.getPy();
-        double pxNoeudDepart = noeudDepart.getPx();
-        pyNoeudArrivee = pyNoeudArrivee - pyNoeudDepart;
-        pxNoeudArrivee = pxNoeudArrivee - pxNoeudDepart;
-        double angle = atan(pyNoeudArrivee / pxNoeudArrivee);
+      public static double angleHoriz(double x_n, double y_n, double x_m, double y_m){
+        double x_nm=x_m-x_n;
+        double y_nm=y_m-y_n;
+        return Math.atan2(y_nm, x_nm);
+    }
+    
+    //Méthode pour donner l'angle entre une barre et le vecteur horizontal
+    public double angle(Noeud n){
+        Noeud m = this.noeudOppose(n);
+        double angle=(angleHoriz(n.getPx(),n.getPy(),m.getPx(),m.getPy()))/(Math.PI/180);
+        System.out.println("Il y a un angle de "+angle+"° entre la barre et l'axe horizontal.");
         return angle;
     }
 
     @Override
     public String toString() {
         String output = new String();
-        output = "Départ : " + this.noeudDepart + " ; Arrivée : " + this.noeudArrivee + " ; Traction maximale : " + this.maxTrac + " ; Compression maximale : " + this.maxComp + " ; Coût au mètre : " + this.cout;
+        output = "Départ : " + this.noeudDepart + " ; Arrivée : " + this.noeudArrivee + " ; Traction actuelle : " + this.trac + " ; Traction maximale : " + this.maxTrac + " ; Compression maximale : " + this.maxComp + " ; Coût au mètre : " + this.cout;
         return output;
     }
 
@@ -197,6 +220,20 @@ public class Barre {
 
     public void setF(Vecteur2D f) {
         this.f = f;
+    }
+
+    /**
+     * @return the trac
+     */
+    public double getTrac() {
+        return trac;
+    }
+
+    /**
+     * @param trac the trac to set
+     */
+    public void setTrac(double trac) {
+        this.trac = trac;
     }
 
 }
