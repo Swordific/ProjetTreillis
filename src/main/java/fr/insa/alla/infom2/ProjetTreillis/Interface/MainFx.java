@@ -6,6 +6,7 @@ package fr.insa.alla.infom2.ProjetTreillis.Interface;
 
 import fr.insa.alla.infom2.ProjetTreillis.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -19,10 +20,11 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -66,14 +68,16 @@ public class MainFx extends Application {
 
     Point2D zero, topRightPt;
 
-    Image appuiSimple = new Image(getClass().getResourceAsStream("/appui_simple.png"), 24, 24, true, true);
-    Image appuiDouble = new Image(getClass().getResourceAsStream("/appui_double.png"), 24, 24, true, true);
-    Image noeudSimple = new Image(getClass().getResourceAsStream("/noeud_simple.png"), 24, 24, true, true);
+    Image appuiSimpleImg = new Image(getClass().getResourceAsStream("/appui_simple.png"), 24, 24, true, true);
+    Image appuiDoubleImg = new Image(getClass().getResourceAsStream("/appui_double.png"), 24, 24, true, true);
+    Image noeudSimpleImg = new Image(getClass().getResourceAsStream("/noeud_simple.png"), 24, 24, true, true);
+    Image barreImg = new Image(getClass().getResourceAsStream("/barre.png"), 24, 24, true, true);
+    Image supprImg = new Image(getClass().getResourceAsStream("/suppr.png"), 24, 24, true, true);
 
-    ArrayList<ImageView> appuiSimpleImages = new ArrayList<>();
-    ArrayList<ImageView> appuiDoubleImages = new ArrayList<>();
-    ArrayList<ImageView> noeudSimpleImages = new ArrayList<>();
-    ArrayList<Line> barresList = new ArrayList<>();
+    HashMap<ImageView, Noeud> appuiSimpleImages = new HashMap<>();
+    HashMap<ImageView, Noeud> appuiDoubleImages = new HashMap<>();
+    HashMap<ImageView, Noeud> noeudSimpleImages = new HashMap<>();
+    HashMap<Line, Barre> barresMap = new HashMap<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -109,13 +113,17 @@ public class MainFx extends Application {
         Menu menuEditer = new Menu("Editer");
 
         ToggleGroup boutonsAjout = new ToggleGroup();
-        ToggleButton btnNoeudSimple = new ToggleButton("", new ImageView(noeudSimple));
+        ToggleButton btnNoeudSimple = new ToggleButton("", new ImageView(noeudSimpleImg));
         btnNoeudSimple.setUserData("noeudSimple");
-        ToggleButton btnAppuiSimple = new ToggleButton("", new ImageView(appuiSimple));
+        ToggleButton btnAppuiSimple = new ToggleButton("", new ImageView(appuiSimpleImg));
         btnAppuiSimple.setUserData("appuiSimple");
-        ToggleButton btnAppuiDouble = new ToggleButton("", new ImageView(appuiDouble));
+        ToggleButton btnAppuiDouble = new ToggleButton("", new ImageView(appuiDoubleImg));
         btnAppuiDouble.setUserData("appuiDouble");
-        boutonsAjout.getToggles().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble);
+        ToggleButton btnBarre = new ToggleButton("", new ImageView(barreImg));
+        btnBarre.setUserData("barre");
+        ToggleButton btnSuppr = new ToggleButton("", new ImageView(supprImg));
+        btnSuppr.setUserData("suppr");
+        boutonsAjout.getToggles().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr);
 
         MenuBar menuBar = new MenuBar();
         ToolBar toolBar = new ToolBar();
@@ -132,14 +140,10 @@ public class MainFx extends Application {
         menuFichier.getItems().addAll(creerTreillisMenu, importTreillisMenu, exportTreillisMenu);
         menuEditer.getItems().addAll(creerNoeudMenu, supprNoeudMenu, creerBarreMenu, supprBarreMenu);
         menuBar.getMenus().addAll(menuFichier, menuEditer);
-        toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble);
+        toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr);
 
-        ArrayList<String> typesNoeuds = new ArrayList<>();
-        typesNoeuds.add("Noeud Simple");
-        typesNoeuds.add("Noeud Appui Simple");
-        typesNoeuds.add("Noeud Appui Double");
-        ChoiceDialog<String> choixNoeudDialog = new ChoiceDialog<>(typesNoeuds.get(0), typesNoeuds);
         Dialog<double[]> creationNoeudDialog = new Dialog<>();
+        Dialog<double[]> creationBarreDialog = new Dialog<>();
 
         //Menu de départ/déclaration écran principal
         primaryStage.getIcons().add(appicon);
@@ -163,13 +167,6 @@ public class MainFx extends Application {
         //Ecran principal
         primaryStage.setMaximized(true);
         primaryStage.show();
-        Noeud n1 = new NoeudSimple(0, 0);
-        Noeud n2 = new NoeudSimple(10, 10);
-        treillis.getNoeuds().add(n1);
-        treillis.getNoeuds().add(n2);
-        Barre bb = new Barre(n1, n2);
-        treillis.getBarres().add(bb);
-        dessinerContenu(treillis);
 
         //Events et set boutons
         creerTreillisBouton.setOnAction(new EventHandler<ActionEvent>() {
@@ -239,107 +236,185 @@ public class MainFx extends Application {
             }
         };
 
-        creationNoeudDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        EventHandler ajouterBarre = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                //Barre b = new Barre();
+            }
+        };
 
-        choixNoeudDialog.setTitle("Choix de noeud");
-        choixNoeudDialog.setHeaderText(null);
-        choixNoeudDialog.setContentText("Choisissez le type voulu :");
-        choixNoeudDialog.setGraphic(null);
+        EventHandler supprimerObjet = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                Line objL = null;
+                ImageView objIm = null;
+                Barre b = null;
+                Noeud n = null;
+                if (e.getSource() instanceof ImageView) {
+                    objIm = (ImageView) e.getSource();
+                    if (appuiSimpleImages.containsKey(objIm)) {
+                        n = appuiSimpleImages.get(objIm);
+                        appuiSimpleImages.remove(objIm);
+                    } else if (appuiDoubleImages.containsKey(objIm)) {
+                        n = appuiDoubleImages.get(objIm);
+                        appuiDoubleImages.remove(objIm);
+                    } else if (noeudSimpleImages.containsKey(objIm)) {
+                        n = noeudSimpleImages.get(objIm);
+                        noeudSimpleImages.remove(objIm);
+                    }
+                    treillis.getNoeuds().remove(n);
+                } else {
+                    if (barresMap.containsKey(objL)) {
+                        b = barresMap.get(objL);
+                        barresMap.remove(objL);
+                        treillis.getBarres().remove(b);
+                    }
+                }
+
+                dessinerContenu(treillis);
+            }
+        };
+
+        creationNoeudDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         creationNoeudDialog.setTitle("Création de noeud");
         GridPane creationNoeudGrid = new GridPane();
         creationNoeudGrid.setHgap(10);
         creationNoeudGrid.setVgap(10);
         creationNoeudGrid.setPadding(new Insets(10, 10, 10, 10));
+
+        String[] typesNoeuds = {"Noeud Simple", "Noeud Appui Simple", "Noeud Appui Double"};
+
+        ChoiceBox<String> choixNoeudField = new ChoiceBox<String>();
+        choixNoeudField.getItems().addAll(typesNoeuds);
+        creationNoeudGrid.add(choixNoeudField, 1, 0);
+        creationNoeudGrid.add(new Label("Choisissez le type de noeud"), 0, 0);
         TextField noeudPxField = new TextField();
-        creationNoeudGrid.add(noeudPxField, 1, 0);
-        creationNoeudGrid.add(new Label("Entrez l'abscisse du noeud"), 0, 0);
+        creationNoeudGrid.add(noeudPxField, 1, 1);
+        creationNoeudGrid.add(new Label("Entrez l'abscisse du noeud"), 0, 1);
         TextField noeudPyField = new TextField();
-        creationNoeudGrid.add(noeudPyField, 1, 1);
-        creationNoeudGrid.add(new Label("Entrez l'ordonnée du noeud"), 0, 1);
+        creationNoeudGrid.add(noeudPyField, 1, 2);
+        creationNoeudGrid.add(new Label("Entrez l'ordonnée du noeud"), 0, 2);
         TextField noeudFxField = new TextField();
-        creationNoeudGrid.add(noeudFxField, 1, 2);
-        creationNoeudGrid.add(new Label("Entrez la force horizontale"), 0, 2);
+        creationNoeudGrid.add(noeudFxField, 1, 3);
+        creationNoeudGrid.add(new Label("Entrez la force horizontale"), 0, 3);
         TextField noeudFyField = new TextField();
-        creationNoeudGrid.add(noeudFyField, 1, 3);
-        creationNoeudGrid.add(new Label("Entrez la force verticale"), 0, 3);
+        creationNoeudGrid.add(noeudFyField, 1, 4);
+        creationNoeudGrid.add(new Label("Entrez la force verticale"), 0, 4);
 
         creationNoeudDialog.setResultConverter(btn -> {
-            if (btn == ButtonType.OK) {
-                double[] out = {Double.parseDouble(noeudPxField.getText()), Double.parseDouble(noeudPyField.getText()), Double.parseDouble(noeudFxField.getText()), Double.parseDouble(noeudFyField.getText())};
-                return out;
+            if (btn == ButtonType.OK && !noeudPxField.getText().equals("") && !noeudPyField.getText().equals("")) {
+                int type = -1;
+                switch (choixNoeudField.getValue()) {
+                    case "Noeud Simple":
+                        type = 0;
+                        break;
+                    case "Noeud Appui Simple":
+                        type = 1;
+                        break;
+                    case "Noeud Appui Double":
+                        type = 2;
+                        break;
+                }
+                try {
+                    double[] out = {type, Double.parseDouble(noeudPxField.getText()), Double.parseDouble(noeudPyField.getText()), Double.parseDouble(noeudFxField.getText()), Double.parseDouble(noeudFyField.getText())};
+                    return out;
+                } catch (Exception e) {
+                    double[] out = {type, Double.parseDouble(noeudPxField.getText()), Double.parseDouble(noeudPyField.getText())};
+                    return out;
+                }
             }
             return null;
-        });
+        }
+        );
+
+        creationBarreDialog.setTitle("Création de barre");
+        String[] typesBarres = {"Barre"};
 
         creationNoeudDialog.getDialogPane().setContent(creationNoeudGrid);
 
         EventHandler creerNoeudEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-
-                Optional<String> typeNoeud = choixNoeudDialog.showAndWait();
                 Optional<double[]> noeudInfo = creationNoeudDialog.showAndWait();
-                typeNoeud.ifPresent(type -> {
-                    noeudInfo.ifPresent(data -> {
-                        double px = data[0];
-                        double py = data[1];
-                        Vecteur2D f = new Vecteur2D(data[2], data[3]);
-                        Noeud n;
-                        switch (type) {
-                            case "Noeud Simple":
-                                n = new NoeudSimple(px, py, f);
-                                n.setId(numNoeudSimple.getOrAdd(n));
-                                treillis.ajouteNoeud(n);
-                                break;
-                            case "Noeud Appui Simple":
-                                n = new NoeudAppuiSimple(px, py, f);
-                                n.setId(numAppuiSimple.getOrAdd(n));
-                                treillis.ajouteNoeud(n);
-                                break;
-                            case "Noeud Appui Double":
-                                n = new NoeudAppuiDouble(px, py, f);
-                                n.setId(numAppuiDouble.getOrAdd(n));
-                                treillis.ajouteNoeud(n);
-                                break;
-                        }
-                        System.out.println(treillis.getNoeuds());
+                noeudInfo.ifPresent(data -> {
+                    double px = data[1];
+                    double py = data[2];
+                    Vecteur2D f = new Vecteur2D(0, 0);
+                    if (data.length > 3) {
+                        f = new Vecteur2D(data[3], data[4]);
+                    }
+                    Noeud n;
+                    switch ((int) data[0]) {
+                        case 0:
+                            n = new NoeudSimple(px, py, f);
+                            n.setId(numNoeudSimple.getOrAdd(n));
+                            treillis.ajouteNoeud(n);
+                            break;
+                        case 1:
+                            n = new NoeudAppuiSimple(px, py, f);
+                            n.setId(numAppuiSimple.getOrAdd(n));
+                            treillis.ajouteNoeud(n);
+                            break;
+                        case 2:
+                            n = new NoeudAppuiDouble(px, py, f);
+                            n.setId(numAppuiDouble.getOrAdd(n));
+                            treillis.ajouteNoeud(n);
+                            break;
+                    }
+                    System.out.println(treillis.getNoeuds());
 
-                        dessinerContenu(treillis);
-                    });
+                    dessinerContenu(treillis);
                 });
+
             }
         };
 
         creerNoeudMenu.setOnAction(creerNoeudEvent);
 
         boutonsAjout.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+
+            @Override
             public void changed(ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) {
                 if (new_toggle == null) {
                     graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
                     graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
                     graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
+                    graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
                 } else {
                     switch ((String) boutonsAjout.getSelectedToggle().getUserData()) {
                         case "noeudSimple":
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
+                            graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
                             graphGrille.addEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
                             break;
                         case "appuiSimple":
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
+                            graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
                             graphGrille.addEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
                             break;
                         case "appuiDouble":
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
+                            graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
                             graphGrille.addEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
+                            break;
+                        case "suppr":
+                            graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
+                            graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
+                            graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
+                            for (Node obj : graphObjets.getChildren()) {
+                                obj.addEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
+                            }
+
                             break;
                     }
                 }
             }
-        });
+        }
+        );
     }
 
     public Point2D[] dessinerGraphe() {
@@ -406,7 +481,7 @@ public class MainFx extends Application {
     }
 
     public void dessinerContenu(Treillis t) {
-        graphObjets.getChildren().removeAll();
+        graphObjets.getChildren().removeAll(graphObjets.getChildren());
         for (Noeud n : t.getNoeuds()) {
             dessinerNoeud(n);
         }
@@ -420,38 +495,36 @@ public class MainFx extends Application {
         Point2D xy = calcCoordR(n.getPx(), n.getPy());
         switch (type) {
             case 0:
-                ImageView noeudSimpleView = new ImageView(noeudSimple);
+                ImageView noeudSimpleView = new ImageView(noeudSimpleImg);
                 noeudSimpleView.setFitWidth(16);
                 noeudSimpleView.setFitHeight(16);
                 noeudSimpleView.setX(xy.getX() - 8);
                 noeudSimpleView.setY(xy.getY() - 8);
-                noeudSimpleImages.add(noeudSimpleView);
-                graphObjets.getChildren().removeAll(noeudSimpleImages);
-                graphObjets.getChildren().addAll(noeudSimpleImages);
+                noeudSimpleImages.put(noeudSimpleView, n);
+                graphObjets.getChildren().add(noeudSimpleView);
                 break;
 
             case 1:
-                ImageView appuiSimpleView = new ImageView(appuiSimple);
+                ImageView appuiSimpleView = new ImageView(appuiSimpleImg);
                 appuiSimpleView.setFitWidth(32);
                 appuiSimpleView.setFitHeight(32);
                 appuiSimpleView.setX(xy.getX() - 16);
                 appuiSimpleView.setY(xy.getY() - 5);
-                appuiSimpleImages.add(appuiSimpleView);
-                graphObjets.getChildren().removeAll(appuiSimpleImages);
-                graphObjets.getChildren().addAll(appuiSimpleImages);
+                appuiSimpleImages.put(appuiSimpleView, n);
+                graphObjets.getChildren().add(appuiSimpleView);
                 break;
 
             case 2:
-                ImageView appuiDoubleView = new ImageView(appuiDouble);
+                ImageView appuiDoubleView = new ImageView(appuiDoubleImg);
                 appuiDoubleView.setFitWidth(32);
                 appuiDoubleView.setFitHeight(32);
                 appuiDoubleView.setX(xy.getX() - 16);
                 appuiDoubleView.setY(xy.getY() - 4);
-                appuiDoubleImages.add(appuiDoubleView);
-                graphObjets.getChildren().removeAll(appuiDoubleImages);
-                graphObjets.getChildren().addAll(appuiDoubleImages);
+                appuiDoubleImages.put(appuiDoubleView, n);
+                graphObjets.getChildren().add(appuiDoubleView);
                 break;
         }
+        System.out.println(graphObjets.getChildren());
     }
 
     public void dessinerBarre(Barre b) {
@@ -461,9 +534,9 @@ public class MainFx extends Application {
         Point2D pa = calcCoordR(na.getPx(), na.getPy());
         Line l = new Line(pd.getX(), pd.getY(), pa.getX(), pa.getY());
         l.setStrokeWidth(5);
-        barresList.add(l);
-        graphObjets.getChildren().removeAll(barresList);
-        graphObjets.getChildren().addAll(barresList);
+        barresMap.put(l, b);
+        graphObjets.getChildren().removeAll(barresMap.keySet());
+        graphObjets.getChildren().addAll(barresMap.keySet());
     }
 
     public Point2D calcCoord(double x, double y) {
