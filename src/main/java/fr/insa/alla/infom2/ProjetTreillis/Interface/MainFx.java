@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -54,7 +53,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 
 /**
  *
@@ -82,6 +80,7 @@ public class MainFx extends Application {
     HashMap<ImageView, Noeud> appuiDoubleImages = new HashMap<>();
     HashMap<ImageView, Noeud> noeudSimpleImages = new HashMap<>();
     HashMap<Line, Barre> linesMap = new HashMap<>();
+    HashMap<String, Noeud> stringNoeudMap = new HashMap<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -89,6 +88,8 @@ public class MainFx extends Application {
         primaryStage.setResizable(false);
         Scene mainScene;
         graph.getChildren().addAll(graphGrille, graphObjets);
+
+        ArrayList<String> choixNoeudArray = new ArrayList<>();
 
         //Images
         Image appicon = new Image(getClass().getResourceAsStream("/appicon.png"));
@@ -100,6 +101,7 @@ public class MainFx extends Application {
         Numeroteur numAppuiSimple = new Numeroteur();
         Numeroteur numAppuiDouble = new Numeroteur();
         Numeroteur numNoeudSimple = new Numeroteur();
+        Numeroteur numBarre = new Numeroteur();
 
         //Boutons/Menus/Dialogs
         Button importTreillisBouton = new Button("Importer un treillis existant");
@@ -147,7 +149,7 @@ public class MainFx extends Application {
         toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr);
 
         Dialog<double[]> creationNoeudDialog = new Dialog<>();
-        Dialog<double[]> creationBarreDialog = new Dialog<>();
+        Dialog<Object[]> creationBarreDialog = new Dialog<>();
 
         //Menu de départ/déclaration écran principal
         primaryStage.getIcons().add(appicon);
@@ -210,6 +212,7 @@ public class MainFx extends Application {
                 NoeudAppuiSimple n = new NoeudAppuiSimple(pt.getX(), pt.getY());;
                 n.setId(numAppuiSimple.add(n));
                 treillis.ajouteNoeud(n);
+                stringNoeudMap.put(n.toString(), n);
                 System.out.println(treillis.getNoeuds());
 
                 dessinerContenu(treillis);
@@ -222,6 +225,7 @@ public class MainFx extends Application {
                 NoeudAppuiDouble n = new NoeudAppuiDouble(pt.getX(), pt.getY());;
                 n.setId(numAppuiDouble.add(n));
                 treillis.ajouteNoeud(n);
+                stringNoeudMap.put(n.toString(), n);
                 System.out.println(treillis.getNoeuds());
 
                 dessinerContenu(treillis);
@@ -234,6 +238,7 @@ public class MainFx extends Application {
                 NoeudSimple n = new NoeudSimple(pt.getX(), pt.getY());
                 n.setId(numNoeudSimple.getOrAdd(n));
                 treillis.ajouteNoeud(n);
+                stringNoeudMap.put(n.toString(), n);
                 System.out.println(treillis.getNoeuds());
 
                 dessinerContenu(treillis);
@@ -254,6 +259,7 @@ public class MainFx extends Application {
                 ImageView objIm = null;
                 Barre b = null;
                 Noeud n = null;
+                System.out.println(e.getSource());
                 if (e.getSource() instanceof ImageView) {
                     objIm = (ImageView) e.getSource();
                     if (appuiSimpleImages.containsKey(objIm)) {
@@ -267,7 +273,9 @@ public class MainFx extends Application {
                         noeudSimpleImages.remove(objIm);
                     }
                     treillis.getNoeuds().remove(n);
+                    choixNoeudArray.remove(n.toString());
                 } else {
+                    objL = (Line) e.getSource();
                     if (linesMap.containsKey(objL)) {
                         b = linesMap.get(objL);
                         linesMap.remove(objL);
@@ -331,15 +339,7 @@ public class MainFx extends Application {
         }
         );
 
-        StringConverter<Noeud> noeudConverter = new StringConverter<Noeud>() {
-            public String toString(Noeud n) {
-                return n.toString();
-            }
-
-            public Noeud fromString(String x) {
-                return null;
-            }
-        };
+        creationNoeudDialog.getDialogPane().setContent(creationNoeudGrid);
 
         creationBarreDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         String[] typesBarres = {"Barre"};
@@ -352,30 +352,32 @@ public class MainFx extends Application {
         choixBarreField.getItems().addAll(typesBarres);
         creationBarreGrid.add(new Label("Choisir le type de barre"), 0, 0);
         creationBarreGrid.add(choixBarreField, 1, 0);
-        ChoiceBox<Noeud> choixNoeudDepartField = new ChoiceBox<Noeud>();
-        choixNoeudDepartField.setConverter(noeudConverter);
-        choixNoeudDepartField.getItems().addAll(treillis.getNoeuds());
-
+        ChoiceBox<String> choixNoeudDepartField = new ChoiceBox<String>();
+        for (Noeud n : treillis.getNoeuds()) {
+            choixNoeudArray.add(n.toString());
+        }
+        choixNoeudDepartField.getItems().addAll(choixNoeudArray);
         creationBarreGrid.add(new Label("Choisir le noeud de départ"), 0, 1);
         creationBarreGrid.add(choixNoeudDepartField, 1, 1);
-        ChoiceBox<Noeud> choixNoeudArriveeField = new ChoiceBox<Noeud>();
-        choixNoeudArriveeField.setConverter(noeudConverter);
-        choixNoeudArriveeField.getItems().addAll(treillis.getNoeuds());
+        ChoiceBox<String> choixNoeudArriveeField = new ChoiceBox<String>();
+        choixNoeudArriveeField.getItems().addAll(choixNoeudArray);
 
         creationBarreGrid.add(new Label("Choisir le noeud d'arrivée"), 0, 2);
         creationBarreGrid.add(choixNoeudArriveeField, 1, 2);
 
         creationBarreDialog.getDialogPane().setContent(creationBarreGrid);
-        creationBarreDialog.showAndWait();
 
-//        creationBarreDialog.setResultConverter(btn -> {
-//            if (btn == ButtonType.OK) {
-//                int type = -1;
-//
-//            }
-//            return null;
-//        }
-//        );
+        creationBarreDialog.setResultConverter(btn -> {
+            if (btn == ButtonType.OK) {
+                //choixBarreField.getValue();
+                Noeud nd = stringNoeudMap.get((String) choixNoeudDepartField.getValue());
+                Noeud na = stringNoeudMap.get((String) choixNoeudArriveeField.getValue());
+                Object[] out = {nd, na};
+                return out;
+            }
+            return null;
+        }
+        );
         EventHandler creerNoeudEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -413,7 +415,34 @@ public class MainFx extends Application {
             }
         };
 
+        EventHandler creerBarreEvent = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                for (Noeud n : treillis.getNoeuds()) {
+                    if (!choixNoeudArray.contains(n.toString())) {
+                        choixNoeudArray.add(n.toString());
+                    }
+                }
+                choixNoeudDepartField.getItems().removeAll(choixNoeudDepartField.getItems());
+                choixNoeudArriveeField.getItems().removeAll(choixNoeudArriveeField.getItems());
+                choixNoeudDepartField.getItems().addAll(choixNoeudArray);
+                choixNoeudArriveeField.getItems().addAll(choixNoeudArray);
+                Optional<Object[]> barreInfo = creationBarreDialog.showAndWait();
+                barreInfo.ifPresent(data -> {
+                    Barre b = new Barre((Noeud) data[0], (Noeud) data[1]);
+                    b.setId(numBarre.getOrAdd(b));
+                    treillis.ajouteBarre(b);
+
+                    System.out.println(treillis.getBarres());
+
+                    dessinerContenu(treillis);
+                });
+
+            }
+        };
+
         creerNoeudMenu.setOnAction(creerNoeudEvent);
+        creerBarreMenu.setOnAction(creerBarreEvent);
 
         boutonsAjout.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 
@@ -588,7 +617,7 @@ public class MainFx extends Application {
         l.setStrokeWidth(5);
         l.setStrokeLineCap(StrokeLineCap.ROUND);
         linesMap.put(l, b);
-        graphObjets.getChildren().addAll(l);
+        graphObjets.getChildren().add(l);
     }
 
     public Point2D calcCoord(double x, double y) {
