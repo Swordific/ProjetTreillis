@@ -54,6 +54,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 /**
  *
@@ -330,11 +331,51 @@ public class MainFx extends Application {
         }
         );
 
-        creationBarreDialog.setTitle("Création de barre");
+        StringConverter<Noeud> noeudConverter = new StringConverter<Noeud>() {
+            public String toString(Noeud n) {
+                return n.toString();
+            }
+
+            public Noeud fromString(String x) {
+                return null;
+            }
+        };
+
+        creationBarreDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         String[] typesBarres = {"Barre"};
+        creationBarreDialog.setTitle("Création de barre");
+        GridPane creationBarreGrid = new GridPane();
+        creationBarreGrid.setHgap(10);
+        creationBarreGrid.setVgap(10);
+        creationBarreGrid.setPadding(new Insets(10, 10, 10, 10));
+        ChoiceBox<String> choixBarreField = new ChoiceBox<String>();
+        choixBarreField.getItems().addAll(typesBarres);
+        creationBarreGrid.add(new Label("Choisir le type de barre"), 0, 0);
+        creationBarreGrid.add(choixBarreField, 1, 0);
+        ChoiceBox<Noeud> choixNoeudDepartField = new ChoiceBox<Noeud>();
+        choixNoeudDepartField.setConverter(noeudConverter);
+        choixNoeudDepartField.getItems().addAll(treillis.getNoeuds());
 
-        creationNoeudDialog.getDialogPane().setContent(creationNoeudGrid);
+        creationBarreGrid.add(new Label("Choisir le noeud de départ"), 0, 1);
+        creationBarreGrid.add(choixNoeudDepartField, 1, 1);
+        ChoiceBox<Noeud> choixNoeudArriveeField = new ChoiceBox<Noeud>();
+        choixNoeudArriveeField.setConverter(noeudConverter);
+        choixNoeudArriveeField.getItems().addAll(treillis.getNoeuds());
 
+        creationBarreGrid.add(new Label("Choisir le noeud d'arrivée"), 0, 2);
+        creationBarreGrid.add(choixNoeudArriveeField, 1, 2);
+
+        creationBarreDialog.getDialogPane().setContent(creationBarreGrid);
+        creationBarreDialog.showAndWait();
+
+//        creationBarreDialog.setResultConverter(btn -> {
+//            if (btn == ButtonType.OK) {
+//                int type = -1;
+//
+//            }
+//            return null;
+//        }
+//        );
         EventHandler creerNoeudEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {

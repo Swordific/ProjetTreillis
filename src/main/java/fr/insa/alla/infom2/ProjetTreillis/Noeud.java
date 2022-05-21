@@ -108,7 +108,7 @@ public abstract class Noeud {
 
     @Override
     public String toString() {
-        String output = "(id=" + id + ") (" + this.px + " ; " + this.py + ") ; F = " + this.f;
+        String output = "( id=" + id + " ) (" + this.px + " ; " + this.py + ") ; F = " + this.f;
         return output;
     }
 

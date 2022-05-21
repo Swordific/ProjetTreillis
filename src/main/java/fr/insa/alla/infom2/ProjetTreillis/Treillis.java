@@ -86,13 +86,31 @@ public class Treillis {
         return null;
     }
 
-    public Noeud choixNoeud() {
+    public Noeud choixNoeudTexte() {
         System.out.println("Choisissez le noeud voulu");
         for (int i = 0; i < noeuds.size(); i++) {
             System.out.print(i + 1 + ") ");
             System.out.println(noeuds.get(i));
         }
         return noeuds.get(Lire.i() - 1);
+    }
+
+    public Noeud choixNoeudStr(String n, Numeroteur ns, Numeroteur as, Numeroteur ad) {
+        String[] nArr = n.split(" ");
+        for (String s : nArr) {
+            if (s.charAt(0) == 'i' && s.charAt(1) == 'd') {
+                String[] idStr = s.split("=");
+                int id = Integer.parseInt(idStr[1]);
+                if (ns.getObject(id) != null) {
+                    return (Noeud) ns.getObject(id);
+                } else if (as.getObject(id) != null) {
+                    return (Noeud) as.getObject(id);
+                } else if (ad.getObject(id) != null) {
+                    return (Noeud) ad.getObject(id);
+                }
+            }
+        }
+        return null;
     }
 
     public Barre choixBarre() {
@@ -186,13 +204,13 @@ public class Treillis {
                     treillis.noeuds.add(Noeud.entreeNoeud());
                     break;
                 case 3:
-                    treillis.noeuds.remove(treillis.choixNoeud());
+                    treillis.noeuds.remove(treillis.choixNoeudTexte());
                     break;
                 case 4:
                     System.out.println("Noeud de départ :");
-                    Noeud depart = treillis.choixNoeud();
+                    Noeud depart = treillis.choixNoeudTexte();
                     System.out.println("Noeud d'arrivée :");
-                    Noeud arrivee = treillis.choixNoeud();
+                    Noeud arrivee = treillis.choixNoeudTexte();
                     System.out.println("Voulez-vous entrer des caractéristiques supplémentaires ? (o/n)");
                     if (Lire.S().toLowerCase().equals("o")) {
                         System.out.println("Entrez la traction maximale supportée");
