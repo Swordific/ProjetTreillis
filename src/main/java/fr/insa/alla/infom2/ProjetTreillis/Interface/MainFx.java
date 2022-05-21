@@ -48,6 +48,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -60,11 +61,13 @@ import javafx.stage.Stage;
  */
 public class MainFx extends Application {
 
-    private Group graph = new Group();
-    private Group graphGrille = new Group();
-    private Group graphObjets = new Group();
-    private Rectangle2D tailleEcran = Screen.getPrimary().getVisualBounds();
-    private Treillis treillis = new Treillis();
+    Group graph = new Group();
+    Group graphGrille = new Group();
+    Group graphObjets = new Group();
+    Rectangle2D tailleEcran = Screen.getPrimary().getVisualBounds();
+    Treillis treillis = new Treillis();
+    Boolean isSupprOn = false;
+    EventHandler supprimerObjet;
 
     Point2D zero, topRightPt;
 
@@ -77,7 +80,7 @@ public class MainFx extends Application {
     HashMap<ImageView, Noeud> appuiSimpleImages = new HashMap<>();
     HashMap<ImageView, Noeud> appuiDoubleImages = new HashMap<>();
     HashMap<ImageView, Noeud> noeudSimpleImages = new HashMap<>();
-    HashMap<Line, Barre> barresMap = new HashMap<>();
+    HashMap<Line, Barre> linesMap = new HashMap<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -243,7 +246,7 @@ public class MainFx extends Application {
             }
         };
 
-        EventHandler supprimerObjet = new EventHandler<MouseEvent>() {
+        supprimerObjet = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 Line objL = null;
@@ -264,13 +267,12 @@ public class MainFx extends Application {
                     }
                     treillis.getNoeuds().remove(n);
                 } else {
-                    if (barresMap.containsKey(objL)) {
-                        b = barresMap.get(objL);
-                        barresMap.remove(objL);
+                    if (linesMap.containsKey(objL)) {
+                        b = linesMap.get(objL);
+                        linesMap.remove(objL);
                         treillis.getBarres().remove(b);
                     }
                 }
-
                 dessinerContenu(treillis);
             }
         };
@@ -377,6 +379,7 @@ public class MainFx extends Application {
             @Override
             public void changed(ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) {
                 if (new_toggle == null) {
+                    isSupprOn = false;
                     graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
                     graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
                     graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
@@ -384,31 +387,34 @@ public class MainFx extends Application {
                 } else {
                     switch ((String) boutonsAjout.getSelectedToggle().getUserData()) {
                         case "noeudSimple":
+                            isSupprOn = false;
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
                             graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
                             graphGrille.addEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
                             break;
                         case "appuiSimple":
+                            isSupprOn = false;
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
                             graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
                             graphGrille.addEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
                             break;
                         case "appuiDouble":
+                            isSupprOn = false;
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
                             graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
                             graphGrille.addEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
                             break;
                         case "suppr":
+                            isSupprOn = true;
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
                             for (Node obj : graphObjets.getChildren()) {
                                 obj.addEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
                             }
-
                             break;
                     }
                 }
@@ -488,6 +494,11 @@ public class MainFx extends Application {
         for (Barre b : t.getBarres()) {
             dessinerBarre(b);
         }
+        if (isSupprOn) {
+            for (Node obj : graphObjets.getChildren()) {
+                obj.addEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
+            }
+        }
     }
 
     public void dessinerNoeud(Noeud n) {
@@ -534,9 +545,9 @@ public class MainFx extends Application {
         Point2D pa = calcCoordR(na.getPx(), na.getPy());
         Line l = new Line(pd.getX(), pd.getY(), pa.getX(), pa.getY());
         l.setStrokeWidth(5);
-        barresMap.put(l, b);
-        graphObjets.getChildren().removeAll(barresMap.keySet());
-        graphObjets.getChildren().addAll(barresMap.keySet());
+        l.setStrokeLineCap(StrokeLineCap.ROUND);
+        linesMap.put(l, b);
+        graphObjets.getChildren().addAll(l);
     }
 
     public Point2D calcCoord(double x, double y) {
