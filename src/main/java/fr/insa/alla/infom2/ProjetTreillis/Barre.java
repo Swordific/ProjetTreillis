@@ -21,14 +21,16 @@ public class Barre {
     @Expose
     private Vecteur2D f;
     @Expose
-    private double trac ; 
+    private double trac;
+    @Expose
+    private String type;
 
     public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, double trac, double maxTrac, double maxComp, double cout) {
         this.id = id;
         this.noeudDepart = noeudDepart;
         this.noeudArrivee = noeudArrivee;
         this.cout = cout;
-        this.trac = trac ;
+        this.trac = trac;
         this.maxComp = maxComp;
         this.maxTrac = maxTrac;
 
@@ -40,13 +42,13 @@ public class Barre {
         noeudDepart.setBarresDepart(listeDepart);
         noeudArrivee.setBarresArrivee(listeArrivee);
     }
-    
-     public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, double maxTrac, double maxComp, double cout) {
+
+    public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, double maxTrac, double maxComp, double cout) {
         this.id = id;
         this.noeudDepart = noeudDepart;
         this.noeudArrivee = noeudArrivee;
         this.cout = cout;
-        this.trac = 0 ;
+        this.trac = 0;
         this.maxComp = maxComp;
         this.maxTrac = maxTrac;
 
@@ -104,6 +106,40 @@ public class Barre {
         noeudArrivee.setBarresArrivee(listeArrivee);
     }
 
+    public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, String type) {
+        if (type == "acier") {
+            this.id = id;
+            this.noeudDepart = noeudDepart;
+            this.noeudArrivee = noeudArrivee;
+            this.cout = 100;
+            this.trac = 0;
+            this.maxComp = -13000;
+            this.maxTrac = 18000;
+
+        }
+        else if (type == "bois") {
+            this.id = id;
+            this.noeudDepart = noeudDepart;
+            this.noeudArrivee = noeudArrivee;
+            this.cout = 20;
+            this.trac = 0;
+            this.maxComp = -2000;
+            this.maxTrac = 4500;
+        }
+        else if (type == "aluminium") {
+            this.id = id;
+            this.noeudDepart = noeudDepart;
+            this.noeudArrivee = noeudArrivee;
+            this.cout = 450;
+            this.trac = 0;
+            this.maxComp = -10000;
+            this.maxTrac = 14000;
+        }
+        else {
+            System.out.println("Le type de barre entrée n'est pas reconnu");
+        }
+    }
+
     public Noeud noeudOppose(Noeud n) {
         if (n == noeudDepart) {
             return noeudArrivee;
@@ -113,17 +149,17 @@ public class Barre {
         return null;
     }
 
-      public static double angleHoriz(double x_n, double y_n, double x_m, double y_m){
-        double x_nm=x_m-x_n;
-        double y_nm=y_m-y_n;
+    public static double angleHoriz(double x_n, double y_n, double x_m, double y_m) {
+        double x_nm = x_m - x_n;
+        double y_nm = y_m - y_n;
         return StrictMath.atan2(y_nm, x_nm);
     }
-    
+
     //Méthode pour donner l'angle entre une barre et le vecteur horizontal
-    public double angle(Noeud n){
+    public double angle(Noeud n) {
         Noeud m = this.noeudOppose(n);
-        
-        double angle=(angleHoriz(n.getPx(),n.getPy(),m.getPx(),m.getPy()));
+
+        double angle = (angleHoriz(n.getPx(), n.getPy(), m.getPx(), m.getPy()));
         //System.out.println("Il y a un angle de "+angle+"° entre la barre et l'axe horizontal.");
         return angle;
     }
