@@ -14,6 +14,7 @@ import static java.lang.Math.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.xml.stream.XMLStreamException;
@@ -123,45 +124,60 @@ public class Treillis {
     }
 
     public Matrix calculeTraction() {
+        int nbrNoeudSimple = 0;
+        int nbrNoeudAppuiSimple = 0;
+        int nbrNoeudAppuiDouble = 0;
+        for (Noeud n : this.noeuds) {
+            int type = n.nbrInconnues();
+            switch (type) {
+                case 0:
+                    nbrNoeudSimple++;
+                    break;
 
-        Matrix equa = new Matrix(2 * noeuds.size() + barres.size()-1, 2* noeuds.size());
+                case 1:
+                    nbrNoeudAppuiSimple++;
+                    break ;
+                    
+                case 2 : 
+                    nbrNoeudAppuiDouble++;
+                    break;
+                    
+            }
+
+        }
+
+        Matrix equa = new Matrix(2 * noeuds.size(), nbrNoeudAppuiSimple + nbrNoeudAppuiDouble + barres.size());
         Matrix secondMembre = new Matrix(2 * noeuds.size(), 1);
 
         ArrayList<Barre> listBarres = new ArrayList();
-        int listR =0 ;
+        int listR = 0;
         int i = 0;
         int k = 0;
 
         while (i <= 2 * noeuds.size() - 2) {
             for (Noeud n : this.noeuds) {
 
-                for (Barre b : this.barres) {
+                for (Barre b : n.barresIncidentes()) {
                     int j = 0;
+                    DecimalFormat angleF = new DecimalFormat("#.##");
+                    angleF.format(StrictMath.sin(b.angle(n)));
+                    double angleSin = Double.parseDouble(angleF.format(StrictMath.sin(b.angle(n))));
+                    double angleCos = Double.parseDouble(angleF.format(StrictMath.cos(b.angle(n))));
                     if (!listBarres.contains(b)) {
 
-                        equa.set(i, listBarres.size(), cos(Math.toRadians(b.angle(n))));
-                        equa.set(i + 1, listBarres.size() , sin(Math.toRadians(b.angle(n))));
+                        double z = b.angle(n);
+                        //System.out.println(n + "" + b + z);
+
+                        equa.set(i, listBarres.size(), angleCos);
+                        equa.set(i + 1, listBarres.size(), angleSin);
+
                         listBarres.add(b);
 
                     } else if (listBarres.contains(b)) {
-                        equa.set(i, listBarres.indexOf(b), cos(Math.toRadians(b.angle(n))));
-                        equa.set(i + 1, listBarres.indexOf(b), sin(Math.toRadians(b.angle(n))));
+                        equa.set(i, listBarres.indexOf(b), angleCos);
+                        equa.set(i + 1, listBarres.indexOf(b), angleSin);
                     }
 
-                }
-                int type = n.nbrInconnues();
-                System.out.println(type);
-                switch (type) {
-                    case 1:
-                        equa.set(i, listBarres.size() + listR, 0.0);
-                        equa.set(i + 1, listBarres.size() + listR + 1, 1.0);
-                        listR= listR +2 ;
-                        break;
-                    case 2:
-                        equa.set(i, listBarres.size() + listR, 0);
-                        equa.set(i + 1, listBarres.size() + listR + 1, 1);
-                        listR= listR +2 ;
-                        break;
                 }
 
                 secondMembre.set(i, 0, n.getF().getVx());
@@ -170,19 +186,36 @@ public class Treillis {
                 i += 2;
             }
         }
-        System.out.println(Arrays.deepToString(equa.getArray()));
-        System.out.println(listBarres.size());
-        System.out.println(listR);
-        System.out.println(Arrays.deepToString(secondMembre.getArray()));
+        i = 0;
+        while (i <= 2 * noeuds.size() - 2) {
+            for (Noeud n : this.noeuds) {
+                int type = n.nbrInconnues();
+
+                switch (type) {
+                    case 1:
+                        //equa.set(i, listBarres.size() + listR, 0.0);
+                        equa.set(i + 1, listBarres.size() + listR , 1.0);
+                        listR = listR + 1;
+                        break;
+                    case 2:
+                        //equa.set(i, listBarres.size() + listR, 0);
+                        equa.set(i + 1, listBarres.size() + listR , 1);
+                        listR = listR + 1;
+                        break;
+                }
+                i += 2;
+            }
+        }
+        //System.out.println(Arrays.deepToString(equa.det().getArray()));
+       // System.out.println(equa.det());
+
         Matrix solution = equa.solve(secondMembre);
-        
         //Matrix[] m = {equa, secondMembre};
         return solution;
 
     }
 
     public static void menuTexte(Treillis treillis) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException, TransformerException, IOException {
-        
 
         while (true) {
             System.out.println("Que voulez-vous faire ?\r\n1) Afficher le treillis\r\n2) Créer un noeud\r\n3) Supprimer un noeud\r\n4) Créer une barre\r\n5) Supprimer une barre");

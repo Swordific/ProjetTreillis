@@ -112,14 +112,15 @@ public class Barre {
       public static double angleHoriz(double x_n, double y_n, double x_m, double y_m){
         double x_nm=x_m-x_n;
         double y_nm=y_m-y_n;
-        return Math.atan2(y_nm, x_nm);
+        return StrictMath.atan2(y_nm, x_nm);
     }
     
     //Méthode pour donner l'angle entre une barre et le vecteur horizontal
     public double angle(Noeud n){
         Noeud m = this.noeudOppose(n);
-        double angle=(angleHoriz(n.getPx(),n.getPy(),m.getPx(),m.getPy()))/(Math.PI/180);
-        System.out.println("Il y a un angle de "+angle+"° entre la barre et l'axe horizontal.");
+        
+        double angle=(angleHoriz(n.getPx(),n.getPy(),m.getPx(),m.getPy()));
+        //System.out.println("Il y a un angle de "+angle+"° entre la barre et l'axe horizontal.");
         return angle;
     }
 
