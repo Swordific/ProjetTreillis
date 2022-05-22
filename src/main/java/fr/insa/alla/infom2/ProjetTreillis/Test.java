@@ -43,8 +43,8 @@ public class Test {
         System.out.println(gson.toJson(new Barre(n1, n2)));
 
         Treillis t = new Treillis();
-        t.ajouteNoeud(n2);
         t.ajouteNoeud(n1);
+        t.ajouteNoeud(n2);
         t.ajouteNoeud(n3);
         t.ajouteBarre(b1);
         t.ajouteBarre(b2);

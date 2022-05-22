@@ -179,12 +179,12 @@ public class Treillis {
 
                 case 1:
                     nbrNoeudAppuiSimple++;
-                    break ;
-                    
-                case 2 : 
+                    break;
+
+                case 2:
                     nbrNoeudAppuiDouble++;
                     break;
-                    
+
             }
 
         }
@@ -202,14 +202,11 @@ public class Treillis {
 
                 for (Barre b : n.barresIncidentes()) {
                     int j = 0;
-                    DecimalFormat angleF = new DecimalFormat("#.##");
+                    DecimalFormat angleF = new DecimalFormat("#.#########");
                     angleF.format(StrictMath.sin(b.angle(n)));
                     double angleSin = Double.parseDouble(angleF.format(StrictMath.sin(b.angle(n))));
                     double angleCos = Double.parseDouble(angleF.format(StrictMath.cos(b.angle(n))));
                     if (!listBarres.contains(b)) {
-
-                        double z = b.angle(n);
-                        //System.out.println(n + "" + b + z);
 
                         equa.set(i, listBarres.size(), angleCos);
                         equa.set(i + 1, listBarres.size(), angleSin);
@@ -236,23 +233,29 @@ public class Treillis {
 
                 switch (type) {
                     case 1:
-                        //equa.set(i, listBarres.size() + listR, 0.0);
-                        equa.set(i + 1, listBarres.size() + listR , 1.0);
+
+                        equa.set(i + 1, listBarres.size() + listR, 1.0);
                         listR = listR + 1;
                         break;
                     case 2:
-                        //equa.set(i, listBarres.size() + listR, 0);
-                        equa.set(i + 1, listBarres.size() + listR , 1);
+
+                        equa.set(i + 1, listBarres.size() + listR, 1);
                         listR = listR + 1;
                         break;
                 }
                 i += 2;
             }
         }
-        //System.out.println(Arrays.deepToString(equa.det().getArray()));
-       // System.out.println(equa.det());
 
         Matrix solution = equa.solve(secondMembre);
+
+        int x = 0;
+        for (Barre b : listBarres) {
+            b.setTrac(solution.get(x, 0));
+            x = x + 1;
+
+        }
+
         //Matrix[] m = {equa, secondMembre};
         return solution;
 
