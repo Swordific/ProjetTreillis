@@ -5,8 +5,6 @@
 package fr.insa.alla.infom2.ProjetTreillis;
 
 import Jama.Matrix;
-
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -76,6 +74,17 @@ public class Treillis {
         return null;
     }
 
+    public String ajouteNoeuds(Noeud... ns) {
+        for (Noeud n : ns) {
+            if (noeuds.contains(n)) {
+                return "Noeud déjà dans la liste";
+            }
+            //n.setId(this.maxIdNoeud());
+            noeuds.add(n);
+        }
+        return null;
+    }
+
     public String ajouteBarre(Barre b) {
         if (barres.contains(b)) {
             return "Barre déjà dans la liste";
@@ -84,6 +93,19 @@ public class Treillis {
         this.ajouteNoeud(b.getNoeudArrivee());
         //b.setId(this.maxIdBarre());
         barres.add(b);
+        return null;
+    }
+
+    public String ajouteBarres(Barre... bs) {
+        for (Barre b : bs) {
+            if (barres.contains(b)) {
+                return "Barre déjà dans la liste";
+            }
+            this.ajouteNoeud(b.getNoeudDepart());
+            this.ajouteNoeud(b.getNoeudArrivee());
+            //b.setId(this.maxIdBarre());
+            barres.add(b);
+        }
         return null;
     }
 
@@ -262,23 +284,23 @@ public class Treillis {
                     treillis.barres.remove(treillis.choixBarre());
                     break;
                 case 6:
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    // write XML to ByteArrayOutputStream
-                    Fichier.exportTreillis(treillis, out);
-
-                    // Java 10
-                    //String xml = out.toString(StandardCharsets.UTF_8);
-                    // standard way to convert byte array to String
-                    String xml = new String(out.toByteArray(), StandardCharsets.UTF_8);
-
-                    // System.out.println(formatXML(xml));
-                    String prettyPrintXML = Fichier.formatXML(xml);
-
-                    // print to console
-                    // System.out.println(prettyPrintXML);
-                    // Java 11 - write to file
-                    Files.write(Paths.get("C:/Users/ialla01/Desktop/zbeub.xml"), prettyPrintXML.getBytes(StandardCharsets.UTF_8));
-                    //Fichier.exportTreillis(treillis, new FileOutputStream("C:/Users/ialla01/Desktop/zbeub.xml"));
+//                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+//                    // write XML to ByteArrayOutputStream
+//                    Fichier.exportTreillis(treillis, out);
+//
+//                    // Java 10
+//                    //String xml = out.toString(StandardCharsets.UTF_8);
+//                    // standard way to convert byte array to String
+//                    String xml = new String(out.toByteArray(), StandardCharsets.UTF_8);
+//
+//                    // System.out.println(formatXML(xml));
+//                    String prettyPrintXML = Fichier.formatXML(xml);
+//
+//                    // print to console
+//                    // System.out.println(prettyPrintXML);
+//                    // Java 11 - write to file
+//                    Files.write(Paths.get("C:/Users/ialla01/Desktop/zbeub.xml"), prettyPrintXML.getBytes(StandardCharsets.UTF_8));
+//                    //Fichier.exportTreillis(treillis, new FileOutputStream("C:/Users/ialla01/Desktop/zbeub.xml"));
                     break;
                 case 7:
                     System.out.println(Arrays.deepToString(treillis.calculeTraction().getArray()));
