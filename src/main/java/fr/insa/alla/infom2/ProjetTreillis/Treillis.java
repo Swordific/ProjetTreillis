@@ -8,13 +8,10 @@ import Jama.Matrix;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import static java.lang.Math.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.TransformerException;
 
@@ -85,6 +82,17 @@ public class Treillis {
         return null;
     }
 
+    public String ajouteNoeuds(Collection<Noeud> ns) {
+        for (Noeud n : ns) {
+            if (noeuds.contains(n)) {
+                return "Noeud déjà dans la liste";
+            }
+            //n.setId(this.maxIdNoeud());
+            noeuds.add(n);
+        }
+        return null;
+    }
+
     public String ajouteBarre(Barre b) {
         if (barres.contains(b)) {
             return "Barre déjà dans la liste";
@@ -97,6 +105,19 @@ public class Treillis {
     }
 
     public String ajouteBarres(Barre... bs) {
+        for (Barre b : bs) {
+            if (barres.contains(b)) {
+                return "Barre déjà dans la liste";
+            }
+            this.ajouteNoeud(b.getNoeudDepart());
+            this.ajouteNoeud(b.getNoeudArrivee());
+            //b.setId(this.maxIdBarre());
+            barres.add(b);
+        }
+        return null;
+    }
+
+    public String ajouteBarres(Collection<Barre> bs) {
         for (Barre b : bs) {
             if (barres.contains(b)) {
                 return "Barre déjà dans la liste";
