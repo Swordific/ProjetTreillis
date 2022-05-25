@@ -5,6 +5,7 @@
 package fr.insa.alla.infom2.ProjetTreillis.Interface;
 
 import fr.insa.alla.infom2.ProjetTreillis.*;
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -48,6 +49,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -80,6 +82,7 @@ public class MainFx extends Application {
     HashMap<ImageView, Noeud> appuiDoubleImages = new HashMap<>();
     HashMap<ImageView, Noeud> noeudSimpleImages = new HashMap<>();
     HashMap<Line, Barre> linesMap = new HashMap<>();
+    HashMap<Barre, Line> barresMap = new HashMap<>();
     HashMap<String, Noeud> stringNoeudMap = new HashMap<>();
 
     @Override
@@ -161,6 +164,7 @@ public class MainFx extends Application {
         rootWelcome.getChildren().addAll(shrabView, hboxWelcome);
 
         mainScene = new Scene(rootWelcome);
+        
         primaryStage.setScene(mainScene);
 
         Pane rootPane = new Pane();
@@ -175,14 +179,17 @@ public class MainFx extends Application {
         primaryStage.show();
         Vecteur2D f = new Vecteur2D(0, 0);
         Noeud n1 = new NoeudAppuiSimple(1, 0, 0, f);
-        Noeud n2 = new NoeudAppuiSimple(2, 2, 0, f);
-        Noeud n3 = new NoeudSimple(3, 1, 1, f);
+        Noeud n2 = new NoeudAppuiSimple(2, 20, 0, f);
+        Noeud n3 = new NoeudSimple(3, 10, 10, f);
         
-        Barre b1 = new Barre(n1, n2);
-        Barre b2 = new Barre(n2, n3);
-        Barre b3 = new Barre(n3, n1);
+        Barre b1 = new Barre(1, n1, n2, "acier");
+        Barre b2 = new Barre(2, n2, n3, "acier");
+        Barre b3 = new Barre(3, n3, n1, "acier");
         treillis.ajouteNoeuds(n1, n2, n3);
         treillis.ajouteBarres(b1, b2, b3);
+        treillis.calculeTraction();
+        dessinerContenu(treillis);
+        
         //System.out.println(Fichier.exportTreillis(treillis, "")[0]);
         //Events et set boutons
         creerTreillisBouton.setOnAction(new EventHandler<ActionEvent>() {
@@ -521,11 +528,11 @@ public class MainFx extends Application {
                 hLines.get(i / 2 - 1).setEndY(h / 10 * i / 2 + 50);
 
                 hLines.get(i / 2 - 1).setStrokeWidth(2);
-                hLines.get(i / 2 - 1).setStroke(Color.GREY);
+                hLines.get(i / 2 - 1).setStroke(Color.BLACK);
                 hLines.get(i / 2 - 1).setOpacity(0.4);
 
                 Text t = new Text(25, h / 10 * (i / 2) + 54, Integer.toString((8 - i / 2) * 10));
-                t.setFill(Color.GREY);
+                t.setFill(Color.BLACK);
                 t.setOpacity(0.8);
                 graduations.add(t);
 
@@ -627,8 +634,31 @@ public class MainFx extends Application {
         l.setStrokeWidth(5);
         l.setStrokeLineCap(StrokeLineCap.ROUND);
         linesMap.put(l, b);
+        barresMap.put(b, l);
+        barreCouleur(b);
         graphObjets.getChildren().add(l);
+        
     }
+    public void barreCouleur (Barre b){
+        double colorComp ;
+        double colorTrac ; 
+        Line l = barresMap.get(b) ;
+        colorComp =  (abs(b.getTrac())/abs(b.getMaxComp()))*120d + 120d ; 
+        colorTrac =  (120d - b.getTrac()/b.getMaxTrac())*120d ; 
+        if (b.getTrac() >= 0){
+            l.setFill(Color.hsb(colorTrac, 1.0, 1.0));
+            
+        }
+        else if (b.getTrac() <= 0) { 
+            l.setFill(Color.hsb(colorComp, 1.0, 1.0));
+        }
+        else {
+            l.setFill(Color.BLACK);
+            l.getStrokeDashArray().addAll(25d, 10d);
+        }
+        barresMap.replace(b, l);
+    }
+    
 
     public Point2D calcCoord(double x, double y) {
         Point2D pt;
