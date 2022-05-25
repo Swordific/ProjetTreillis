@@ -4,6 +4,7 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis;
 
+import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 
 /**
@@ -13,8 +14,11 @@ import java.util.ArrayList;
 //TODO creer methodes pour ajouter et retirer des barres dans les listes
 public abstract class Noeud {
 
+    @Expose
     protected int id;
+    @Expose
     protected double px, py;
+    @Expose
     protected Vecteur2D f;
     protected ArrayList<Barre> barresDepart;
     protected ArrayList<Barre> barresArrivee;

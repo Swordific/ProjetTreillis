@@ -4,7 +4,7 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis;
 
-import static java.lang.Math.atan;
+import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 
 /**
@@ -12,12 +12,17 @@ import java.util.ArrayList;
  * @author antoi
  */
 public class Barre {
-
+    @Expose
     private int id;
+    @Expose
     private Noeud noeudDepart, noeudArrivee;
+    @Expose
     private double maxTrac, maxComp, cout;
+    @Expose
     private Vecteur2D f;
+    @Expose
     private double trac;
+    @Expose
     private String type;
 
     public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, double trac, double maxTrac, double maxComp, double cout) {

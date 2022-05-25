@@ -1,3 +1,4 @@
-[{"id":1,"px":0.0,"py":0.0,"f":{"vx":0.0,"vy":1000.0},"barresDepart":[],"barresArrivee":[]},{"id":3,"px":1.0,"py":1.0,"f":{"vx":0.0,"vy":1000.0},"barresDepart":[],"barresArrivee":[]}]
-[{"id":2,"px":2.0,"py":0.0,"f":{"vx":0.0,"vy":1000.0},"barresDepart":[],"barresArrivee":[]}]
-[]
+[{"id":1,"px":0.0,"py":0.0,"f":{}}]
+[{"id":2,"px":2.0,"py":0.0,"f":{}}]
+[{"id":3,"px":1.0,"py":1.0,"f":{}}]
+[{"id":-1,"noeudDepart":{"id":1,"px":0.0,"py":0.0,"f":{}},"noeudArrivee":{"id":2,"px":2.0,"py":0.0,"f":{}},"maxTrac":0.0,"maxComp":0.0,"cout":0.0,"trac":0.0},{"id":-1,"noeudDepart":{"id":2,"px":2.0,"py":0.0,"f":{}},"noeudArrivee":{"id":3,"px":1.0,"py":1.0,"f":{}},"maxTrac":0.0,"maxComp":0.0,"cout":0.0,"trac":0.0},{"id":-1,"noeudDepart":{"id":3,"px":1.0,"py":1.0,"f":{}},"noeudArrivee":{"id":1,"px":0.0,"py":0.0,"f":{}},"maxTrac":0.0,"maxComp":0.0,"cout":0.0,"trac":0.0}]
