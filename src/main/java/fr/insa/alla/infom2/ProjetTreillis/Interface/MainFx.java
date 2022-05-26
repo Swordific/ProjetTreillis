@@ -314,6 +314,7 @@ public class MainFx extends Application {
         };
 
         creationNoeudDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        creationNoeudDialog.setWidth(500);
 
         creationNoeudDialog.setTitle("Création de noeud");
         GridPane creationNoeudGrid = new GridPane();
@@ -367,8 +368,12 @@ public class MainFx extends Application {
         );
 
         creationNoeudDialog.getDialogPane().setContent(creationNoeudGrid);
+        //creationNoeudDialog.setWidth(1000d);
 
         creationBarreDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        creationBarreDialog.getDialogPane().setMinWidth(500);
+        //creationBarreDialog.setHeight(500d);
+        creationBarreDialog.setResizable(true);
         String[] typesBarres = {"Barre"};
         creationBarreDialog.setTitle("Création de barre");
         GridPane creationBarreGrid = new GridPane();
