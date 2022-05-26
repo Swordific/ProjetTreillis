@@ -425,6 +425,7 @@ public class MainFx extends Application {
         modifNoeudDialog.getDialogPane().setContent(modifNoeudGrid);
 
         creationBarreDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        creationBarreDialog.getDialogPane().setMinWidth(500);
         String[] typesBarres = {"Acier", "Aluminium", "Bois"};
         creationBarreDialog.setTitle("Création de barre");
         GridPane creationBarreGrid = new GridPane();
