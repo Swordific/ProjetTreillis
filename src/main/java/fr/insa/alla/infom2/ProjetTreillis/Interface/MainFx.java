@@ -96,7 +96,7 @@ public class MainFx extends Application {
 
         //Images
         Image appicon = new Image(getClass().getResourceAsStream("/appicon.png"));
-        Image shrab = new Image(getClass().getResourceAsStream("/companylogo.png"));
+        Image shrab = new Image(getClass().getResourceAsStream("/pont.png"));
         ImageView shrabView = new ImageView(shrab);
         shrabView.setOpacity(0.35);
 
@@ -109,6 +109,7 @@ public class MainFx extends Application {
         //Boutons/Menus/Dialogs
         Button importTreillisBouton = new Button("Importer un treillis existant");
         Button creerTreillisBouton = new Button("Créer un nouveau treillis");
+        Button calculerTractionBouton = new Button("Calculer la traction sur les barres");
 
         MenuItem importTreillisMenu = new MenuItem("Importer un treillis existant");
         MenuItem exportTreillisMenu = new MenuItem("Exporter le treillis actif");
@@ -149,7 +150,7 @@ public class MainFx extends Application {
         menuFichier.getItems().addAll(creerTreillisMenu, importTreillisMenu, exportTreillisMenu);
         menuEditer.getItems().addAll(creerNoeudMenu, supprNoeudMenu, creerBarreMenu, supprBarreMenu);
         menuBar.getMenus().addAll(menuFichier, menuEditer);
-        toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr);
+        toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr, calculerTractionBouton);
 
         Dialog<double[]> creationNoeudDialog = new Dialog<>();
         Dialog<Object[]> creationBarreDialog = new Dialog<>();
@@ -177,26 +178,26 @@ public class MainFx extends Application {
         //Ecran principal
         primaryStage.setMaximized(true);
         primaryStage.show();
-        Vecteur2D f = new Vecteur2D(0, 20000);
-        Vecteur2D f0 = new Vecteur2D(0, 0);
-        Noeud n1 = new NoeudAppuiSimple(1, 0, 0, f0);
-        Noeud n2 = new NoeudAppuiSimple(2, 20, 0, f0);
-        Noeud n3 = new NoeudSimple(3, 10, 10, f);
-
-        Barre b1 = new Barre(1, n1, n2, "acier");
-        Barre b2 = new Barre(2, n2, n3, "acier");
-        Barre b3 = new Barre(3, n3, n1, "acier");
-        //b1.setTrac(-11100);
-
-        treillis.ajouteNoeuds(n1, n2, n3);
-        treillis.ajouteBarres(b1, b2, b3);
-        treillis.calculeTraction();
-        //System.out.println(b1.getTrac());
-
-        dessinerContenu(treillis);
-        System.out.println(b1.getTrac());
-        System.out.println(b2.getTrac());
-        System.out.println(b3.getTrac());
+//        Vecteur2D f = new Vecteur2D(0, 200000);
+//        Vecteur2D f0 = new Vecteur2D(0, 0);
+//        Noeud n1 = new NoeudAppuiSimple(1, 0, 10, f0);
+//        Noeud n2 = new NoeudAppuiSimple(2, 20, 12, f0);
+//        Noeud n3 = new NoeudSimple(3, 10, 20, f);
+//
+//        Barre b1 = new Barre(1, n1, n2, "acier");
+//        Barre b2 = new Barre(2, n2, n3, "acier");
+//        Barre b3 = new Barre(3, n3, n1, "acier");
+//        //b1.setTrac(-11100);
+//
+//        treillis.ajouteNoeuds(n1, n2, n3);
+//        treillis.ajouteBarres(b1, b2, b3);
+//        //treillis.calculeTraction();
+//        //System.out.println(b1.getTrac());
+//
+//        dessinerContenu(treillis);
+//        System.out.println(b1.getTrac());
+//        System.out.println(b2.getTrac());
+//        System.out.println(b3.getTrac());
         //System.out.println(barresMap.get(b3).getFill());
 
         //System.out.println(Fichier.exportTreillis(treillis, "")[0]);
@@ -214,7 +215,12 @@ public class MainFx extends Application {
             @Override
             public void handle(ActionEvent e) {
                 String filePathImport = fileChooser.showOpenDialog(primaryStage).getPath();
-                //Fichier.importTreillis();
+                treillis = Fichier.importTreillis(filePathImport);
+                dessinerContenu(treillis);
+                try {
+                    primaryStage.getScene().setRoot(rootPane);
+                } catch (Exception ex) {
+                }
             }
         };
 
@@ -227,6 +233,11 @@ public class MainFx extends Application {
             @Override
             public void handle(ActionEvent e) {
                 String filePathExport = fileChooser.showOpenDialog(primaryStage).getPath();
+                try {
+                    Fichier.exportTreillis(treillis, filePathExport);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         };
         exportTreillisMenu.setOnAction(exportTreillisEvent);
@@ -368,7 +379,7 @@ public class MainFx extends Application {
         creationNoeudDialog.getDialogPane().setContent(creationNoeudGrid);
 
         creationBarreDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        String[] typesBarres = {"Barre"};
+        String[] typesBarres = {"Acier", "Aluminium", "Bois"};
         creationBarreDialog.setTitle("Création de barre");
         GridPane creationBarreGrid = new GridPane();
         creationBarreGrid.setHgap(10);
@@ -396,9 +407,10 @@ public class MainFx extends Application {
         creationBarreDialog.setResultConverter(btn -> {
             if (btn == ButtonType.OK) {
                 //choixBarreField.getValue();
+                String type = choixBarreField.getValue().toLowerCase();
                 Noeud nd = stringNoeudMap.get((String) choixNoeudDepartField.getValue());
                 Noeud na = stringNoeudMap.get((String) choixNoeudArriveeField.getValue());
-                Object[] out = {nd, na};
+                Object[] out = {nd, na, type};
                 return out;
             }
             return null;
@@ -415,22 +427,26 @@ public class MainFx extends Application {
                     if (data.length > 3) {
                         f = new Vecteur2D(data[3], data[4]);
                     }
+                    System.out.println("Vecteur2D  " + f);
                     Noeud n;
                     switch ((int) data[0]) {
                         case 0:
                             n = new NoeudSimple(px, py, f);
                             n.setId(numNoeudSimple.getOrAdd(n));
                             treillis.ajouteNoeud(n);
+                            stringNoeudMap.put(n.toString(), n);
                             break;
                         case 1:
                             n = new NoeudAppuiSimple(px, py, f);
                             n.setId(numAppuiSimple.getOrAdd(n));
                             treillis.ajouteNoeud(n);
+                            stringNoeudMap.put(n.toString(), n);
                             break;
                         case 2:
                             n = new NoeudAppuiDouble(px, py, f);
                             n.setId(numAppuiDouble.getOrAdd(n));
                             treillis.ajouteNoeud(n);
+                            stringNoeudMap.put(n.toString(), n);
                             break;
                     }
                     System.out.println(treillis.getNoeuds());
@@ -456,6 +472,9 @@ public class MainFx extends Application {
                 Optional<Object[]> barreInfo = creationBarreDialog.showAndWait();
                 barreInfo.ifPresent(data -> {
                     Barre b = new Barre((Noeud) data[0], (Noeud) data[1]);
+                    b.setType((String) data[2]);
+                    System.out.println((String) data[2]);
+                    b.defineType((String) data[2]);
                     b.setId(numBarre.getOrAdd(b));
                     treillis.ajouteBarre(b);
 
@@ -469,6 +488,19 @@ public class MainFx extends Application {
 
         creerNoeudMenu.setOnAction(creerNoeudEvent);
         creerBarreMenu.setOnAction(creerBarreEvent);
+
+        EventHandler calculerTractionEvent = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                try {
+                    treillis.calculeTraction();
+                    dessinerContenu(treillis);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+        calculerTractionBouton.setOnAction(calculerTractionEvent);
 
         boutonsAjout.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 
@@ -584,10 +616,13 @@ public class MainFx extends Application {
 
     public void dessinerContenu(Treillis t) {
         graphObjets.getChildren().removeAll(graphObjets.getChildren());
+
         for (Noeud n : t.getNoeuds()) {
+            System.out.println("brrr" + t.getNoeuds() + "\r\n" + n);
             dessinerNoeud(n);
         }
         for (Barre b : t.getBarres()) {
+            System.out.println(b.getTrac());
             dessinerBarre(b);
         }
         if (isSupprOn) {
@@ -598,6 +633,7 @@ public class MainFx extends Application {
     }
 
     public void dessinerNoeud(Noeud n) {
+        System.out.println("zob" + n);
         int type = n.nbrInconnues();
         Point2D xy = calcCoordR(n.getPx(), n.getPy());
         switch (type) {
@@ -642,9 +678,7 @@ public class MainFx extends Application {
         Line l = new Line(pd.getX(), pd.getY(), pa.getX(), pa.getY());
         l.setStrokeWidth(5);
         l.setStrokeLineCap(StrokeLineCap.ROUND);
-        l.setFill(barreCouleur(b));
 
-        linesMap.put(l, b);
         //barresMap.put(b, l);
         l.setStroke(barreCouleur(b));
         if (l.getStroke() == Color.RED) {
@@ -652,6 +686,7 @@ public class MainFx extends Application {
         } else if (l.getStroke() == Color.BLUE) {
             l.getStrokeDashArray().addAll(25d, 10d);
         }
+        linesMap.put(l, b);
 
         graphObjets.getChildren().add(l);
 
@@ -660,7 +695,7 @@ public class MainFx extends Application {
     public Paint barreCouleur(Barre b) {
         double colorComp;
         double colorTrac;
-        Line l = barresMap.get(b);
+        //Line l = barresMap.get(b);
         colorComp = (abs(b.getTrac()) / abs(b.getMaxComp())) * 120d + 120d;
         colorTrac = 120d - (b.getTrac() / b.getMaxTrac()) * 120d;
         //System.out.println(colorComp + " / " + colorTrac);
@@ -668,18 +703,22 @@ public class MainFx extends Application {
         if (b.getTrac() > b.getMaxTrac()) {
             //l.getStrokeDashArray().addAll(25d, 10d);
             return Color.RED;
+            //return Color.WHITE;
         } else if (b.getTrac() < b.getMaxComp()) {
             //l.getStrokeDashArray().addAll(25d, 10d);
             return Color.BLUE;
+            //return Color.BLUEVIOLET;
         } else if (b.getTrac() >= 0) {
             //l.setFill(Color.hsb(colorTrac, 1.0, 1.0));
             return Color.hsb(colorTrac, 1.0, 0.75);
-        } else if (b.getTrac() <= 0) {
+            //return Color.WHITE;
+        } else if (b.getTrac() < 0) {
             //l.setFill(Color.hsb(colorComp, 1.0, 1.0));
             return Color.hsb(colorComp, 1.0, 0.75);
+            //return Color.PURPLE;
         } else {
             //l.setFill(Color.BLACK);
-            l.getStrokeDashArray().addAll(25d, 10d);
+            //l.getStrokeDashArray().addAll(25d, 10d);
             return Color.BLACK;
         }
         //barresMap.replace(b, l);

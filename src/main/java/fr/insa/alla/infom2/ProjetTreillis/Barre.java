@@ -138,42 +138,49 @@ public class Barre {
             noeudDepart.setBarresDepart(listeDepart);
             noeudArrivee.setBarresArrivee(listeArrivee);
         } catch (Exception e) {
-            noeudDepart.setBarresDepart(new ArrayList<Barre>());
-            noeudArrivee.setBarresArrivee(new ArrayList<Barre>());
-            noeudDepart.getBarresDepart().add(this);
-            noeudArrivee.getBarresArrivee().add(this);
+//            noeudDepart.setBarresDepart(new ArrayList<>());
+//            noeudArrivee.setBarresArrivee(new ArrayList<>());
+//            noeudDepart.getBarresDepart().add(this);
+//            noeudArrivee.getBarresArrivee().add(this);
         }
     }
 
     public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, String type) {
-        if (type == "acier") {
-            this.id = id;
-            this.noeudDepart = noeudDepart;
-            this.noeudArrivee = noeudArrivee;
-            this.cout = 100;
-            this.trac = 0;
-            this.maxComp = -13000;
-            this.maxTrac = 18000;
-
-        } else if (type == "bois") {
-            this.id = id;
-            this.noeudDepart = noeudDepart;
-            this.noeudArrivee = noeudArrivee;
-            this.cout = 20;
-            this.trac = 0;
-            this.maxComp = -2000;
-            this.maxTrac = 4500;
-        } else if (type == "aluminium") {
-            this.id = id;
-            this.noeudDepart = noeudDepart;
-            this.noeudArrivee = noeudArrivee;
-            this.cout = 450;
-            this.trac = 0;
-            this.maxComp = -10000;
-            this.maxTrac = 14000;
-        } else {
+        if (null == type) {
             System.out.println("Le type de barre entrée n'est pas reconnu");
-        }
+        } else
+            switch (type) {
+                case "acier":
+                    this.id = id;
+                    this.noeudDepart = noeudDepart;
+                    this.noeudArrivee = noeudArrivee;
+                    this.cout = 100;
+                    this.trac = 0;
+                    this.maxComp = -13000;
+                    this.maxTrac = 18000;
+                    break;
+                case "bois":
+                    this.id = id;
+                    this.noeudDepart = noeudDepart;
+                    this.noeudArrivee = noeudArrivee;
+                    this.cout = 20;
+                    this.trac = 0;
+                    this.maxComp = -2000;
+                    this.maxTrac = 4500;
+                    break;
+                case "aluminium":
+                    this.id = id;
+                    this.noeudDepart = noeudDepart;
+                    this.noeudArrivee = noeudArrivee;
+                    this.cout = 450;
+                    this.trac = 0;
+                    this.maxComp = -10000;
+                    this.maxTrac = 14000;
+                    break;
+                default:
+                    System.out.println("Le type de barre entrée n'est pas reconnu");
+                    break;
+            }
         ArrayList<Barre> listeDepart = noeudDepart.getBarresDepart();
         listeDepart.add(this);
         ArrayList<Barre> listeArrivee = noeudArrivee.getBarresArrivee();
@@ -322,24 +329,28 @@ public class Barre {
     }
 
     public void defineType(String type) {
-        if (type == "acier") {
-            this.cout = 100;
-            this.trac = 0;
-            this.maxComp = -13000;
-            this.maxTrac = 18000;
-
-        } else if (type == "bois") {
-            this.cout = 20;
-            this.trac = 0;
-            this.maxComp = -2000;
-            this.maxTrac = 4500;
-        } else if (type == "aluminium") {
-            this.cout = 450;
-            this.trac = 0;
-            this.maxComp = -10000;
-            this.maxTrac = 14000;
-        } else {
-            System.out.println("Le type de barre entrée n'est pas reconnu");
+        switch (type) {
+            case "acier":
+                this.cout = 100;
+                this.trac = 0;
+                this.maxComp = -13000;
+                this.maxTrac = 18000;
+                break;
+            case "bois":
+                this.cout = 20;
+                this.trac = 0;
+                this.maxComp = -2000;
+                this.maxTrac = 4500;
+                break;
+            case "aluminium":
+                this.cout = 450;
+                this.trac = 0;
+                this.maxComp = -10000;
+                this.maxTrac = 14000;
+                break;
+            default:
+                System.out.println("Le type de barre entrée n'est pas reconnu");
+                break;
         }
     }
 

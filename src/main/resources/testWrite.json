@@ -1,8 +1,0 @@
-[{"px":0.0,"py":0.0,"f":{"vx":0.0,"vy":1000.0}}]
-[{"px":2.0,"py":0.0,"f":{"vx":0.0,"vy":1000.0}}]
-[{"px":1.0,"py":1.0,"f":{"vx":0.0,"vy":1000.0}}]
-Barres
-{"noeudDepart":{"px":0.0,"py":0.0,"f":{"vx":0.0,"vy":1000.0}},"noeudArrivee":{"px":2.0,"py":0.0,"f":{"vx":0.0,"vy":1000.0}},"maxTrac":0.0,"maxComp":0.0,"cout":0.0,"trac":0.0,"type":"acier"}
-{"noeudDepart":{"px":2.0,"py":0.0,"f":{"vx":0.0,"vy":1000.0}},"noeudArrivee":{"px":1.0,"py":1.0,"f":{"vx":0.0,"vy":1000.0}},"maxTrac":0.0,"maxComp":0.0,"cout":0.0,"trac":0.0,"type":"bois"}
-{"noeudDepart":{"px":1.0,"py":1.0,"f":{"vx":0.0,"vy":1000.0}},"noeudArrivee":{"px":0.0,"py":0.0,"f":{"vx":0.0,"vy":1000.0}},"maxTrac":0.0,"maxComp":0.0,"cout":0.0,"trac":0.0,"type":"aluminium"}
-/Barres
