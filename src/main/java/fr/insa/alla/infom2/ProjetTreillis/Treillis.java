@@ -203,7 +203,7 @@ public class Treillis {
 
                 for (Barre b : n.barresIncidentes()) {
                     int j = 0;
-                    DecimalFormat angleF = new DecimalFormat("#.#########");
+                    DecimalFormat angleF = new DecimalFormat("#,#########");
                     angleF.format(StrictMath.sin(b.angle(n)));
                     double angleSin = Double.parseDouble(angleF.format(StrictMath.sin(b.angle(n))));
                     double angleCos = Double.parseDouble(angleF.format(StrictMath.cos(b.angle(n))));

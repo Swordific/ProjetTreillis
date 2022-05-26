@@ -208,9 +208,11 @@ public class Fichier {
                     }
                 }
                 try {
-                    Barre b = new Barre(nD, nA, readLine.get("maxTrac").getAsDouble(), readLine.get("maxComp").getAsDouble(), readLine.get("cout").getAsDouble(), readLine.get("type").getAsString());
-                    b.setId(numBarres.add(b));
-                    listBarre.add(b);
+                    if (nA != null && nD != null) {
+                        Barre b = new Barre(nD, nA, readLine.get("maxTrac").getAsDouble(), readLine.get("maxComp").getAsDouble(), readLine.get("cout").getAsDouble(), readLine.get("type").getAsString());
+                        b.setId(numBarres.add(b));
+                        listBarre.add(b);
+                    }
                 } catch (Exception e) {
                     System.out.println("\r\n" + nD + "\r\n" + nA);
                     e.printStackTrace();

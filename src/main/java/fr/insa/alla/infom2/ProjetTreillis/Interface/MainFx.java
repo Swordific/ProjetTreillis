@@ -5,7 +5,7 @@
 package fr.insa.alla.infom2.ProjetTreillis.Interface;
 
 import fr.insa.alla.infom2.ProjetTreillis.*;
-import static java.lang.Math.abs;
+import static java.lang.StrictMath.abs;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -89,7 +89,6 @@ public class MainFx extends Application {
     HashMap<String, Noeud> stringNoeudMap = new HashMap<>();
     ToolBar toolBar = new ToolBar();
     Label cout = new Label("   Coût du treillis : " + calcCout() + " £");
-    
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -99,7 +98,6 @@ public class MainFx extends Application {
         graph.getChildren().addAll(graphGrille, graphObjets);
 
         ArrayList<String> choixNoeudArray = new ArrayList<>();
-        
 
         //Images
         Image appicon = new Image(getClass().getResourceAsStream("/appicon.png"));
@@ -122,9 +120,7 @@ public class MainFx extends Application {
         MenuItem exportTreillisMenu = new MenuItem("Exporter le treillis actif");
         MenuItem creerTreillisMenu = new MenuItem("Créer un nouveau treillis");
         MenuItem creerNoeudMenu = new MenuItem("Créer un noeud");
-        MenuItem supprNoeudMenu = new MenuItem("Supprimer un noeud");
         MenuItem creerBarreMenu = new MenuItem("Créer une barre");
-        MenuItem supprBarreMenu = new MenuItem("Supprimer une barre");
 
         Menu menuFichier = new Menu("Fichier");
         Menu menuEditer = new Menu("Editer");
@@ -143,7 +139,7 @@ public class MainFx extends Application {
         boutonsAjout.getToggles().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr);
 
         MenuBar menuBar = new MenuBar();
-        
+
         HBox barHBox = new HBox(menuBar, toolBar);
 
         menuBar.setPrefHeight(36);
@@ -154,10 +150,18 @@ public class MainFx extends Application {
 
         importTreillisBouton.setEffect(new DropShadow());
         creerTreillisBouton.setEffect(new DropShadow());
-        menuFichier.getItems().addAll(creerTreillisMenu, importTreillisMenu, exportTreillisMenu);
-        menuEditer.getItems().addAll(creerNoeudMenu, supprNoeudMenu, creerBarreMenu, supprBarreMenu);
+        menuFichier.getItems().addAll(importTreillisMenu, exportTreillisMenu);
+        menuEditer.getItems().addAll(creerNoeudMenu, creerBarreMenu);
         menuBar.getMenus().addAll(menuFichier, menuEditer);
-        
+
+//        creerTreillisMenu.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent e) {
+//                treillis = new Treillis();
+//                graphObjets.getChildren().removeAll(graphObjets.getChildren());
+//            }
+//        });
+
         toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr, calculerTractionBouton, cout);
 
         Dialog<double[]> creationNoeudDialog = new Dialog<>();
@@ -380,6 +384,8 @@ public class MainFx extends Application {
                     case "Noeud Appui Double":
                         type = 2;
                         break;
+                    default:
+                        System.out.println("whaaat");
                 }
                 try {
                     double[] out = {type, Double.parseDouble(noeudPxField.getText()), Double.parseDouble(noeudPyField.getText()), Double.parseDouble(noeudFxField.getText()), Double.parseDouble(noeudFyField.getText())};
@@ -437,9 +443,6 @@ public class MainFx extends Application {
         creationBarreGrid.add(choixTypeBarreLabel, 0, 0);
         creationBarreGrid.add(choixBarreField, 1, 0);
         ChoiceBox<String> choixNoeudDepartField = new ChoiceBox<String>();
-        for (Noeud n : treillis.getNoeuds()) {
-            choixNoeudArray.add(n.toString());
-        }
         choixNoeudDepartField.getItems().addAll(choixNoeudArray);
         Label choixNoeudDepartLabel = new Label("Choisir le noeud de départ");
         creationBarreGrid.add(choixNoeudDepartLabel, 0, 1);
@@ -722,14 +725,13 @@ public class MainFx extends Application {
 
     public void dessinerContenu(Treillis t) {
         graphObjets.getChildren().removeAll(graphObjets.getChildren());
-
-        for (Noeud n : t.getNoeuds()) {
-            //System.out.println("brrr" + t.getNoeuds() + "\r\n" + n);
-            dessinerNoeud(n);
-        }
         for (Barre b : t.getBarres()) {
             //System.out.println(b.getTrac());
             dessinerBarre(b);
+        }
+        for (Noeud n : t.getNoeuds()) {
+            //System.out.println("brrr" + t.getNoeuds() + "\r\n" + n);
+            dessinerNoeud(n);
         }
         if (isSupprOn) {
             for (Node obj : graphObjets.getChildren()) {
@@ -746,52 +748,51 @@ public class MainFx extends Application {
         toolBar.getItems().remove(cout);
         cout = new Label("   Coût du treillis : " + calcCout() + " £");
         toolBar.getItems().add(cout);
-        
-        
-        
-        
-        
+        System.out.println(treillis.getBarres());
+        System.out.println(treillis.getNoeuds());
     }
 
     public void dessinerNoeud(Noeud n) {
         //System.out.println("zob" + n);
-        int type = n.nbrInconnues();
-        Point2D xy = calcCoordR(n.getPx(), n.getPy());
-        switch (type) {
-            case 0:
-                ImageView noeudSimpleView = new ImageView(noeudSimpleImg);
-                noeudSimpleView.setFitWidth(16);
-                noeudSimpleView.setFitHeight(16);
-                noeudSimpleView.setX(xy.getX() - 8);
-                noeudSimpleView.setY(xy.getY() - 8);
-                noeudSimpleImages.put(noeudSimpleView, n);
-                Text tS = new Text(noeudSimpleView.getX()+5, noeudSimpleView.getY()+30, Integer.toString(n.getId()));
-                graphObjets.getChildren().addAll(noeudSimpleView, tS);
-                break;
+        if (n != null) {
+            int type = n.nbrInconnues();
+            Point2D xy = calcCoordR(n.getPx(), n.getPy());
+            switch (type) {
+                case 0:
+                    ImageView noeudSimpleView = new ImageView(noeudSimpleImg);
+                    noeudSimpleView.setFitWidth(16);
+                    noeudSimpleView.setFitHeight(16);
+                    noeudSimpleView.setX(xy.getX() - 8);
+                    noeudSimpleView.setY(xy.getY() - 8);
+                    noeudSimpleImages.put(noeudSimpleView, n);
+                    Text tS = new Text(noeudSimpleView.getX() + 5, noeudSimpleView.getY() + 30, Integer.toString(n.getId()));
+                    graphObjets.getChildren().addAll(noeudSimpleView, tS);
+                    break;
 
-            case 1:
-                ImageView appuiSimpleView = new ImageView(appuiSimpleImg);
-                appuiSimpleView.setFitWidth(32);
-                appuiSimpleView.setFitHeight(32);
-                appuiSimpleView.setX(xy.getX() - 16);
-                appuiSimpleView.setY(xy.getY() - 5);
-                appuiSimpleImages.put(appuiSimpleView, n);
-                Text tAP = new Text(appuiSimpleView.getX()+10, appuiSimpleView.getY()+50, Integer.toString(n.getId()));
-                
-                graphObjets.getChildren().addAll(appuiSimpleView, tAP);
-                break;
+                case 1:
+                    ImageView appuiSimpleView = new ImageView(appuiSimpleImg);
+                    appuiSimpleView.setFitWidth(32);
+                    appuiSimpleView.setFitHeight(32);
+                    appuiSimpleView.setX(xy.getX() - 16);
+                    appuiSimpleView.setY(xy.getY() - 5);
+                    appuiSimpleImages.put(appuiSimpleView, n);
+                    Text tAP = new Text(appuiSimpleView.getX() + 10, appuiSimpleView.getY() + 50, Integer.toString(n.getId()));
 
-            case 2:
-                ImageView appuiDoubleView = new ImageView(appuiDoubleImg);
-                appuiDoubleView.setFitWidth(32);
-                appuiDoubleView.setFitHeight(32);
-                appuiDoubleView.setX(xy.getX() - 16);
-                appuiDoubleView.setY(xy.getY() - 4);
-                appuiDoubleImages.put(appuiDoubleView, n);
-               Text tAD = new Text(appuiDoubleView.getX()+10, appuiDoubleView.getY()+50, Integer.toString(n.getId()));
-                
-                graphObjets.getChildren().addAll(appuiDoubleView, tAD);
-                break;
+                    graphObjets.getChildren().addAll(appuiSimpleView, tAP);
+                    break;
+
+                case 2:
+                    ImageView appuiDoubleView = new ImageView(appuiDoubleImg);
+                    appuiDoubleView.setFitWidth(32);
+                    appuiDoubleView.setFitHeight(32);
+                    appuiDoubleView.setX(xy.getX() - 16);
+                    appuiDoubleView.setY(xy.getY() - 4);
+                    appuiDoubleImages.put(appuiDoubleView, n);
+                    Text tAD = new Text(appuiDoubleView.getX() + 10, appuiDoubleView.getY() + 50, Integer.toString(n.getId()));
+
+                    graphObjets.getChildren().addAll(appuiDoubleView, tAD);
+                    break;
+            }
         }
         //System.out.println(graphObjets.getChildren());
     }
@@ -881,14 +882,14 @@ public class MainFx extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public String calcCout (){
-        double coutTot = 0 ;
-        for (Barre b : treillis.getBarres()){
-            coutTot = coutTot + (b.calcLongeur()*b.getCout());
+
+    public String calcCout() {
+        double coutTot = 0;
+        for (Barre b : treillis.getBarres()) {
+            coutTot = coutTot + (b.calcLongeur() * b.getCout());
         }
-        int out = (int) coutTot ; 
-        return Integer.toString(out); 
+        int out = (int) coutTot;
+        return Integer.toString(out);
     }
 
 }
-
