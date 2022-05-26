@@ -97,9 +97,9 @@ public class MainFx extends Application {
 
         //Images
         Image appicon = new Image(getClass().getResourceAsStream("/appicon.png"));
-        Image shrab = new Image(getClass().getResourceAsStream("/companylogo.png"));
+        Image shrab = new Image(getClass().getResourceAsStream("/pont.png"));
         ImageView shrabView = new ImageView(shrab);
-        shrabView.setOpacity(0.35);
+        shrabView.setOpacity(0.80);
 
         //Numeroteurs
         Numeroteur numAppuiSimple = new Numeroteur();
