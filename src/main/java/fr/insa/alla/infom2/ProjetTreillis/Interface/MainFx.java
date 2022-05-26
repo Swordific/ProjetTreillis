@@ -69,7 +69,9 @@ public class MainFx extends Application {
     Rectangle2D tailleEcran = Screen.getPrimary().getVisualBounds();
     Treillis treillis = new Treillis();
     Boolean isSupprOn = false;
+    Boolean isNoeudOn = false;
     EventHandler supprimerObjet;
+    EventHandler modifNoeudEvent;
 
     Point2D zero, topRightPt;
 
@@ -154,7 +156,7 @@ public class MainFx extends Application {
         toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr, calculerTractionBouton);
 
         Dialog<double[]> creationNoeudDialog = new Dialog<>();
-        Dialog<double[]> modifNoeudDialog = new Dialog<>();
+        Dialog<Vecteur2D> modifNoeudDialog = new Dialog<>();
         Dialog<Object[]> creationBarreDialog = new Dialog<>();
 
         //Menu de départ/déclaration écran principal
@@ -194,15 +196,15 @@ public class MainFx extends Application {
 //        treillis.ajouteNoeuds(n1, n2, n3);
 //        treillis.ajouteBarres(b1, b2, b3);
 //        //treillis.calculeTraction();
-//        //System.out.println(b1.getTrac());
+//        ////System.out.println(b1.getTrac());
 //
 //        dessinerContenu(treillis);
-//        System.out.println(b1.getTrac());
-//        System.out.println(b2.getTrac());
-//        System.out.println(b3.getTrac());
-        //System.out.println(barresMap.get(b3).getFill());
+//        //System.out.println(b1.getTrac());
+//        //System.out.println(b2.getTrac());
+//        //System.out.println(b3.getTrac());
+        ////System.out.println(barresMap.get(b3).getFill());
 
-        //System.out.println(Fichier.exportTreillis(treillis, "")[0]);
+        ////System.out.println(Fichier.exportTreillis(treillis, "")[0]);
         //Events et set boutons
         creerTreillisBouton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -253,7 +255,7 @@ public class MainFx extends Application {
                 n.setId(numAppuiSimple.add(n));
                 treillis.ajouteNoeud(n);
                 stringNoeudMap.put(n.toString(), n);
-                System.out.println(treillis.getNoeuds());
+                //System.out.println(treillis.getNoeuds());
 
                 dessinerContenu(treillis);
             }
@@ -266,7 +268,7 @@ public class MainFx extends Application {
                 n.setId(numAppuiDouble.add(n));
                 treillis.ajouteNoeud(n);
                 stringNoeudMap.put(n.toString(), n);
-                System.out.println(treillis.getNoeuds());
+                //System.out.println(treillis.getNoeuds());
 
                 dessinerContenu(treillis);
             }
@@ -279,7 +281,7 @@ public class MainFx extends Application {
                 n.setId(numNoeudSimple.getOrAdd(n));
                 treillis.ajouteNoeud(n);
                 stringNoeudMap.put(n.toString(), n);
-                System.out.println(treillis.getNoeuds());
+                //System.out.println(treillis.getNoeuds());
 
                 dessinerContenu(treillis);
             }
@@ -299,7 +301,7 @@ public class MainFx extends Application {
                 ImageView objIm = null;
                 Barre b = null;
                 Noeud n = null;
-                System.out.println(e.getSource());
+                //System.out.println(e.getSource());
                 if (e.getSource() instanceof ImageView) {
                     objIm = (ImageView) e.getSource();
                     if (appuiSimpleImages.containsKey(objIm)) {
@@ -339,13 +341,16 @@ public class MainFx extends Application {
         ChoiceBox<String> choixNoeudField = new ChoiceBox<String>();
         choixNoeudField.getItems().addAll(typesNoeuds);
         creationNoeudGrid.add(choixNoeudField, 1, 0);
-        creationNoeudGrid.add(new Label("Choisissez le type de noeud"), 0, 0);
+        Label choixTypeNoeudLabel = new Label("Choisissez le type de noeud");
+        creationNoeudGrid.add(choixTypeNoeudLabel, 0, 0);
         TextField noeudPxField = new TextField();
         creationNoeudGrid.add(noeudPxField, 1, 1);
-        creationNoeudGrid.add(new Label("Entrez l'abscisse du noeud"), 0, 1);
+        Label abscisseNoeudLabel = new Label("Entrez l'abscisse du noeud");
+        creationNoeudGrid.add(abscisseNoeudLabel, 0, 1);
         TextField noeudPyField = new TextField();
         creationNoeudGrid.add(noeudPyField, 1, 2);
-        creationNoeudGrid.add(new Label("Entrez l'ordonnée du noeud"), 0, 2);
+        Label ordonneeNoeudLabel = new Label("Entrez l'ordonnée du noeud");
+        creationNoeudGrid.add(ordonneeNoeudLabel, 0, 2);
         TextField noeudFxField = new TextField();
         creationNoeudGrid.add(noeudFxField, 1, 3);
         creationNoeudGrid.add(new Label("Entrez la force horizontale"), 0, 3);
@@ -381,8 +386,34 @@ public class MainFx extends Application {
 
         creationNoeudDialog.getDialogPane().setContent(creationNoeudGrid);
 
-//        GridPane modifNoeudGrid = (GridPane) creationNoeudGrid.clone();
-//        modifNoeudDialog.getDialogPane()
+        modifNoeudDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        modifNoeudDialog.setTitle("Modification de noeud");
+        GridPane modifNoeudGrid = new GridPane();
+        modifNoeudGrid.setHgap(10);
+        modifNoeudGrid.setVgap(10);
+        modifNoeudGrid.setPadding(new Insets(10, 10, 10, 10));
+        TextField noeudFxField2 = new TextField();
+        TextField noeudFyField2 = new TextField();
+        modifNoeudGrid.add(noeudFxField2, 1, 0);
+        modifNoeudGrid.add(new Label("Entrez la force horizontale"), 0, 0);
+        modifNoeudGrid.add(noeudFyField2, 1, 1);
+        modifNoeudGrid.add(new Label("Entrez la force verticale"), 0, 1);
+
+        modifNoeudDialog.setResultConverter(btn -> {
+            if (btn == ButtonType.OK && !noeudFxField2.getText().equals("") && !noeudFyField2.getText().equals("")) {
+                try {
+                    Vecteur2D out = new Vecteur2D(Double.parseDouble(noeudFxField2.getText()), Double.parseDouble(noeudFyField2.getText()));
+                    return out;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+        );
+
+        modifNoeudDialog.getDialogPane().setContent(modifNoeudGrid);
 
         creationBarreDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         String[] typesBarres = {"Acier", "Aluminium", "Bois"};
@@ -393,19 +424,22 @@ public class MainFx extends Application {
         creationBarreGrid.setPadding(new Insets(10, 10, 10, 10));
         ChoiceBox<String> choixBarreField = new ChoiceBox<String>();
         choixBarreField.getItems().addAll(typesBarres);
-        creationBarreGrid.add(new Label("Choisir le type de barre"), 0, 0);
+        Label choixTypeBarreLabel = new Label("Choisir le type de barre");
+        creationBarreGrid.add(choixTypeBarreLabel, 0, 0);
         creationBarreGrid.add(choixBarreField, 1, 0);
         ChoiceBox<String> choixNoeudDepartField = new ChoiceBox<String>();
         for (Noeud n : treillis.getNoeuds()) {
             choixNoeudArray.add(n.toString());
         }
         choixNoeudDepartField.getItems().addAll(choixNoeudArray);
-        creationBarreGrid.add(new Label("Choisir le noeud de départ"), 0, 1);
+        Label choixNoeudDepartLabel = new Label("Choisir le noeud de départ");
+        creationBarreGrid.add(choixNoeudDepartLabel, 0, 1);
         creationBarreGrid.add(choixNoeudDepartField, 1, 1);
         ChoiceBox<String> choixNoeudArriveeField = new ChoiceBox<String>();
         choixNoeudArriveeField.getItems().addAll(choixNoeudArray);
 
-        creationBarreGrid.add(new Label("Choisir le noeud d'arrivée"), 0, 2);
+        Label choixNoeudArriveeLabel = new Label("Choisir le noeud d'arrivée");
+        creationBarreGrid.add(choixNoeudArriveeLabel, 0, 2);
         creationBarreGrid.add(choixNoeudArriveeField, 1, 2);
 
         creationBarreDialog.getDialogPane().setContent(creationBarreGrid);
@@ -425,6 +459,9 @@ public class MainFx extends Application {
         EventHandler creerNoeudEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+
+                String[] typesNoeuds = {"Noeud Simple", "Noeud Appui Simple", "Noeud Appui Double"};
+
                 Optional<double[]> noeudInfo = creationNoeudDialog.showAndWait();
                 noeudInfo.ifPresent(data -> {
                     double px = data[1];
@@ -433,7 +470,7 @@ public class MainFx extends Application {
                     if (data.length > 3) {
                         f = new Vecteur2D(data[3], data[4]);
                     }
-                    System.out.println("Vecteur2D  " + f);
+                    //System.out.println("Vecteur2D  " + f);
                     Noeud n;
                     switch ((int) data[0]) {
                         case 0:
@@ -455,10 +492,38 @@ public class MainFx extends Application {
                             stringNoeudMap.put(n.toString(), n);
                             break;
                     }
-                    System.out.println(treillis.getNoeuds());
+                    //System.out.println(treillis.getNoeuds());
 
                     dessinerContenu(treillis);
                 });
+
+            }
+        };
+
+        modifNoeudEvent = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                Optional<Vecteur2D> noeudInfo = modifNoeudDialog.showAndWait();
+                noeudInfo.ifPresent(data -> {
+                    Noeud source = null;
+
+                    if (appuiSimpleImages.containsKey((ImageView) e.getSource())) {
+                        source = (NoeudAppuiSimple) appuiSimpleImages.get((ImageView) e.getSource());
+                    } else if (appuiDoubleImages.containsKey((ImageView) e.getSource())) {
+                        source = (NoeudAppuiDouble) appuiDoubleImages.get((ImageView) e.getSource());
+                    } else if (noeudSimpleImages.containsKey((ImageView) e.getSource())) {
+                        source = (NoeudSimple) noeudSimpleImages.get((ImageView) e.getSource());
+                    }
+                    try {
+                        source.setF(data);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    //System.out.println(treillis.getNoeuds());
+
+                    dessinerContenu(treillis);
+                }
+                );
 
             }
         };
@@ -479,13 +544,12 @@ public class MainFx extends Application {
                 barreInfo.ifPresent(data -> {
                     Barre b = new Barre((Noeud) data[0], (Noeud) data[1]);
                     b.setType((String) data[2]);
-                    System.out.println((String) data[2]);
+                    //System.out.println((String) data[2]);
                     b.defineType((String) data[2]);
                     b.setId(numBarre.getOrAdd(b));
                     treillis.ajouteBarre(b);
 
-                    System.out.println(treillis.getBarres());
-
+                    //System.out.println(treillis.getBarres());
                     dessinerContenu(treillis);
                 });
 
@@ -493,6 +557,7 @@ public class MainFx extends Application {
         };
 
         creerNoeudMenu.setOnAction(creerNoeudEvent);
+
         creerBarreMenu.setOnAction(creerBarreEvent);
 
         EventHandler calculerTractionEvent = new EventHandler<ActionEvent>() {
@@ -506,6 +571,7 @@ public class MainFx extends Application {
                 }
             }
         };
+
         calculerTractionBouton.setOnAction(calculerTractionEvent);
 
         boutonsAjout.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
@@ -514,38 +580,63 @@ public class MainFx extends Application {
             public void changed(ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) {
                 if (new_toggle == null) {
                     isSupprOn = false;
+                    isNoeudOn = false;
                     graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
                     graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
                     graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
                     graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
+                    graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, modifNoeudEvent);
                 } else {
                     switch ((String) boutonsAjout.getSelectedToggle().getUserData()) {
                         case "noeudSimple":
                             isSupprOn = false;
+                            isNoeudOn = true;
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
                             graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
                             graphGrille.addEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
+                            for (Node obj : graphObjets.getChildren()) {
+                                if (obj instanceof ImageView) {
+                                    obj.addEventFilter(MouseEvent.MOUSE_CLICKED, modifNoeudEvent);
+                                }
+                            }
                             break;
                         case "appuiSimple":
                             isSupprOn = false;
+                            isNoeudOn = true;
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
                             graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
                             graphGrille.addEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
+                            for (Node obj : graphObjets.getChildren()) {
+                                if (obj instanceof ImageView) {
+                                    obj.addEventFilter(MouseEvent.MOUSE_CLICKED, modifNoeudEvent);
+                                }
+                            }
                             break;
                         case "appuiDouble":
                             isSupprOn = false;
+                            isNoeudOn = true;
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
                             graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
                             graphGrille.addEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
+                            for (Node obj : graphObjets.getChildren()) {
+                                if (obj instanceof ImageView) {
+                                    obj.addEventFilter(MouseEvent.MOUSE_CLICKED, modifNoeudEvent);
+                                }
+                            }
                             break;
                         case "suppr":
                             isSupprOn = true;
+                            isNoeudOn = false;
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterNoeudSimple);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiSimple);
                             graphGrille.removeEventFilter(MouseEvent.MOUSE_CLICKED, ajouterAppuiDouble);
+                            graphObjets.removeEventFilter(MouseEvent.MOUSE_CLICKED, modifNoeudEvent);
+                            for (Node obj : graphObjets.getChildren()) {
+                                obj.removeEventFilter(MouseEvent.MOUSE_CLICKED, modifNoeudEvent);
+                            }
                             for (Node obj : graphObjets.getChildren()) {
                                 obj.addEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
                             }
@@ -624,22 +715,29 @@ public class MainFx extends Application {
         graphObjets.getChildren().removeAll(graphObjets.getChildren());
 
         for (Noeud n : t.getNoeuds()) {
-            System.out.println("brrr" + t.getNoeuds() + "\r\n" + n);
+            //System.out.println("brrr" + t.getNoeuds() + "\r\n" + n);
             dessinerNoeud(n);
         }
         for (Barre b : t.getBarres()) {
-            System.out.println(b.getTrac());
+            //System.out.println(b.getTrac());
             dessinerBarre(b);
         }
         if (isSupprOn) {
             for (Node obj : graphObjets.getChildren()) {
                 obj.addEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
             }
+            for (Node obj : graphObjets.getChildren()) {
+                obj.removeEventFilter(MouseEvent.MOUSE_CLICKED, modifNoeudEvent);
+            }
+        } else if (isNoeudOn) {
+            for (Node obj : graphObjets.getChildren()) {
+                obj.addEventFilter(MouseEvent.MOUSE_CLICKED, modifNoeudEvent);
+            }
         }
     }
 
     public void dessinerNoeud(Noeud n) {
-        System.out.println("zob" + n);
+        //System.out.println("zob" + n);
         int type = n.nbrInconnues();
         Point2D xy = calcCoordR(n.getPx(), n.getPy());
         switch (type) {
@@ -673,7 +771,7 @@ public class MainFx extends Application {
                 graphObjets.getChildren().add(appuiDoubleView);
                 break;
         }
-        System.out.println(graphObjets.getChildren());
+        //System.out.println(graphObjets.getChildren());
     }
 
     public void dessinerBarre(Barre b) {
@@ -704,7 +802,7 @@ public class MainFx extends Application {
         //Line l = barresMap.get(b);
         colorComp = (abs(b.getTrac()) / abs(b.getMaxComp())) * 120d + 120d;
         colorTrac = 120d - (b.getTrac() / b.getMaxTrac()) * 120d;
-        //System.out.println(colorComp + " / " + colorTrac);
+        ////System.out.println(colorComp + " / " + colorTrac);
 
         if (b.getTrac() > b.getMaxTrac()) {
             //l.getStrokeDashArray().addAll(25d, 10d);
