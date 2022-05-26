@@ -859,10 +859,6 @@ public class MainFx extends Application {
         Point2D trp = topRightPt;
         double xf, yf;
         x -= zero.getX();
-
-        xf = ((x) / (trp.getX() - zero.getX())) * 160;
-        yf = (y / (trp.getY() - zero.getY() / 70)) - zero.getY();
-
         y -= zero.getY();
         xf = (x / (trp.getX() - zero.getX())) * 160;
         yf = (y / (trp.getY() - zero.getY())) * 70;
