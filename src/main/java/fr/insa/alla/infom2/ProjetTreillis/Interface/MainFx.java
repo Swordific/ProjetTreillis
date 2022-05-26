@@ -185,15 +185,19 @@ public class MainFx extends Application {
         //Ecran principal
         primaryStage.setMaximized(true);
         primaryStage.show();
-//        Vecteur2D f = new Vecteur2D(0, 200000);
+//        Vecteur2D f = new Vecteur2D(0, 10000);
 //        Vecteur2D f0 = new Vecteur2D(0, 0);
-//        Noeud n1 = new NoeudAppuiSimple(1, 0, 10, f0);
-//        Noeud n2 = new NoeudAppuiSimple(2, 20, 12, f0);
-//        Noeud n3 = new NoeudSimple(3, 10, 20, f);
+//        Noeud n1 = new NoeudAppuiSimple(1, 0, 0, f0);
+//        Noeud n2 = new NoeudAppuiSimple(2, 20, 0, f0);
+//        Noeud n3 = new NoeudAppuiSimple(3, 40, 0, f0);
+//        Noeud n4 = new NoeudSimple(1, 10, 20, f);
+//        Noeud n5 = new NoeudSimple(2, 30, 20, f);
+//        Noeud n6 = new NoeudSimple(3, 20, 40, f);
 //
 //        Barre b1 = new Barre(1, n1, n2, "acier");
 //        Barre b2 = new Barre(2, n2, n3, "acier");
-//        Barre b3 = new Barre(3, n3, n1, "acier");
+//        Barre b3 = new Barre(3, n4, n1, "acier");
+//        Barre b4 = new Barre(4, n4, n2, "acier");
 //        //b1.setTrac(-11100);
 //
 //        treillis.ajouteNoeuds(n1, n2, n3);
@@ -205,7 +209,7 @@ public class MainFx extends Application {
 //        System.out.println(b1.getTrac());
 //        System.out.println(b2.getTrac());
 //        System.out.println(b3.getTrac());
-        //System.out.println(barresMap.get(b3).getFill());
+//        //System.out.println(barresMap.get(b3).getFill());
 
         //System.out.println(Fichier.exportTreillis(treillis, "")[0]);
         //Events et set boutons
