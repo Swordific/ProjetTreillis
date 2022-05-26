@@ -174,7 +174,15 @@ public class Barre {
         } else {
             System.out.println("Le type de barre entrée n'est pas reconnu");
         }
+        ArrayList<Barre> listeDepart = noeudDepart.getBarresDepart();
+        listeDepart.add(this);
+        ArrayList<Barre> listeArrivee = noeudArrivee.getBarresArrivee();
+        listeArrivee.add(this);
+
+        noeudDepart.setBarresDepart(listeDepart);
+        noeudArrivee.setBarresArrivee(listeArrivee);
     }
+    
 
     public Noeud noeudOppose(Noeud n) {
         if (n == noeudDepart) {

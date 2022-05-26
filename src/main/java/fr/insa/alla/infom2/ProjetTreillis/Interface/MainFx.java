@@ -5,6 +5,7 @@
 package fr.insa.alla.infom2.ProjetTreillis.Interface;
 
 import fr.insa.alla.infom2.ProjetTreillis.*;
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -44,10 +45,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -80,6 +83,7 @@ public class MainFx extends Application {
     HashMap<ImageView, Noeud> appuiDoubleImages = new HashMap<>();
     HashMap<ImageView, Noeud> noeudSimpleImages = new HashMap<>();
     HashMap<Line, Barre> linesMap = new HashMap<>();
+    HashMap<Barre, Line> barresMap = new HashMap<>();
     HashMap<String, Noeud> stringNoeudMap = new HashMap<>();
 
     @Override
@@ -93,9 +97,9 @@ public class MainFx extends Application {
 
         //Images
         Image appicon = new Image(getClass().getResourceAsStream("/appicon.png"));
-        Image shrab = new Image(getClass().getResourceAsStream("/companylogo.png"));
+        Image shrab = new Image(getClass().getResourceAsStream("/pont.png"));
         ImageView shrabView = new ImageView(shrab);
-        shrabView.setOpacity(0.35);
+        shrabView.setOpacity(0.80);
 
         //Numeroteurs
         Numeroteur numAppuiSimple = new Numeroteur();
@@ -161,6 +165,7 @@ public class MainFx extends Application {
         rootWelcome.getChildren().addAll(shrabView, hboxWelcome);
 
         mainScene = new Scene(rootWelcome);
+
         primaryStage.setScene(mainScene);
 
         Pane rootPane = new Pane();
@@ -173,6 +178,28 @@ public class MainFx extends Application {
         //Ecran principal
         primaryStage.setMaximized(true);
         primaryStage.show();
+        Vecteur2D f = new Vecteur2D(0, 20000);
+        Vecteur2D f0 = new Vecteur2D(0, 0);
+        Noeud n1 = new NoeudAppuiSimple(1, 0, 0, f0);
+        Noeud n2 = new NoeudAppuiSimple(2, 20, 0, f0);
+        Noeud n3 = new NoeudSimple(3, 10, 10, f);
+
+        Barre b1 = new Barre(1, n1, n2, "acier");
+        Barre b2 = new Barre(2, n2, n3, "acier");
+        Barre b3 = new Barre(3, n3, n1, "acier");
+        //b1.setTrac(-11100);
+
+        treillis.ajouteNoeuds(n1, n2, n3);
+        treillis.ajouteBarres(b1, b2, b3);
+        treillis.calculeTraction();
+        //System.out.println(b1.getTrac());
+
+        dessinerContenu(treillis);
+        System.out.println(b1.getTrac());
+        System.out.println(b2.getTrac());
+        System.out.println(b3.getTrac());
+        //System.out.println(barresMap.get(b3).getFill());
+
         //System.out.println(Fichier.exportTreillis(treillis, "")[0]);
         //Events et set boutons
         creerTreillisBouton.setOnAction(new EventHandler<ActionEvent>() {
@@ -287,6 +314,7 @@ public class MainFx extends Application {
         };
 
         creationNoeudDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        creationNoeudDialog.setWidth(500);
 
         creationNoeudDialog.setTitle("Création de noeud");
         GridPane creationNoeudGrid = new GridPane();
@@ -340,8 +368,12 @@ public class MainFx extends Application {
         );
 
         creationNoeudDialog.getDialogPane().setContent(creationNoeudGrid);
+        //creationNoeudDialog.setWidth(1000d);
 
         creationBarreDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        creationBarreDialog.getDialogPane().setMinWidth(500);
+        //creationBarreDialog.setHeight(500d);
+        creationBarreDialog.setResizable(true);
         String[] typesBarres = {"Barre"};
         creationBarreDialog.setTitle("Création de barre");
         GridPane creationBarreGrid = new GridPane();
@@ -511,11 +543,11 @@ public class MainFx extends Application {
                 hLines.get(i / 2 - 1).setEndY(h / 10 * i / 2 + 50);
 
                 hLines.get(i / 2 - 1).setStrokeWidth(2);
-                hLines.get(i / 2 - 1).setStroke(Color.GREY);
+                hLines.get(i / 2 - 1).setStroke(Color.BLACK);
                 hLines.get(i / 2 - 1).setOpacity(0.4);
 
                 Text t = new Text(25, h / 10 * (i / 2) + 54, Integer.toString((8 - i / 2) * 10));
-                t.setFill(Color.GREY);
+                t.setFill(Color.BLACK);
                 t.setOpacity(0.8);
                 graduations.add(t);
 
@@ -616,8 +648,53 @@ public class MainFx extends Application {
         Line l = new Line(pd.getX(), pd.getY(), pa.getX(), pa.getY());
         l.setStrokeWidth(5);
         l.setStrokeLineCap(StrokeLineCap.ROUND);
+        l.setFill(barreCouleur(b));
+
         linesMap.put(l, b);
+        //barresMap.put(b, l);
+        if (treillis.calculeTraction() != null) {
+            l.setStroke(barreCouleur(b));
+            if (l.getStroke() == Color.RED) {
+                l.getStrokeDashArray().addAll(25d, 10d);
+            } else if (l.getStroke() == Color.BLUE) {
+                l.getStrokeDashArray().addAll(25d, 10d);
+            }
+        }
+        else {
+            l.setStroke(Color.BLACK);
+        }
+
         graphObjets.getChildren().add(l);
+
+    }
+
+    public Paint barreCouleur(Barre b) {
+        double colorComp;
+        double colorTrac;
+        Line l = barresMap.get(b);
+        colorComp = (abs(b.getTrac()) / abs(b.getMaxComp())) * 120d + 120d;
+        colorTrac = 120d - (b.getTrac() / b.getMaxTrac()) * 120d;
+        //System.out.println(colorComp + " / " + colorTrac);
+
+        if (b.getTrac() > b.getMaxTrac()) {
+            //l.getStrokeDashArray().addAll(25d, 10d);
+            return Color.RED;
+        } else if (b.getTrac() < b.getMaxComp()) {
+            //l.getStrokeDashArray().addAll(25d, 10d);
+            return Color.BLUE;
+        } else if (b.getTrac() >= 0) {
+            //l.setFill(Color.hsb(colorTrac, 1.0, 1.0));
+            return Color.hsb(colorTrac, 1.0, 0.75);
+        } else if (b.getTrac() <= 0) {
+            //l.setFill(Color.hsb(colorComp, 1.0, 1.0));
+            return Color.hsb(colorComp, 1.0, 0.75);
+        } else {
+            //l.setFill(Color.BLACK);
+            l.getStrokeDashArray().addAll(25d, 10d);
+            return Color.BLACK;
+        }
+        //barresMap.replace(b, l);
+
     }
 
     public Point2D calcCoord(double x, double y) {
