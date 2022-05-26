@@ -70,8 +70,7 @@ public class MainFx extends Application {
     Treillis treillis = new Treillis();
     Boolean isSupprOn = false;
     Boolean isNoeudOn = false;
-    EventHandler supprimerObjet;
-    EventHandler modifNoeudEvent;
+    EventHandler supprimerObjet, creerBarreEvent, modifNoeudEvent;
 
     Point2D zero, topRightPt;
 
@@ -88,7 +87,7 @@ public class MainFx extends Application {
     HashMap<Barre, Line> barresMap = new HashMap<>();
     HashMap<String, Noeud> stringNoeudMap = new HashMap<>();
     ToolBar toolBar = new ToolBar();
-    Label cout = new Label("   Coût du treillis : " + calcCout() + " £");
+    Label cout = new Label("   Coût du treillis : " + calcCout() + " €");
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -103,6 +102,8 @@ public class MainFx extends Application {
         Image appicon = new Image(getClass().getResourceAsStream("/appicon.png"));
         Image shrab = new Image(getClass().getResourceAsStream("/pont.png"));
         ImageView shrabView = new ImageView(shrab);
+        shrabView.fitHeightProperty().bind(primaryStage.heightProperty());
+        shrabView.setPreserveRatio(true);
         shrabView.setOpacity(0.35);
 
         //Numeroteurs
@@ -132,11 +133,11 @@ public class MainFx extends Application {
         btnAppuiSimple.setUserData("appuiSimple");
         ToggleButton btnAppuiDouble = new ToggleButton("", new ImageView(appuiDoubleImg));
         btnAppuiDouble.setUserData("appuiDouble");
-        ToggleButton btnBarre = new ToggleButton("", new ImageView(barreImg));
-        btnBarre.setUserData("barre");
+        Button btnBarre = new Button("", new ImageView(barreImg));
+
         ToggleButton btnSuppr = new ToggleButton("", new ImageView(supprImg));
         btnSuppr.setUserData("suppr");
-        boutonsAjout.getToggles().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr);
+        boutonsAjout.getToggles().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnSuppr);
 
         MenuBar menuBar = new MenuBar();
 
@@ -161,7 +162,6 @@ public class MainFx extends Application {
 //                graphObjets.getChildren().removeAll(graphObjets.getChildren());
 //            }
 //        });
-
         toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr, calculerTractionBouton, cout);
 
         Dialog<double[]> creationNoeudDialog = new Dialog<>();
@@ -227,7 +227,7 @@ public class MainFx extends Application {
         });
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All files", "*.*"), new ExtensionFilter("Treillis Shrab", "*.trs"));
+        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Treillis Shrab", "*.trs"), new ExtensionFilter("All files", "*.*"));
 
         EventHandler importTreillisEvent = new EventHandler<ActionEvent>() {
             @Override
@@ -541,7 +541,7 @@ public class MainFx extends Application {
             }
         };
 
-        EventHandler creerBarreEvent = new EventHandler<ActionEvent>() {
+        creerBarreEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 for (Noeud n : treillis.getNoeuds()) {
@@ -569,7 +569,9 @@ public class MainFx extends Application {
             }
         };
 
+        btnBarre.setOnAction(creerBarreEvent);
         creerNoeudMenu.setOnAction(creerNoeudEvent);
+
 
         creerBarreMenu.setOnAction(creerBarreEvent);
 
@@ -640,6 +642,7 @@ public class MainFx extends Application {
                                 }
                             }
                             break;
+
                         case "suppr":
                             isSupprOn = true;
                             isNoeudOn = false;
@@ -679,11 +682,11 @@ public class MainFx extends Application {
                 hLines.get(i / 2 - 1).setEndY(h / 10 * i / 2 + 50);
 
                 hLines.get(i / 2 - 1).setStrokeWidth(2);
-                hLines.get(i / 2 - 1).setStroke(Color.BLACK);
+                hLines.get(i / 2 - 1).setStroke(Color.GREY);
                 hLines.get(i / 2 - 1).setOpacity(0.4);
 
                 Text t = new Text(25, h / 10 * (i / 2) + 54, Integer.toString((8 - i / 2) * 10));
-                t.setFill(Color.BLACK);
+                t.setFill(Color.GREY);
                 t.setOpacity(0.8);
                 graduations.add(t);
 
