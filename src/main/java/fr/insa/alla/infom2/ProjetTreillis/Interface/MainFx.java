@@ -165,7 +165,7 @@ public class MainFx extends Application {
         rootWelcome.getChildren().addAll(shrabView, hboxWelcome);
 
         mainScene = new Scene(rootWelcome);
-        
+
         primaryStage.setScene(mainScene);
 
         Pane rootPane = new Pane();
@@ -179,28 +179,27 @@ public class MainFx extends Application {
         primaryStage.setMaximized(true);
         primaryStage.show();
         Vecteur2D f = new Vecteur2D(0, 20000);
-        Vecteur2D f0 = new Vecteur2D(0,0); 
+        Vecteur2D f0 = new Vecteur2D(0, 0);
         Noeud n1 = new NoeudAppuiSimple(1, 0, 0, f0);
         Noeud n2 = new NoeudAppuiSimple(2, 20, 0, f0);
         Noeud n3 = new NoeudSimple(3, 10, 10, f);
-        
+
         Barre b1 = new Barre(1, n1, n2, "acier");
         Barre b2 = new Barre(2, n2, n3, "acier");
         Barre b3 = new Barre(3, n3, n1, "acier");
         //b1.setTrac(-11100);
-        
+
         treillis.ajouteNoeuds(n1, n2, n3);
         treillis.ajouteBarres(b1, b2, b3);
         treillis.calculeTraction();
         //System.out.println(b1.getTrac());
-        
-        
+
         dessinerContenu(treillis);
         System.out.println(b1.getTrac());
         System.out.println(b2.getTrac());
         System.out.println(b3.getTrac());
         //System.out.println(barresMap.get(b3).getFill());
-        
+
         //System.out.println(Fichier.exportTreillis(treillis, "")[0]);
         //Events et set boutons
         creerTreillisBouton.setOnAction(new EventHandler<ActionEvent>() {
@@ -645,56 +644,53 @@ public class MainFx extends Application {
         l.setStrokeWidth(5);
         l.setStrokeLineCap(StrokeLineCap.ROUND);
         l.setFill(barreCouleur(b));
-        
+
         linesMap.put(l, b);
         //barresMap.put(b, l);
-       l.setStroke(barreCouleur(b));
-       if (l.getStroke() == Color.RED) {
-           l.getStrokeDashArray().addAll(25d, 10d);
-       }
-       else if (l.getStroke() == Color.BLUE) {
-           l.getStrokeDashArray().addAll(25d, 10d);
-       }
-
-        graphObjets.getChildren().add(l);
-        
-    }
-    public Paint barreCouleur (Barre b){
-        double colorComp ;
-        double colorTrac ; 
-        Line l = barresMap.get(b) ;
-        colorComp =  (abs(b.getTrac())/abs(b.getMaxComp()))*120d + 120d ; 
-        colorTrac =  120d - (b.getTrac()/b.getMaxTrac())*120d ; 
-        //System.out.println(colorComp + " / " + colorTrac);
-        
-        if (b.getTrac() > b.getMaxTrac()){
-            //l.getStrokeDashArray().addAll(25d, 10d);
-            return Color.RED ; 
-        }
-        else if (b.getTrac() < b.getMaxComp()){
-            //l.getStrokeDashArray().addAll(25d, 10d);
-            return Color.BLUE ; 
-        }
-        
-        
-        else if (b.getTrac() >= 0){
-            //l.setFill(Color.hsb(colorTrac, 1.0, 1.0));
-            return Color.hsb(colorTrac, 1.0, 0.75);
-        }
-        else if (b.getTrac() <= 0) { 
-            //l.setFill(Color.hsb(colorComp, 1.0, 1.0));
-            return Color.hsb(colorComp, 1.0, 0.75);
+        if (treillis.calculeTraction() != null) {
+            l.setStroke(barreCouleur(b));
+            if (l.getStroke() == Color.RED) {
+                l.getStrokeDashArray().addAll(25d, 10d);
+            } else if (l.getStroke() == Color.BLUE) {
+                l.getStrokeDashArray().addAll(25d, 10d);
+            }
         }
         else {
+            l.setStroke(Color.BLACK);
+        }
+
+        graphObjets.getChildren().add(l);
+
+    }
+
+    public Paint barreCouleur(Barre b) {
+        double colorComp;
+        double colorTrac;
+        Line l = barresMap.get(b);
+        colorComp = (abs(b.getTrac()) / abs(b.getMaxComp())) * 120d + 120d;
+        colorTrac = 120d - (b.getTrac() / b.getMaxTrac()) * 120d;
+        //System.out.println(colorComp + " / " + colorTrac);
+
+        if (b.getTrac() > b.getMaxTrac()) {
+            //l.getStrokeDashArray().addAll(25d, 10d);
+            return Color.RED;
+        } else if (b.getTrac() < b.getMaxComp()) {
+            //l.getStrokeDashArray().addAll(25d, 10d);
+            return Color.BLUE;
+        } else if (b.getTrac() >= 0) {
+            //l.setFill(Color.hsb(colorTrac, 1.0, 1.0));
+            return Color.hsb(colorTrac, 1.0, 0.75);
+        } else if (b.getTrac() <= 0) {
+            //l.setFill(Color.hsb(colorComp, 1.0, 1.0));
+            return Color.hsb(colorComp, 1.0, 0.75);
+        } else {
             //l.setFill(Color.BLACK);
             l.getStrokeDashArray().addAll(25d, 10d);
             return Color.BLACK;
         }
         //barresMap.replace(b, l);
-        
-        
+
     }
-    
 
     public Point2D calcCoord(double x, double y) {
         Point2D pt;

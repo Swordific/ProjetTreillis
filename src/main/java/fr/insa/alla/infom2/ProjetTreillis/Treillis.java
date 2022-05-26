@@ -246,8 +246,8 @@ public class Treillis {
                 i += 2;
             }
         }
-
-        Matrix solution = equa.solve(secondMembre);
+        try {
+            Matrix solution = equa.solve(secondMembre);
 
         int x = 0;
         for (Barre b : listBarres) {
@@ -258,6 +258,12 @@ public class Treillis {
 
         //Matrix[] m = {equa, secondMembre};
         return solution;
+            
+        }
+        catch (Exception e){
+            return null ; 
+        }
+        
 
     }
 
