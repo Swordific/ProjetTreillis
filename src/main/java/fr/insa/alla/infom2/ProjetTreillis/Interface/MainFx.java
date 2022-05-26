@@ -50,7 +50,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -97,9 +96,9 @@ public class MainFx extends Application {
 
         //Images
         Image appicon = new Image(getClass().getResourceAsStream("/appicon.png"));
-        Image shrab = new Image(getClass().getResourceAsStream("/pont.png"));
+        Image shrab = new Image(getClass().getResourceAsStream("/companylogo.png"));
         ImageView shrabView = new ImageView(shrab);
-        shrabView.setOpacity(0.80);
+        shrabView.setOpacity(0.35);
 
         //Numeroteurs
         Numeroteur numAppuiSimple = new Numeroteur();
@@ -314,7 +313,6 @@ public class MainFx extends Application {
         };
 
         creationNoeudDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        creationNoeudDialog.setWidth(500);
 
         creationNoeudDialog.setTitle("Création de noeud");
         GridPane creationNoeudGrid = new GridPane();
@@ -368,12 +366,8 @@ public class MainFx extends Application {
         );
 
         creationNoeudDialog.getDialogPane().setContent(creationNoeudGrid);
-        //creationNoeudDialog.setWidth(1000d);
 
         creationBarreDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        creationBarreDialog.getDialogPane().setMinWidth(500);
-        //creationBarreDialog.setHeight(500d);
-        creationBarreDialog.setResizable(true);
         String[] typesBarres = {"Barre"};
         creationBarreDialog.setTitle("Création de barre");
         GridPane creationBarreGrid = new GridPane();
@@ -652,16 +646,11 @@ public class MainFx extends Application {
 
         linesMap.put(l, b);
         //barresMap.put(b, l);
-        if (treillis.calculeTraction() != null) {
-            l.setStroke(barreCouleur(b));
-            if (l.getStroke() == Color.RED) {
-                l.getStrokeDashArray().addAll(25d, 10d);
-            } else if (l.getStroke() == Color.BLUE) {
-                l.getStrokeDashArray().addAll(25d, 10d);
-            }
-        }
-        else {
-            l.setStroke(Color.BLACK);
+        l.setStroke(barreCouleur(b));
+        if (l.getStroke() == Color.RED) {
+            l.getStrokeDashArray().addAll(25d, 10d);
+        } else if (l.getStroke() == Color.BLUE) {
+            l.getStrokeDashArray().addAll(25d, 10d);
         }
 
         graphObjets.getChildren().add(l);
