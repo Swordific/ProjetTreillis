@@ -53,6 +53,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -153,6 +154,7 @@ public class MainFx extends Application {
         toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr, calculerTractionBouton);
 
         Dialog<double[]> creationNoeudDialog = new Dialog<>();
+        Dialog<double[]> modifNoeudDialog = new Dialog<>();
         Dialog<Object[]> creationBarreDialog = new Dialog<>();
 
         //Menu de départ/déclaration écran principal
@@ -210,6 +212,7 @@ public class MainFx extends Application {
         });
 
         FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All files", "*.*"), new ExtensionFilter("Treillis Shrab", "*.trs"));
 
         EventHandler importTreillisEvent = new EventHandler<ActionEvent>() {
             @Override
@@ -232,7 +235,7 @@ public class MainFx extends Application {
         EventHandler exportTreillisEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                String filePathExport = fileChooser.showOpenDialog(primaryStage).getPath();
+                String filePathExport = fileChooser.showSaveDialog(primaryStage).getPath();
                 try {
                     Fichier.exportTreillis(treillis, filePathExport);
                 } catch (Exception ex) {
@@ -377,6 +380,9 @@ public class MainFx extends Application {
         );
 
         creationNoeudDialog.getDialogPane().setContent(creationNoeudGrid);
+
+//        GridPane modifNoeudGrid = (GridPane) creationNoeudGrid.clone();
+//        modifNoeudDialog.getDialogPane()
 
         creationBarreDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         String[] typesBarres = {"Acier", "Aluminium", "Bois"};

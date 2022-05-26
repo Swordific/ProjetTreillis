@@ -1,4 +1,4 @@
- /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -19,7 +19,7 @@ public class Numeroteur {
     private HashMap<Integer, Object> objectMap;
     @Expose
     private HashMap<Object, Integer> indexMap;
-
+    
     public Numeroteur() {//(Class type) {
         //this.type = type;
         maxIndex = 0;
@@ -39,35 +39,35 @@ public class Numeroteur {
         }
         return null;
     }
-
+    
     public int getIndex(Object o) {
         if (indexMap.containsKey(o)) {
             return indexMap.get(o);
         }
         return -1;
     }
-
+    
     public int add(Object o) {
-        //if (o.getClass() == type) {
-        maxIndex++;
-        objectMap.put(maxIndex, o);
-        indexMap.put(o, maxIndex);
-        return maxIndex;
-        //}
-        //return -1;
+        if (!objectMap.containsKey(o)) {
+            maxIndex++;
+            objectMap.put(maxIndex, o);
+            indexMap.put(o, maxIndex);
+            return maxIndex;
+        }
+        return -1;
     }
-
+    
     public void addAll(Object... os) {
         for (Object o : os) {
             this.add(o);
         }
     }
-
+    
     public int getOrAdd(Object o) {
         if (!objectMap.containsValue(o)) {
             return this.add(o);
         }
         return indexMap.get(o);
     }
-
+    
 }
