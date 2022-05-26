@@ -749,8 +749,6 @@ public class MainFx extends Application {
         toolBar.getItems().remove(cout);
         cout = new Label("   Coût du treillis : " + calcCout() + " £");
         toolBar.getItems().add(cout);
-        System.out.println(treillis.getBarres());
-        System.out.println(treillis.getNoeuds());
     }
 
     public void dessinerNoeud(Noeud n) {
