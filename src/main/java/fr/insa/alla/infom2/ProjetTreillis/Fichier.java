@@ -217,7 +217,16 @@ public class Fichier {
                 }
                 i++;
             }
-
+            for (Noeud n : noeuds) {
+                n.setBarresDepart(new ArrayList<Barre>());
+                n.setBarresArrivee(new ArrayList<Barre>());
+            }
+            for (Barre b : listBarre) {
+                Noeud nd = b.getNoeudDepart();
+                Noeud na = b.getNoeudArrivee();
+                nd.getBarresDepart().add(b);
+                na.getBarresArrivee().add(b);
+            }
             treillis.ajouteNoeuds(noeuds);
             treillis.ajouteBarres(listBarre);
 

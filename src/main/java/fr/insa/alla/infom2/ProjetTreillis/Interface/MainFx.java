@@ -87,6 +87,9 @@ public class MainFx extends Application {
     HashMap<Line, Barre> linesMap = new HashMap<>();
     HashMap<Barre, Line> barresMap = new HashMap<>();
     HashMap<String, Noeud> stringNoeudMap = new HashMap<>();
+    ToolBar toolBar = new ToolBar();
+    Label cout = new Label("   Coût du treillis : " + calcCout() + " £");
+    
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -96,6 +99,7 @@ public class MainFx extends Application {
         graph.getChildren().addAll(graphGrille, graphObjets);
 
         ArrayList<String> choixNoeudArray = new ArrayList<>();
+        
 
         //Images
         Image appicon = new Image(getClass().getResourceAsStream("/appicon.png"));
@@ -139,7 +143,7 @@ public class MainFx extends Application {
         boutonsAjout.getToggles().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr);
 
         MenuBar menuBar = new MenuBar();
-        ToolBar toolBar = new ToolBar();
+        
         HBox barHBox = new HBox(menuBar, toolBar);
 
         menuBar.setPrefHeight(36);
@@ -153,7 +157,8 @@ public class MainFx extends Application {
         menuFichier.getItems().addAll(creerTreillisMenu, importTreillisMenu, exportTreillisMenu);
         menuEditer.getItems().addAll(creerNoeudMenu, supprNoeudMenu, creerBarreMenu, supprBarreMenu);
         menuBar.getMenus().addAll(menuFichier, menuEditer);
-        toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr, calculerTractionBouton);
+        
+        toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr, calculerTractionBouton, cout);
 
         Dialog<double[]> creationNoeudDialog = new Dialog<>();
         Dialog<Vecteur2D> modifNoeudDialog = new Dialog<>();
@@ -182,15 +187,19 @@ public class MainFx extends Application {
         //Ecran principal
         primaryStage.setMaximized(true);
         primaryStage.show();
-//        Vecteur2D f = new Vecteur2D(0, 200000);
+//        Vecteur2D f = new Vecteur2D(0, 10000);
 //        Vecteur2D f0 = new Vecteur2D(0, 0);
-//        Noeud n1 = new NoeudAppuiSimple(1, 0, 10, f0);
-//        Noeud n2 = new NoeudAppuiSimple(2, 20, 12, f0);
-//        Noeud n3 = new NoeudSimple(3, 10, 20, f);
+//        Noeud n1 = new NoeudAppuiSimple(1, 0, 0, f0);
+//        Noeud n2 = new NoeudAppuiSimple(2, 20, 0, f0);
+//        Noeud n3 = new NoeudAppuiSimple(3, 40, 0, f0);
+//        Noeud n4 = new NoeudSimple(1, 10, 20, f);
+//        Noeud n5 = new NoeudSimple(2, 30, 20, f);
+//        Noeud n6 = new NoeudSimple(3, 20, 40, f);
 //
 //        Barre b1 = new Barre(1, n1, n2, "acier");
 //        Barre b2 = new Barre(2, n2, n3, "acier");
-//        Barre b3 = new Barre(3, n3, n1, "acier");
+//        Barre b3 = new Barre(3, n4, n1, "acier");
+//        Barre b4 = new Barre(4, n4, n2, "acier");
 //        //b1.setTrac(-11100);
 //
 //        treillis.ajouteNoeuds(n1, n2, n3);
@@ -199,10 +208,10 @@ public class MainFx extends Application {
 //        ////System.out.println(b1.getTrac());
 //
 //        dessinerContenu(treillis);
-//        //System.out.println(b1.getTrac());
-//        //System.out.println(b2.getTrac());
-//        //System.out.println(b3.getTrac());
-        ////System.out.println(barresMap.get(b3).getFill());
+//        System.out.println(b1.getTrac());
+//        System.out.println(b2.getTrac());
+//        System.out.println(b3.getTrac());
+//        //System.out.println(barresMap.get(b3).getFill());
 
         ////System.out.println(Fichier.exportTreillis(treillis, "")[0]);
         //Events et set boutons
@@ -734,6 +743,14 @@ public class MainFx extends Application {
                 obj.addEventFilter(MouseEvent.MOUSE_CLICKED, modifNoeudEvent);
             }
         }
+        toolBar.getItems().remove(cout);
+        cout = new Label("   Coût du treillis : " + calcCout() + " £");
+        toolBar.getItems().add(cout);
+        
+        
+        
+        
+        
     }
 
     public void dessinerNoeud(Noeud n) {
@@ -748,7 +765,8 @@ public class MainFx extends Application {
                 noeudSimpleView.setX(xy.getX() - 8);
                 noeudSimpleView.setY(xy.getY() - 8);
                 noeudSimpleImages.put(noeudSimpleView, n);
-                graphObjets.getChildren().add(noeudSimpleView);
+                Text tS = new Text(noeudSimpleView.getX()+5, noeudSimpleView.getY()+30, Integer.toString(n.getId()));
+                graphObjets.getChildren().addAll(noeudSimpleView, tS);
                 break;
 
             case 1:
@@ -758,7 +776,9 @@ public class MainFx extends Application {
                 appuiSimpleView.setX(xy.getX() - 16);
                 appuiSimpleView.setY(xy.getY() - 5);
                 appuiSimpleImages.put(appuiSimpleView, n);
-                graphObjets.getChildren().add(appuiSimpleView);
+                Text tAP = new Text(appuiSimpleView.getX()+10, appuiSimpleView.getY()+50, Integer.toString(n.getId()));
+                
+                graphObjets.getChildren().addAll(appuiSimpleView, tAP);
                 break;
 
             case 2:
@@ -768,7 +788,9 @@ public class MainFx extends Application {
                 appuiDoubleView.setX(xy.getX() - 16);
                 appuiDoubleView.setY(xy.getY() - 4);
                 appuiDoubleImages.put(appuiDoubleView, n);
-                graphObjets.getChildren().add(appuiDoubleView);
+               Text tAD = new Text(appuiDoubleView.getX()+10, appuiDoubleView.getY()+50, Integer.toString(n.getId()));
+                
+                graphObjets.getChildren().addAll(appuiDoubleView, tAD);
                 break;
         }
         //System.out.println(graphObjets.getChildren());
@@ -859,5 +881,14 @@ public class MainFx extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    public String calcCout (){
+        double coutTot = 0 ;
+        for (Barre b : treillis.getBarres()){
+            coutTot = coutTot + (b.calcLongeur()*b.getCout());
+        }
+        int out = (int) coutTot ; 
+        return Integer.toString(out); 
+    }
 
 }
+
