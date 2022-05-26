@@ -300,12 +300,6 @@ public class MainFx extends Application {
             }
         };
 
-        EventHandler ajouterBarre = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                //Barre b = new Barre();
-            }
-        };
 
         supprimerObjet = new EventHandler<MouseEvent>() {
             @Override
@@ -555,6 +549,10 @@ public class MainFx extends Application {
                 choixNoeudArriveeField.getItems().addAll(choixNoeudArray);
                 Optional<Object[]> barreInfo = creationBarreDialog.showAndWait();
                 barreInfo.ifPresent(data -> {
+                    stringNoeudMap = new HashMap<String, Noeud>();
+                    for (Noeud n : treillis.getNoeuds()) {
+                        stringNoeudMap.put(n.toString(), n);
+                    }
                     Barre b = new Barre((Noeud) data[0], (Noeud) data[1]);
                     b.setType((String) data[2]);
                     //System.out.println((String) data[2]);
