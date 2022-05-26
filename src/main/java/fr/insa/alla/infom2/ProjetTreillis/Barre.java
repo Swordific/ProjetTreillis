@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author antoi
  */
 public class Barre {
-    @Expose
+
     private int id;
     @Expose
     private Noeud noeudDepart, noeudArrivee;
@@ -69,13 +69,20 @@ public class Barre {
         this.maxComp = maxComp;
         this.maxTrac = maxTrac;
 
-        ArrayList<Barre> listeDepart = noeudDepart.getBarresDepart();
-        listeDepart.add(this);
-        ArrayList<Barre> listeArrivee = noeudArrivee.getBarresArrivee();
-        listeArrivee.add(this);
+        try {
+            ArrayList<Barre> listeDepart = noeudDepart.getBarresDepart();
+            listeDepart.add(this);
+            ArrayList<Barre> listeArrivee = noeudArrivee.getBarresArrivee();
+            listeArrivee.add(this);
 
-        noeudDepart.setBarresDepart(listeDepart);
-        noeudArrivee.setBarresArrivee(listeArrivee);
+            noeudDepart.setBarresDepart(listeDepart);
+            noeudArrivee.setBarresArrivee(listeArrivee);
+        } catch (Exception e) {
+            noeudDepart.setBarresDepart(new ArrayList<Barre>());
+            noeudArrivee.setBarresArrivee(new ArrayList<Barre>());
+            noeudDepart.getBarresDepart().add(this);
+            noeudArrivee.getBarresArrivee().add(this);
+        }
     }
 
     public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee) {
@@ -92,18 +99,50 @@ public class Barre {
         noeudArrivee.setBarresArrivee(listeArrivee);
     }
 
+    public Barre(Noeud noeudDepart, Noeud noeudArrivee, double maxTrac, double maxComp, double cout, String type) {
+        this.id = -1;
+        this.noeudDepart = noeudDepart;
+        this.noeudArrivee = noeudArrivee;
+        this.cout = cout;
+        this.maxComp = maxComp;
+        this.maxTrac = maxTrac;
+
+        try {
+            ArrayList<Barre> listeDepart = noeudDepart.getBarresDepart();
+            listeDepart.add(this);
+            ArrayList<Barre> listeArrivee = noeudArrivee.getBarresArrivee();
+            listeArrivee.add(this);
+
+            noeudDepart.setBarresDepart(listeDepart);
+            noeudArrivee.setBarresArrivee(listeArrivee);
+        } catch (Exception e) {
+            noeudDepart.setBarresDepart(new ArrayList<Barre>());
+            noeudArrivee.setBarresArrivee(new ArrayList<Barre>());
+            noeudDepart.getBarresDepart().add(this);
+            noeudArrivee.getBarresArrivee().add(this);
+        }
+        this.type = type;
+    }
+
     public Barre(Noeud noeudDepart, Noeud noeudArrivee) {
         this.id = -1;
         this.noeudDepart = noeudDepart;
         this.noeudArrivee = noeudArrivee;
 
-        ArrayList<Barre> listeDepart = noeudDepart.getBarresDepart();
-        listeDepart.add(this);
-        ArrayList<Barre> listeArrivee = noeudArrivee.getBarresArrivee();
-        listeArrivee.add(this);
+        try {
+            ArrayList<Barre> listeDepart = noeudDepart.getBarresDepart();
+            listeDepart.add(this);
+            ArrayList<Barre> listeArrivee = noeudArrivee.getBarresArrivee();
+            listeArrivee.add(this);
 
-        noeudDepart.setBarresDepart(listeDepart);
-        noeudArrivee.setBarresArrivee(listeArrivee);
+            noeudDepart.setBarresDepart(listeDepart);
+            noeudArrivee.setBarresArrivee(listeArrivee);
+        } catch (Exception e) {
+            noeudDepart.setBarresDepart(new ArrayList<Barre>());
+            noeudArrivee.setBarresArrivee(new ArrayList<Barre>());
+            noeudDepart.getBarresDepart().add(this);
+            noeudArrivee.getBarresArrivee().add(this);
+        }
     }
 
     public Barre(int id, Noeud noeudDepart, Noeud noeudArrivee, String type) {
@@ -116,8 +155,7 @@ public class Barre {
             this.maxComp = -13000;
             this.maxTrac = 18000;
 
-        }
-        else if (type == "bois") {
+        } else if (type == "bois") {
             this.id = id;
             this.noeudDepart = noeudDepart;
             this.noeudArrivee = noeudArrivee;
@@ -125,8 +163,7 @@ public class Barre {
             this.trac = 0;
             this.maxComp = -2000;
             this.maxTrac = 4500;
-        }
-        else if (type == "aluminium") {
+        } else if (type == "aluminium") {
             this.id = id;
             this.noeudDepart = noeudDepart;
             this.noeudArrivee = noeudArrivee;
@@ -134,8 +171,7 @@ public class Barre {
             this.trac = 0;
             this.maxComp = -10000;
             this.maxTrac = 14000;
-        }
-        else {
+        } else {
             System.out.println("Le type de barre entrée n'est pas reconnu");
         }
     }
@@ -275,6 +311,36 @@ public class Barre {
      */
     public void setTrac(double trac) {
         this.trac = trac;
+    }
+
+    public void defineType(String type) {
+        if (type == "acier") {
+            this.cout = 100;
+            this.trac = 0;
+            this.maxComp = -13000;
+            this.maxTrac = 18000;
+
+        } else if (type == "bois") {
+            this.cout = 20;
+            this.trac = 0;
+            this.maxComp = -2000;
+            this.maxTrac = 4500;
+        } else if (type == "aluminium") {
+            this.cout = 450;
+            this.trac = 0;
+            this.maxComp = -10000;
+            this.maxTrac = 14000;
+        } else {
+            System.out.println("Le type de barre entrée n'est pas reconnu");
+        }
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

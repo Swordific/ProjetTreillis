@@ -173,16 +173,6 @@ public class MainFx extends Application {
         //Ecran principal
         primaryStage.setMaximized(true);
         primaryStage.show();
-        Vecteur2D f = new Vecteur2D(0, 0);
-        Noeud n1 = new NoeudAppuiSimple(1, 0, 0, f);
-        Noeud n2 = new NoeudAppuiSimple(2, 2, 0, f);
-        Noeud n3 = new NoeudSimple(3, 1, 1, f);
-        
-        Barre b1 = new Barre(n1, n2);
-        Barre b2 = new Barre(n2, n3);
-        Barre b3 = new Barre(n3, n1);
-        treillis.ajouteNoeuds(n1, n2, n3);
-        treillis.ajouteBarres(b1, b2, b3);
         //System.out.println(Fichier.exportTreillis(treillis, "")[0]);
         //Events et set boutons
         creerTreillisBouton.setOnAction(new EventHandler<ActionEvent>() {

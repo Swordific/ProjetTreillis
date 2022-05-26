@@ -4,6 +4,7 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis;
 
+import com.google.gson.annotations.Expose;
 import java.util.HashMap;
 
 /**
@@ -14,7 +15,9 @@ public class Numeroteur {
 
     //private Class type;
     private int maxIndex;
+    @Expose
     private HashMap<Integer, Object> objectMap;
+    @Expose
     private HashMap<Object, Integer> indexMap;
 
     public Numeroteur() {//(Class type) {

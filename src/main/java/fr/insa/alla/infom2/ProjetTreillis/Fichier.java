@@ -6,6 +6,8 @@ package fr.insa.alla.infom2.ProjetTreillis;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 public class Fichier {
 
 //    public static void main(String[] args) {
-
 //        JsonSerializer<Barre> barreSerializer = new JsonSerializer<Barre>() {
 //            @Override
 //            public JsonElement serialize(Barre src, Type typeOfSrc, JsonSerializationContext context) {
@@ -97,7 +98,6 @@ public class Fichier {
 //        //System.out.println(gson.toJson(new Barre(new NoeudSimple(0, 0), new NoeudSimple(1, 1))));
 //        System.out.println(gson.toJson(new NoeudSimple(0, 0)));
 //    }
-
     public static void exportTreillis(Treillis t, String filepath) throws IOException {
 
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
@@ -126,14 +126,17 @@ public class Fichier {
         String outNSimple = gson.toJson(listNSimple);
         String outASimple = gson.toJson(listASimple);
         String outADouble = gson.toJson(listADouble);
-        String outBarre = gson.toJson(listBarre);
 
         try {
             PrintWriter pw = new PrintWriter(filepath, "UTF-8");
             pw.println(outNSimple);
             pw.println(outASimple);
             pw.println(outADouble);
-            pw.println(outBarre);
+            pw.println("Barres");
+            for (Barre b : listBarre) {
+                pw.println(gson.toJson(b));
+            }
+            pw.println("/Barres");
             pw.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,7 +161,10 @@ public class Fichier {
         ArrayList<NoeudSimple> listNSimple;
         ArrayList<NoeudAppuiSimple> listASimple;
         ArrayList<NoeudAppuiDouble> listADouble;
-        ArrayList<Barre> listBarre;
+        ArrayList<Barre> listBarre = new ArrayList<Barre>();
+        Numeroteur numNoeuds = new Numeroteur();
+        Numeroteur numBarresJson = new Numeroteur();
+        Numeroteur numBarres = new Numeroteur();
 
         try {
             File file = new File(filepath);
@@ -173,14 +179,48 @@ public class Fichier {
             listNSimple = gson.fromJson(linesList.get(0), typeNSimple);
             listASimple = gson.fromJson(linesList.get(1), typeASimple);
             listADouble = gson.fromJson(linesList.get(2), typeADouble);
-            listBarre = gson.fromJson(linesList.get(3), typeBarre);
 
             ArrayList<Noeud> noeuds = new ArrayList<>(listNSimple);
             noeuds.addAll(listASimple);
             noeuds.addAll(listADouble);
 
+            for (Noeud n : noeuds) {
+                n.setId(numNoeuds.add(n));
+            }
+
+            int i = 4;
+            while (!"/Barres".equals(linesList.get(i))) {
+                JsonParser parser = new JsonParser();
+                JsonObject readLine = parser.parseString(linesList.get(i)).getAsJsonObject();
+                //numBarresJson.add(readLine);
+                double xD = readLine.get("noeudDepart").getAsJsonObject().get("px").getAsDouble();
+                double yD = readLine.get("noeudDepart").getAsJsonObject().get("py").getAsDouble();
+                double xA = readLine.get("noeudArrivee").getAsJsonObject().get("px").getAsDouble();
+                double yA = readLine.get("noeudArrivee").getAsJsonObject().get("py").getAsDouble();
+                Noeud nD = null;
+                Noeud nA = null;
+                for (Noeud n : noeuds) {
+                    if (n.getPx() == xD && n.getPy() == yD) {
+                        nD = n;
+                    }
+                    if (n.getPx() == xA && n.getPy() == yA) {
+                        nA = n;
+                    }
+                }
+                try {
+                    Barre b = new Barre(nD, nA, readLine.get("maxTrac").getAsDouble(), readLine.get("maxComp").getAsDouble(), readLine.get("cout").getAsDouble(), readLine.get("type").getAsString());
+                    b.setId(numBarres.add(b));
+                    listBarre.add(b);
+                } catch (Exception e) {
+                    System.out.println("\r\n" + nD + "\r\n" + nA);
+                    e.printStackTrace();
+                }
+                i++;
+            }
+
             treillis.ajouteNoeuds(noeuds);
             treillis.ajouteBarres(listBarre);
+
             return treillis;
 
         } catch (Exception e) {

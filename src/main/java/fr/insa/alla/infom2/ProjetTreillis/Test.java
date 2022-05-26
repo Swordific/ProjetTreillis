@@ -40,7 +40,10 @@ public class Test {
         Barre b2 = new Barre(n2, n3);
         Barre b3 = new Barre(n3, n1);
 
-        System.out.println(gson.toJson(new Barre(n1, n2)));
+        Numeroteur numNoeuds = new Numeroteur();
+        Numeroteur numBarres = new Numeroteur();
+
+//        System.out.println(gson.toJson(new Barre(n1, n2)));
 
         Treillis t = new Treillis();
         t.ajouteNoeud(n1);
@@ -49,19 +52,22 @@ public class Test {
         t.ajouteBarre(b1);
         t.ajouteBarre(b2);
         t.ajouteBarre(b3);
+        b1.setType("acier");
+        b2.setType("bois");
+        b3.setType("aluminium");
         //menuTexte(t);
-//        Fichier.exportTreillis(t, "C:\\Users\\Asus\\Desktop\\Cours\\S2\\Info\\Projet\\ProjetTreillis\\ProjetTreillis\\src\\main\\resources\\testWrite.json");
+        Fichier.exportTreillis(t, "C:\\Users\\Asus\\Desktop\\Cours\\S2\\Info\\Projet\\ProjetTreillis\\ProjetTreillis\\src\\main\\resources\\testWrite.json");
         //System.out.println(n.getF());
-        Treillis treillis = Fichier.importTreillis("C:\\Users\\Asus\\Desktop\\Cours\\S2\\Info\\Projet\\ProjetTreillis\\ProjetTreillis\\src\\main\\resources\\testWrite.json");
-        System.out.println("Noeuds : ");
-        for (Noeud n : treillis.getNoeuds()) {
-            System.out.print(n + " ");
-        }
-        System.out.println("\r\nBarres : ");
-        for (Barre b : treillis.getBarres()) {
-            System.out.print(b + " ");
-        }
-        System.out.println("\r\n");
+//        Treillis treillis = Fichier.importTreillis("C:\\Users\\Asus\\Desktop\\Cours\\S2\\Info\\Projet\\ProjetTreillis\\ProjetTreillis\\src\\main\\resources\\testWrite.json");
+//        System.out.println("Noeuds : ");
+//        for (Noeud n : treillis.getNoeuds()) {
+//            System.out.print(n + " ");
+//        }
+//        System.out.println("\r\nBarres : ");
+//        for (Barre b : treillis.getBarres()) {
+//            System.out.print(b + " ");
+//        }
+//        System.out.println("\r\n");
 
     }
 }

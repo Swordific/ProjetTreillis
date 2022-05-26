@@ -4,12 +4,15 @@
  */
 package fr.insa.alla.infom2.ProjetTreillis;
 
+import com.google.gson.annotations.Expose;
+
 /**
  *
  * @author Ilyas ALLA
  */
 public class Vecteur2D {
 
+    @Expose
     private double vx, vy;
 
     public double getVx() {

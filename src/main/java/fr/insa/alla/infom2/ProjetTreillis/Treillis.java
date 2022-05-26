@@ -93,6 +93,7 @@ public class Treillis {
         return null;
     }
 
+
     public String ajouteBarre(Barre b) {
         if (barres.contains(b)) {
             return "Barre déjà dans la liste";
