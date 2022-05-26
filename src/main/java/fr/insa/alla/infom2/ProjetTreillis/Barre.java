@@ -5,6 +5,7 @@
 package fr.insa.alla.infom2.ProjetTreillis;
 
 import com.google.gson.annotations.Expose;
+import static java.lang.Math.sqrt;
 import java.util.ArrayList;
 
 /**
@@ -360,6 +361,15 @@ public class Barre {
 
     public void setType(String type) {
         this.type = type;
+    }
+    
+    public double calcLongeur () {
+        double x1 = noeudDepart.getPx();
+        double y1 = noeudDepart.getPy();
+        double x2 = noeudArrivee.getPx();
+        double y2 = noeudArrivee.getPy(); 
+        double l = sqrt(Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2));
+        return l ;
     }
 
 }

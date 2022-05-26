@@ -85,6 +85,9 @@ public class MainFx extends Application {
     HashMap<Line, Barre> linesMap = new HashMap<>();
     HashMap<Barre, Line> barresMap = new HashMap<>();
     HashMap<String, Noeud> stringNoeudMap = new HashMap<>();
+    ToolBar toolBar = new ToolBar();
+    Label cout = new Label("   Coût du treillis : " + calcCout() + " £");
+    
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -94,6 +97,7 @@ public class MainFx extends Application {
         graph.getChildren().addAll(graphGrille, graphObjets);
 
         ArrayList<String> choixNoeudArray = new ArrayList<>();
+        
 
         //Images
         Image appicon = new Image(getClass().getResourceAsStream("/appicon.png"));
@@ -137,7 +141,7 @@ public class MainFx extends Application {
         boutonsAjout.getToggles().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr);
 
         MenuBar menuBar = new MenuBar();
-        ToolBar toolBar = new ToolBar();
+        
         HBox barHBox = new HBox(menuBar, toolBar);
 
         menuBar.setPrefHeight(36);
@@ -151,7 +155,8 @@ public class MainFx extends Application {
         menuFichier.getItems().addAll(creerTreillisMenu, importTreillisMenu, exportTreillisMenu);
         menuEditer.getItems().addAll(creerNoeudMenu, supprNoeudMenu, creerBarreMenu, supprBarreMenu);
         menuBar.getMenus().addAll(menuFichier, menuEditer);
-        toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr, calculerTractionBouton);
+        
+        toolBar.getItems().addAll(btnNoeudSimple, btnAppuiSimple, btnAppuiDouble, btnBarre, btnSuppr, calculerTractionBouton, cout);
 
         Dialog<double[]> creationNoeudDialog = new Dialog<>();
         Dialog<double[]> modifNoeudDialog = new Dialog<>();
@@ -636,6 +641,14 @@ public class MainFx extends Application {
                 obj.addEventFilter(MouseEvent.MOUSE_CLICKED, supprimerObjet);
             }
         }
+        toolBar.getItems().remove(cout);
+        cout = new Label("   Coût du treillis : " + calcCout() + " £");
+        toolBar.getItems().add(cout);
+        
+        
+        
+        
+        
     }
 
     public void dessinerNoeud(Noeud n) {
@@ -766,5 +779,14 @@ public class MainFx extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    public String calcCout (){
+        double coutTot = 0 ;
+        for (Barre b : treillis.getBarres()){
+            coutTot = coutTot + (b.calcLongeur()*b.getCout());
+        }
+        int out = (int) coutTot ; 
+        return Integer.toString(out); 
+    }
 
 }
+
