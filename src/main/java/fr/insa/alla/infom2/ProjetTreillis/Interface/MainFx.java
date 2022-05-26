@@ -650,7 +650,8 @@ public class MainFx extends Application {
                 noeudSimpleView.setX(xy.getX() - 8);
                 noeudSimpleView.setY(xy.getY() - 8);
                 noeudSimpleImages.put(noeudSimpleView, n);
-                graphObjets.getChildren().add(noeudSimpleView);
+                Text tS = new Text(noeudSimpleView.getX()+5, noeudSimpleView.getY()+30, Integer.toString(n.getId()));
+                graphObjets.getChildren().addAll(noeudSimpleView, tS);
                 break;
 
             case 1:
@@ -660,7 +661,9 @@ public class MainFx extends Application {
                 appuiSimpleView.setX(xy.getX() - 16);
                 appuiSimpleView.setY(xy.getY() - 5);
                 appuiSimpleImages.put(appuiSimpleView, n);
-                graphObjets.getChildren().add(appuiSimpleView);
+                Text tAP = new Text(appuiSimpleView.getX()+10, appuiSimpleView.getY()+50, Integer.toString(n.getId()));
+                
+                graphObjets.getChildren().addAll(appuiSimpleView, tAP);
                 break;
 
             case 2:
@@ -670,7 +673,9 @@ public class MainFx extends Application {
                 appuiDoubleView.setX(xy.getX() - 16);
                 appuiDoubleView.setY(xy.getY() - 4);
                 appuiDoubleImages.put(appuiDoubleView, n);
-                graphObjets.getChildren().add(appuiDoubleView);
+               Text tAD = new Text(appuiDoubleView.getX()+10, appuiDoubleView.getY()+50, Integer.toString(n.getId()));
+                
+                graphObjets.getChildren().addAll(appuiDoubleView, tAD);
                 break;
         }
         System.out.println(graphObjets.getChildren());
