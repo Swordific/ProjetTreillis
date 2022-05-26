@@ -48,7 +48,7 @@ public class Numeroteur {
     }
     
     public int add(Object o) {
-        if (!objectMap.containsKey(o)) {
+        if (!indexMap.containsKey(o)) {
             maxIndex++;
             objectMap.put(maxIndex, o);
             indexMap.put(o, maxIndex);
@@ -64,7 +64,7 @@ public class Numeroteur {
     }
     
     public int getOrAdd(Object o) {
-        if (!objectMap.containsValue(o)) {
+        if (!indexMap.containsValue(o)) {
             return this.add(o);
         }
         return indexMap.get(o);
