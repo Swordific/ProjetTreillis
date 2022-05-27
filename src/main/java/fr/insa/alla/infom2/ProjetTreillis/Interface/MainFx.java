@@ -7,6 +7,7 @@ package fr.insa.alla.infom2.ProjetTreillis.Interface;
 import fr.insa.alla.infom2.ProjetTreillis.*;
 import static java.lang.StrictMath.abs;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
 import javafx.application.Application;
@@ -89,14 +90,14 @@ public class MainFx extends Application {
     ToolBar toolBar = new ToolBar();
     Label cout = new Label("   Coût du treillis : " + calcCout() + " €");
 
+    ArrayList<String> choixNoeudArray = new ArrayList<>();
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Treillis");
         primaryStage.setResizable(false);
         Scene mainScene;
         graph.getChildren().addAll(graphGrille, graphObjets);
-
-        ArrayList<String> choixNoeudArray = new ArrayList<>();
 
         //Images
         Image appicon = new Image(getClass().getResourceAsStream("/appicon.png"));
@@ -300,7 +301,6 @@ public class MainFx extends Application {
             }
         };
 
-
         supprimerObjet = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -455,6 +455,10 @@ public class MainFx extends Application {
             if (btn == ButtonType.OK) {
                 //choixBarreField.getValue();
                 String type = choixBarreField.getValue().toLowerCase();
+                for (Noeud n : treillis.getNoeuds()) {
+                    stringNoeudMap.put(n.toString(), n);
+                    System.out.println(n);
+                }
                 Noeud nd = stringNoeudMap.get((String) choixNoeudDepartField.getValue());
                 Noeud na = stringNoeudMap.get((String) choixNoeudArriveeField.getValue());
                 Object[] out = {nd, na, type};
@@ -513,7 +517,6 @@ public class MainFx extends Application {
                 Optional<Vecteur2D> noeudInfo = modifNoeudDialog.showAndWait();
                 noeudInfo.ifPresent(data -> {
                     Noeud source = null;
-
                     if (appuiSimpleImages.containsKey((ImageView) e.getSource())) {
                         source = (NoeudAppuiSimple) appuiSimpleImages.get((ImageView) e.getSource());
                     } else if (appuiDoubleImages.containsKey((ImageView) e.getSource())) {
@@ -522,7 +525,11 @@ public class MainFx extends Application {
                         source = (NoeudSimple) noeudSimpleImages.get((ImageView) e.getSource());
                     }
                     try {
-                        source.setF(data);
+                        if (source != null) {
+                            treillis.getNoeuds().remove(source);
+                            source.setF(data);
+                            treillis.ajouteNoeud(source);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -538,10 +545,9 @@ public class MainFx extends Application {
         creerBarreEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                choixNoeudArray = new ArrayList<String>();
                 for (Noeud n : treillis.getNoeuds()) {
-                    if (!choixNoeudArray.contains(n.toString())) {
-                        choixNoeudArray.add(n.toString());
-                    }
+                    choixNoeudArray.add(n.toString());
                 }
                 choixNoeudDepartField.getItems().removeAll(choixNoeudDepartField.getItems());
                 choixNoeudArriveeField.getItems().removeAll(choixNoeudArriveeField.getItems());
@@ -552,7 +558,9 @@ public class MainFx extends Application {
                     stringNoeudMap = new HashMap<String, Noeud>();
                     for (Noeud n : treillis.getNoeuds()) {
                         stringNoeudMap.put(n.toString(), n);
+                        System.out.println(n);
                     }
+                    System.out.println(Arrays.deepToString(data));
                     Barre b = new Barre((Noeud) data[0], (Noeud) data[1]);
                     b.setType((String) data[2]);
                     //System.out.println((String) data[2]);
@@ -569,7 +577,6 @@ public class MainFx extends Application {
 
         btnBarre.setOnAction(creerBarreEvent);
         creerNoeudMenu.setOnAction(creerNoeudEvent);
-
 
         creerBarreMenu.setOnAction(creerBarreEvent);
 
@@ -727,11 +734,17 @@ public class MainFx extends Application {
 
     public void dessinerContenu(Treillis t) {
         graphObjets.getChildren().removeAll(graphObjets.getChildren());
+        ArrayList<Integer> idNoeuds = new ArrayList<>();
+        //ArrayList<Integer> idBarres = new ArrayList<>();
         for (Barre b : t.getBarres()) {
-            //System.out.println(b.getTrac());
+            //idBarres.add()
             dessinerBarre(b);
         }
         for (Noeud n : t.getNoeuds()) {
+//            if (idNoeuds.contains(n.getId())) {
+//                treillis.getNoeuds().remove(n);
+//            }
+            idNoeuds.add(n.getId());
             //System.out.println("brrr" + t.getNoeuds() + "\r\n" + n);
             dessinerNoeud(n);
         }

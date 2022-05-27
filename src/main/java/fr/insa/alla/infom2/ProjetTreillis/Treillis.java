@@ -93,7 +93,6 @@ public class Treillis {
         return null;
     }
 
-
     public String ajouteBarre(Barre b) {
         if (barres.contains(b)) {
             return "Barre déjà dans la liste";
@@ -250,21 +249,21 @@ public class Treillis {
         try {
             Matrix solution = equa.solve(secondMembre);
 
-        int x = 0;
-        for (Barre b : listBarres) {
-            b.setTrac(solution.get(x, 0));
-            x = x + 1;
+            int x = 0;
+            for (Barre b : listBarres) {
+                b.setTrac(solution.get(x, 0));
+                x = x + 1;
 
-        }
+            }
 
-        //Matrix[] m = {equa, secondMembre};
-        return solution;
-            
+            //Matrix[] m = {equa, secondMembre};
+            return solution;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(Arrays.deepToString(equa.getArray()));
+            return null;
         }
-        catch (Exception e){
-            return null ; 
-        }
-        
 
     }
 
